@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Radio, Zap } from 'lucide-react';
+import { RefreshCw, Radio, Zap, Github, ExternalLink } from 'lucide-react';
 import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 
 export const Navbar = ({ title = 'Command Center' }) => {
@@ -60,6 +60,39 @@ export const Navbar = ({ title = 'Command Center' }) => {
 
       {/* Control Actions & Clock */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* GitHub Repository Badge */}
+        <a
+          href="https://github.com/Saurav-Kumar-Nayak/URBANPULSE-AI"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(32, 43, 56, 0.6)',
+            border: '1px solid #202B38',
+            color: '#cbd5e1',
+            fontSize: '0.78rem',
+            fontWeight: 600,
+            textDecoration: 'none',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#06b6d4';
+            e.currentTarget.style.color = '#ffffff';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#202B38';
+            e.currentTarget.style.color = '#cbd5e1';
+          }}
+        >
+          <Github size={15} />
+          <span>GitHub</span>
+          <ExternalLink size={12} style={{ opacity: 0.6 }} />
+        </a>
+
         {/* Stream Indicator */}
         <div
           style={{
