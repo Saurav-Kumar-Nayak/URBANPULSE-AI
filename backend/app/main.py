@@ -9,7 +9,7 @@ from app.core.database import engine, Base, SessionLocal
 from app.db.models import UrbanRecord
 from app.db.seeder import seed_database
 from app.ml.engine import ml_engine
-from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics
+from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics, auth
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -84,6 +84,7 @@ app.include_router(insights.router, prefix="/api")
 app.include_router(locations.router, prefix="/api")
 app.include_router(explorer.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")
 
 # Duplicate mounts under `/api/v1` to ensure strict dual route support
 app.include_router(overview.router, prefix="/api/v1")
@@ -95,6 +96,7 @@ app.include_router(insights.router, prefix="/api/v1")
 app.include_router(locations.router, prefix="/api/v1")
 app.include_router(explorer.router, prefix="/api/v1")
 app.include_router(analytics.router, prefix="/api/v1")
+app.include_router(auth.router, prefix="/api/v1")
 
 # ==============================================================================
 # ONE-SERVER FRONTEND STATIC FILE SERVING & SPA FALLBACK

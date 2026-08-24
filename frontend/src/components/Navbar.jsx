@@ -16,8 +16,9 @@ import {
   Menu, 
   X, 
   User, 
-  Github,
-  Radio
+  LogOut,
+  Radio,
+  Lock
 } from 'lucide-react';
 import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 
@@ -29,7 +30,11 @@ export const Navbar = () => {
     lastUpdated, 
     triggerGlobalRefresh,
     toggleCopilot,
-    openCopilotWithQuery
+    isAuthenticated,
+    user,
+    role,
+    setIsLoginModalOpen,
+    logout
   } = useUrbanPulseContext();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,17 +49,28 @@ export const Navbar = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const navItems = [
+  const publicNavItems = [
     { id: 'home', label: 'Home', icon: HomeIcon },
+    { id: 'live-city', label: 'Live Map', icon: Map },
+    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
+    { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
+    { id: 'traffic', label: 'Traffic', icon: Car },
+    { id: 'pollution', label: 'Air Quality', icon: Wind },
+    { id: 'weather', label: 'Weather', icon: CloudSun },
+  ];
+
+  const operatorNavItems = [
     { id: 'command-center', label: 'Command Center', icon: Activity },
     { id: 'live-city', label: 'Live Map', icon: Map },
-    { id: 'predictions', label: 'Predictive Analytics', icon: TrendingUp },
+    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
     { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
     { id: 'traffic', label: 'Traffic', icon: Car },
     { id: 'pollution', label: 'Air Quality', icon: Wind },
     { id: 'weather', label: 'Weather', icon: CloudSun },
     { id: 'what-if', label: 'What-If Simulator', icon: Sliders },
   ];
+
+  const navItems = isAuthenticated ? operatorNavItems : publicNavItems;
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -69,7 +85,7 @@ export const Navbar = () => {
 
   return (
     <header className="top-nav-container">
-      {/* LEFT: Brand Logo & Title (3D Tactile Pill) */}
+      {/* LEFT: Brand Logo & Title */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <button 
           onClick={() => handleNavClick('home')} 
@@ -81,7 +97,9 @@ export const Navbar = () => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'left' }}>
             <div className="top-nav-title">UrbanPulse AI</div>
-            <div className="top-nav-subtitle">Smart City Intelligence</div>
+            <div className="top-nav-subtitle">
+              {isAuthenticated ? `${role} MODE` : 'MUNICIPAL TELEMETRY'}
+            </div>
           </div>
         </button>
       </div>
@@ -101,7 +119,7 @@ export const Navbar = () => {
               className={`top-nav-link ${isActive ? 'active' : ''}`}
               id={`nav-link-${item.id}`}
             >
-              <Icon size={15} color={isActive ? '#06b6d4' : '#94a3b8'} />
+              <Icon size={15} color={isActive ? '#38bdf8' : '#94a3b8'} />
               <span>{item.id === 'command-center' ? 'Dashboard' : item.label}</span>
             </button>
           );
@@ -146,7 +164,7 @@ export const Navbar = () => {
           }}
           className="desktop-only"
         >
-          <Radio size={13} color="#06b6d4" className="spin" />
+          <Radio size={13} color="#38bdf8" className="spin" />
           <span>{timeStr}</span>
         </div>
 
@@ -158,113 +176,102 @@ export const Navbar = () => {
           className="btn-subtle"
           style={{
             padding: '7px 10px',
-            borderRadius: '9px',
+            borderRadius: '9999px',
           }}
         >
           <RefreshCw size={15} className={refreshing ? 'spin' : ''} />
         </button>
 
-        {/* Notification Bell Dropdown */}
-        <div style={{ position: 'relative' }}>
+        {/* AI Copilot Trigger (Operator Only) */}
+        {isAuthenticated && (
           <button
-            onClick={() => setNotificationsOpen(!notificationsOpen)}
-            className="btn-subtle"
+            onClick={toggleCopilot}
             style={{
-              padding: '7px 10px',
-              borderRadius: '9px',
-              position: 'relative'
+              background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2))',
+              border: '1px solid rgba(6, 182, 212, 0.4)',
+              borderRadius: '8px',
+              padding: '6px 12px',
+              color: '#38bdf8',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
+            id="top-nav-copilot-btn"
           >
-            <Bell size={15} />
-            <span style={{
-              position: 'absolute',
-              top: '4px',
-              right: '4px',
-              width: '7px',
-              height: '7px',
-              borderRadius: '50%',
-              backgroundColor: '#f43f5e'
-            }} />
+            <Sparkles size={14} color="#38bdf8" />
+            <span>✦ AI Copilot</span>
           </button>
+        )}
 
-          {notificationsOpen && (
-            <div
+        {/* USER AUTH / OPERATOR ACCESS CONTROL BUTTON */}
+        {isAuthenticated ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div 
               style={{
-                position: 'absolute',
-                top: '45px',
-                right: '0',
-                width: '300px',
-                background: '#0d131c',
-                border: '1px solid var(--border-color)',
-                borderRadius: '12px',
-                padding: '12px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
-                zIndex: 120
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                background: role === 'ADMIN' ? 'rgba(168, 85, 247, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                border: `1px solid ${role === 'ADMIN' ? 'rgba(168, 85, 247, 0.3)' : 'rgba(56, 189, 248, 0.3)'}`,
+                color: role === 'ADMIN' ? '#c084fc' : '#38bdf8',
+                fontSize: '0.75rem',
+                fontWeight: 800
               }}
             >
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f8fafc', marginBottom: '8px', borderBottom: '1px solid #1e293b', paddingBottom: '6px' }}>
-                Operational Alerts & Telemetry
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.75rem' }}>
-                <div style={{ color: '#fb7185', background: 'rgba(244,63,94,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🔴 <strong>Jayadev Vihar:</strong> Congestion index surge (+18% above baseline)
-                </div>
-                <div style={{ color: '#fbbf24', background: 'rgba(245,158,11,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🟠 <strong>Patia Main Road:</strong> AQI elevation (129.7 AQI)
-                </div>
-                <div style={{ color: '#38bdf8', background: 'rgba(6,182,212,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🔵 <strong>ML Engine:</strong> Real Scikit-learn inference active (250 records)
-                </div>
-              </div>
+              <User size={14} />
+              <span>{user?.name?.split(' ')[0] || role}</span>
             </div>
-          )}
-        </div>
 
-        {/* AI Copilot Trigger Button */}
-        <button
-          onClick={toggleCopilot}
-          style={{
-            background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2))',
-            border: '1px solid rgba(6, 182, 212, 0.4)',
-            borderRadius: '8px',
-            padding: '7px 14px',
-            color: '#38bdf8',
-            fontSize: '0.78rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            transition: 'all 0.2s ease',
-            boxShadow: '0 0 12px rgba(6, 182, 212, 0.15)'
-          }}
-          id="top-nav-copilot-btn"
-        >
-          <Sparkles size={14} color="#06b6d4" />
-          <span>✦ AI Copilot</span>
-        </button>
+            <button
+              onClick={logout}
+              title="Logout session"
+              style={{
+                padding: '6px 12px',
+                borderRadius: '8px',
+                background: 'rgba(244, 63, 94, 0.15)',
+                border: '1px solid rgba(244, 63, 94, 0.3)',
+                color: '#fb7185',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              <LogOut size={13} />
+              <span>Logout</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsLoginModalOpen(true)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #0284c7, #0369a1)',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              color: '#ffffff',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)'
+            }}
+          >
+            <Lock size={13} />
+            <span>Operator Login</span>
+          </button>
+        )}
 
-        {/* User Profile Icon */}
-        <div 
-          style={{ 
-            width: '32px', 
-            height: '32px', 
-            borderRadius: '50%', 
-            background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', 
-            border: '1px solid rgba(255,255,255,0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#ffffff',
-            fontSize: '0.75rem',
-            fontWeight: 800
-          }}
-          title="Admin User"
-        >
-          AD
-        </div>
-
-        {/* Mobile Hamburger Drawer Toggle */}
+        {/* Mobile Hamburger Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           style={{
@@ -312,9 +319,9 @@ export const Navbar = () => {
                   gap: '12px',
                   padding: '12px',
                   borderRadius: '8px',
-                  backgroundColor: isActive ? 'rgba(6, 182, 212, 0.15)' : 'rgba(17, 25, 35, 0.6)',
-                  color: isActive ? '#06b6d4' : '#cbd5e1',
-                  border: `1px solid ${isActive ? 'rgba(6, 182, 212, 0.4)' : 'transparent'}`,
+                  backgroundColor: isActive ? 'rgba(56, 189, 248, 0.15)' : 'rgba(17, 25, 35, 0.6)',
+                  color: isActive ? '#38bdf8' : '#cbd5e1',
+                  border: `1px solid ${isActive ? 'rgba(56, 189, 248, 0.4)' : 'transparent'}`,
                   fontWeight: 600,
                   fontSize: '0.9rem',
                   textAlign: 'left'

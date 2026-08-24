@@ -1,11 +1,12 @@
 import React from 'react';
 import Navbar from '../Navbar';
 import AICopilotDrawer from '../dashboard/AICopilotDrawer';
+import LoginModal from '../ui/LoginModal';
 import { useUrbanPulseContext } from '../../context/UrbanPulseContext';
 import { Sparkles } from 'lucide-react';
 
 export const AppLayout = ({ children }) => {
-  const { activeTab, toggleCopilot } = useUrbanPulseContext();
+  const { activeTab, toggleCopilot, isAuthenticated } = useUrbanPulseContext();
   const isHome = activeTab === 'home';
 
   return (
@@ -20,8 +21,8 @@ export const AppLayout = ({ children }) => {
         </main>
       </div>
 
-      {/* Global Floating AI Copilot Trigger Button (Shown on telemetry dashboard pages) */}
-      {!isHome && (
+      {/* Global Floating AI Copilot Trigger Button (Shown on telemetry dashboard pages when operator is authenticated) */}
+      {!isHome && isAuthenticated && (
         <button
           onClick={toggleCopilot}
           className="copilot-floating-btn"
@@ -34,6 +35,9 @@ export const AppLayout = ({ children }) => {
 
       {/* Slide-out AI Copilot Drawer */}
       <AICopilotDrawer />
+
+      {/* Global Operator Login Modal */}
+      <LoginModal />
     </div>
   );
 };

@@ -10,7 +10,33 @@ const apiClient = axios.create({
   timeout: 15000
 });
 
+// Attach Authorization Bearer token automatically if stored
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('urbanpulse_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => Promise.reject(error));
+
 export const api = {
+  // Authentication
+  login: async (username, password) => {
+    const res = await apiClient.post('/auth/login', { username, password });
+    return res.data;
+  },
+  getMe: async () => {
+    const res = await apiClient.get('/auth/me');
+    return res.data;
+  },
+  logout: async () => {
+    try {
+      await apiClient.post('/auth/logout');
+    } catch {
+      // Ignore logout network errors
+    }
+  },
+
   // Health
   getHealth: async () => {
     const res = await apiClient.get('/health');
@@ -68,12 +94,14 @@ export const api = {
   },
 
   // Data Explorer
-  getRecords: async (params = {}) => {
-    const res = await apiClient.get('/records', { params });
+  getExplorerData: async (params = {}) => {
+    const res = await apiClient.get('/explorer', { params });
     return res.data;
   },
-  getExportUrl: (params = {}) => {
-    const query = new URLSearchParams(params).toString();
-    return `${API_BASE}/records/export${query ? `?${query}` : ''}`;
+
+  // Analytics
+  getAnalytics: async () => {
+    const res = await apiClient.get('/analytics');
+    return res.data;
   }
 };

@@ -26,7 +26,16 @@ import LiveCityMap from '../components/LiveCityMap';
 import { api } from '../services/api';
 
 export const LandingPage = () => {
-  const { setActiveTab, setSelectedZone, openCopilotWithQuery } = useUrbanPulseContext();
+  const { 
+    setActiveTab, 
+    setSelectedZone, 
+    openCopilotWithQuery,
+    isAuthenticated,
+    user,
+    role,
+    setIsLoginModalOpen,
+    logout
+  } = useUrbanPulseContext();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   
   // Real overview telemetry from backend
@@ -212,44 +221,58 @@ export const LandingPage = () => {
           <button onClick={() => setActiveTab('pollution')} className="nav-item" style={{ fontSize: '0.82rem', padding: '6px 12px', borderRadius: '8px', background: 'none', color: '#cbd5e1', border: 'none', fontWeight: 600, cursor: 'pointer' }}>
             Air Quality
           </button>
-          <button onClick={() => setActiveTab('what-if')} className="nav-item" style={{ fontSize: '0.82rem', padding: '6px 12px', borderRadius: '8px', background: 'none', color: '#cbd5e1', border: 'none', fontWeight: 600, cursor: 'pointer' }}>
-            What-If Simulator
+          <button onClick={() => setActiveTab('weather')} className="nav-item" style={{ fontSize: '0.82rem', padding: '6px 12px', borderRadius: '8px', background: 'none', color: '#cbd5e1', border: 'none', fontWeight: 600, cursor: 'pointer' }}>
+            Weather
           </button>
         </nav>
 
         {/* Right Nav Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button 
-            onClick={() => setIsLoginOpen(true)}
-            style={{ 
-              fontSize: '0.78rem', 
-              padding: '6px 14px', 
-              borderRadius: '8px', 
-              background: 'rgba(30, 41, 59, 0.8)', 
-              color: '#e2e8f0', 
-              border: '1px solid rgba(255, 255, 255, 0.12)', 
-              fontWeight: 600, 
-              cursor: 'pointer' 
-            }}
-          >
-            Operator Login
-          </button>
-          <button 
-            onClick={() => setActiveTab('command-center')}
-            style={{ 
-              fontSize: '0.78rem', 
-              padding: '7px 16px', 
-              borderRadius: '8px', 
-              background: 'linear-gradient(135deg, #0284c7, #0369a1)', 
-              color: '#fff', 
-              border: '1px solid rgba(56, 189, 248, 0.4)', 
-              fontWeight: 700, 
-              cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.3)'
-            }}
-          >
-            Open Command Center
-          </button>
+          {isAuthenticated ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ padding: '4px 10px', borderRadius: '6px', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#38bdf8', fontSize: '0.75rem', fontWeight: 800 }}>
+                ● {user?.name || role}
+              </div>
+              <button 
+                onClick={() => setActiveTab('command-center')}
+                style={{ 
+                  fontSize: '0.78rem', 
+                  padding: '7px 16px', 
+                  borderRadius: '8px', 
+                  background: 'linear-gradient(135deg, #0284c7, #0369a1)', 
+                  color: '#fff', 
+                  border: '1px solid rgba(56, 189, 248, 0.4)', 
+                  fontWeight: 700, 
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(2, 132, 199, 0.3)'
+                }}
+              >
+                Open Command Center
+              </button>
+              <button
+                onClick={logout}
+                style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '8px', background: 'rgba(244, 63, 94, 0.15)', border: '1px solid rgba(244, 63, 94, 0.3)', color: '#fb7185', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setIsLoginModalOpen(true)}
+              style={{ 
+                fontSize: '0.78rem', 
+                padding: '7px 16px', 
+                borderRadius: '8px', 
+                background: 'linear-gradient(135deg, #0284c7, #0369a1)', 
+                color: '#e2e8f0', 
+                border: '1px solid rgba(56, 189, 248, 0.4)', 
+                fontWeight: 700, 
+                cursor: 'pointer' 
+              }}
+            >
+              Operator Login
+            </button>
+          )}
         </div>
       </header>
 
