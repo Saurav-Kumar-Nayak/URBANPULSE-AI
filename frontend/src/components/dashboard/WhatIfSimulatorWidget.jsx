@@ -197,35 +197,39 @@ export const WhatIfSimulatorWidget = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ background: 'rgba(17,25,35,0.9)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Predicted Traffic</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#38bdf8', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>Predicted Traffic</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>
                 {results.predictedTraffic}
               </div>
+              <div style={{ fontSize: '0.66rem', color: '#94a3b8', marginTop: '2px' }}>Baseline: 140 veh/min</div>
             </div>
 
             <div style={{ background: 'rgba(17,25,35,0.9)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>AQI Impact</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fbbf24', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>AQI Impact</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#fbbf24', marginTop: '2px' }}>
                 {results.aqiImpact}
               </div>
+              <div style={{ fontSize: '0.66rem', color: '#94a3b8', marginTop: '2px' }}>Baseline: 75 AQI</div>
             </div>
 
             <div style={{ background: 'rgba(17,25,35,0.9)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Risk Level</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: results.riskLevel === 'CRITICAL' || results.riskLevel === 'HIGH' ? '#fb7185' : '#34d399', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>Risk Level</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: results.riskLevel === 'CRITICAL' || results.riskLevel === 'HIGH' ? '#fb7185' : '#34d399', marginTop: '2px' }}>
                 {results.riskLevel}
               </div>
+              <div style={{ fontSize: '0.66rem', color: '#94a3b8', marginTop: '2px' }}>Baseline: Low Risk</div>
             </div>
 
             <div style={{ background: 'rgba(17,25,35,0.9)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Expected Delay</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#c084fc', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>Expected Delay</div>
+              <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#c084fc', marginTop: '2px' }}>
                 {results.expectedDelay}
               </div>
+              <div style={{ fontSize: '0.66rem', color: '#94a3b8', marginTop: '2px' }}>Baseline: Normal Flow</div>
             </div>
           </div>
 
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '4px' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '2px' }}>
             Model Confidence: 94.2% • RandomForest + GradientBoosting Regressors
           </div>
         </div>

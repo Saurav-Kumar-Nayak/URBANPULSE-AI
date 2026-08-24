@@ -64,7 +64,6 @@ export const LandingPage = () => {
             display: 'block',
             userSelect: 'none',
             WebkitUserDrag: 'none',
-            imageRendering: '-webkit-optimize-contrast',
             imageRendering: 'high-quality'
           }}
         />

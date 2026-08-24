@@ -21,11 +21,11 @@ export const AICopilotDrawer = () => {
   const messagesEndRef = useRef(null);
 
   const suggestedQuestions = [
-    "Why is Zone 4 high risk?",
-    "Which zone has the worst AQI?",
-    "What is the traffic forecast?",
+    "Why is my area at risk?",
+    "What is predicted next?",
+    "Why did traffic increase?",
     "Show today's anomalies",
-    "Which area requires immediate attention?"
+    "What should operators monitor?"
   ];
 
   useEffect(() => {

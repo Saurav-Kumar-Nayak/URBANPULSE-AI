@@ -11,6 +11,10 @@ import LeftIntelligencePanel from '../components/dashboard/LeftIntelligencePanel
 import LiveTrafficFeed from '../components/dashboard/LiveTrafficFeed';
 import ActiveAlertCenter from '../components/dashboard/ActiveAlertCenter';
 import DynamicCharts from '../components/dashboard/DynamicCharts';
+import AICityInsights from '../components/dashboard/AICityInsights';
+import WhatIfSimulatorWidget from '../components/dashboard/WhatIfSimulatorWidget';
+import PredictionTimeline from '../components/dashboard/PredictionTimeline';
+import SystemHealthBar from '../components/dashboard/SystemHealthBar';
 
 import { Sparkles } from 'lucide-react';
 
@@ -93,16 +97,16 @@ export const CommandCenter = () => {
         />
 
         {/* RIGHT MAIN CONTAINER */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* 1. TOP 5 KPI STRIP */}
+          {/* 1. TOP COMPACT KPI STRIP */}
           <KpiCards kpis={data?.kpis || []} overview={data} activeZone={selectedZone} />
 
-          {/* 2. MIDDLE ROW: MAP (LEFT) & LIVE TRAFFIC / ALERTS (RIGHT) */}
+          {/* 2. HERO GEOSPATIAL MAP & AI CITY INSIGHTS */}
           <div 
             style={{ 
               display: 'grid', 
-              gridTemplateColumns: '1fr 330px', 
+              gridTemplateColumns: '1fr 340px', 
               gap: '16px',
               alignItems: 'stretch' 
             }}
@@ -113,28 +117,38 @@ export const CommandCenter = () => {
               locations={data?.locations || []} 
               selectedZone={selectedZone} 
               onSelectZone={setSelectedZone} 
-              mapHeight="510px"
+              mapHeight="520px"
               userLocation={userLocation}
             />
 
-            {/* Right Feed Stack */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <LiveTrafficFeed 
-                locationRankings={trafficData?.location_rankings || []}
-                activeZone={selectedZone}
-                onSelectZone={setSelectedZone}
-                loading={trendLoading}
-              />
-              <ActiveAlertCenter 
-                anomalies={anomaliesData?.recent_anomalies || []}
-                activeZone={selectedZone}
-                onSelectZone={setSelectedZone}
-                loading={trendLoading}
-              />
-            </div>
+            {/* AI Autonomous City Insights */}
+            <AICityInsights />
           </div>
 
-          {/* 3. BOTTOM ROW: 4 DYNAMIC ANALYTICS CHARTS */}
+          {/* 3. PREDICTION TIMELINE BAND */}
+          <PredictionTimeline activeZone={selectedZone} />
+
+          {/* 4. DECISION & SIMULATION GRID (ALERTS, TRAFFIC FEED, WHAT-IF SIMULATOR) */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <ActiveAlertCenter 
+              anomalies={anomaliesData?.recent_anomalies || []}
+              activeZone={selectedZone}
+              onSelectZone={setSelectedZone}
+              loading={trendLoading}
+            />
+
+            <LiveTrafficFeed 
+              locationRankings={trafficData?.location_rankings || []}
+              activeZone={selectedZone}
+              onSelectZone={setSelectedZone}
+              loading={trendLoading}
+            />
+          </div>
+
+          {/* 5. WHAT-IF SIMULATOR WIDGET */}
+          <WhatIfSimulatorWidget />
+
+          {/* 6. DYNAMIC ANALYTICS CHARTS */}
           <DynamicCharts
             pollutionData={pollutionData}
             trafficData={trafficData}
@@ -146,11 +160,14 @@ export const CommandCenter = () => {
             loading={trendLoading}
           />
 
+          {/* 7. SYSTEM TELEMETRY HEALTH BAR */}
+          <SystemHealthBar overview={data} />
+
         </div>
 
       </div>
 
-      {/* FLOATING AI COPILOT BUTTON (ONLY SHOWN WHEN DRAWER IS CLOSED) */}
+      {/* FLOATING AI COPILOT BUTTON */}
       {!isCopilotOpen && (
         <button
           onClick={toggleCopilot}
@@ -178,7 +195,7 @@ export const CommandCenter = () => {
           }}
         >
           <Sparkles size={16} color="#ffffff" />
-          <span>✦ Ask AI</span>
+          <span>✦ Ask AI Copilot</span>
         </button>
       )}
 

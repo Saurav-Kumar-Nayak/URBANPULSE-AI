@@ -20,7 +20,8 @@ export default function KpiCards({ overview = null, activeZone = null, kpis = []
   const areaVal = activeZone?.areaSqKm ? `${activeZone.areaSqKm} sq km` : '176 sq km';
   const zonesVal = activeZone?.sensorNodes ? `${activeZone.sensorNodes}` : '52';
   const sourcesVal = activeZone?.dataSources ? `${activeZone.dataSources}` : '128+';
-  const alertsVal = activeZone?.alertsCount !== undefined ? `${activeZone.alertsCount}` : (overview?.anomaly_count ? `${overview.anomaly_count}` : '3');
+  const activeAlertsVal = activeZone?.alertsCount !== undefined ? `${activeZone.alertsCount}` : '3 Active';
+  const anomalyCountText = overview?.anomaly_count ? `(${overview.anomaly_count} Anomalies Logged)` : '(25 Anomalies Logged)';
 
   const cards = [
     {
@@ -59,7 +60,8 @@ export default function KpiCards({ overview = null, activeZone = null, kpis = []
     {
       id: 'alerts',
       title: 'Active Alerts',
-      value: alertsVal,
+      value: activeAlertsVal,
+      trend: anomalyCountText,
       icon: AlertTriangle,
       color: '#f43f5e',
       bg: 'rgba(244, 63, 94, 0.2)',

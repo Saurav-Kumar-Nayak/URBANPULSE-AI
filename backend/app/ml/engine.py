@@ -74,7 +74,7 @@ class UrbanPulseMLEngine:
         importances_aqi.sort(key=lambda x: x["importance"], reverse=True)
 
         self.metrics["aqi_model"] = {
-            "r2": max(0.82, r2_aqi),
+            "r2": r2_aqi,
             "rmse": rmse_aqi,
             "feature_importance": importances_aqi
         }
@@ -100,7 +100,7 @@ class UrbanPulseMLEngine:
         importances_tr.sort(key=lambda x: x["importance"], reverse=True)
 
         self.metrics["traffic_model"] = {
-            "r2": max(0.85, r2_tr),
+            "r2": r2_tr,
             "rmse": rmse_tr,
             "feature_importance": importances_tr
         }
@@ -126,8 +126,8 @@ class UrbanPulseMLEngine:
         importances_r.sort(key=lambda x: x["importance"], reverse=True)
 
         self.metrics["risk_model"] = {
-            "accuracy": max(0.88, acc_r),
-            "f1_score": max(0.87, f1_r),
+            "accuracy": acc_r,
+            "f1_score": f1_r,
             "feature_importance": importances_r
         }
 
@@ -139,7 +139,7 @@ class UrbanPulseMLEngine:
         self.anomaly_detector.fit(X_anom)
 
         self.is_trained = True
-        print("[ML Engine] Scikit-learn ML models successfully trained and operational.")
+        print(f"[ML Engine] Scikit-learn ML models trained. AQI R²={r2_aqi}, Traffic R²={r2_tr}, Risk Acc={acc_r}.")
 
     def predict_aqi(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         features = np.array([[
@@ -154,11 +154,23 @@ class UrbanPulseMLEngine:
         ]])
         predicted_aqi = float(self.aqi_model.predict(features)[0])
         status = "Good" if predicted_aqi < 50 else ("Moderate" if predicted_aqi < 100 else ("Unhealthy for Sensitive Groups" if predicted_aqi < 150 else "Unhealthy"))
+        
+        location = input_data.get('location_name', 'Selected Zone')
+        top_feat = self.metrics["aqi_model"]["feature_importance"][0]["feature"] if self.metrics["aqi_model"]["feature_importance"] else "pm25"
+        impact = "High" if predicted_aqi > 100 else ("Moderate" if predicted_aqi > 50 else "Low")
+        
         return {
             "predicted_aqi": round(predicted_aqi, 1),
             "status": status,
             "confidence_r2": self.metrics["aqi_model"]["r2"],
-            "model_used": "RandomForestRegressor"
+            "model_used": "RandomForestRegressor",
+            "what": f"Air Quality Projection: {round(predicted_aqi, 1)} AQI ({status})",
+            "where": location,
+            "when": "+1 hour forecast horizon",
+            "confidence": f"{int(max(0, self.metrics['aqi_model']['r2']) * 100)}%",
+            "impact": impact,
+            "why": f"Driven primarily by particulate payload ({top_feat}) and traffic density.",
+            "recommended_action": "Deploy localized environmental monitoring and adjust signal timing if AQI > 100."
         }
 
     def predict_congestion(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -174,12 +186,24 @@ class UrbanPulseMLEngine:
         predicted_congestion = float(self.traffic_model.predict(features)[0])
         predicted_congestion = max(0.05, min(0.99, round(predicted_congestion, 2)))
         status = "Fluid" if predicted_congestion < 0.35 else ("Moderate Congestion" if predicted_congestion < 0.65 else ("Heavy Gridlock" if predicted_congestion < 0.85 else "Severe Bottleneck"))
+        
+        location = input_data.get('location_name', 'Selected Corridor')
+        top_feat = self.metrics["traffic_model"]["feature_importance"][0]["feature"] if self.metrics["traffic_model"]["feature_importance"] else "traffic_density"
+        impact = "Critical" if predicted_congestion > 0.8 else ("High" if predicted_congestion > 0.6 else "Moderate")
+
         return {
             "predicted_congestion_index": predicted_congestion,
             "congestion_percentage": f"{int(predicted_congestion * 100)}%",
             "status": status,
             "confidence_r2": self.metrics["traffic_model"]["r2"],
-            "model_used": "GradientBoostingRegressor"
+            "model_used": "GradientBoostingRegressor",
+            "what": f"Traffic Congestion Forecast: {int(predicted_congestion * 100)}% ({status})",
+            "where": location,
+            "when": "+1 hour commute window",
+            "confidence": f"{int(max(0, self.metrics['traffic_model']['r2']) * 100)}%",
+            "impact": impact,
+            "why": f"Elevated volume along corridor combined with key feature influence ({top_feat}).",
+            "recommended_action": "Reroute transit fleet and activate dynamic signal timing for key intersections."
         }
 
     def predict_risk(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -196,12 +220,22 @@ class UrbanPulseMLEngine:
         classes = list(self.risk_model.classes_)
         confidence = float(np.max(probs))
 
+        location = input_data.get('location_name', 'Metropolitan Zone')
+        top_feat = self.metrics["risk_model"]["feature_importance"][0]["feature"] if self.metrics["risk_model"]["feature_importance"] else "congestion_index"
+
         return {
             "predicted_risk_level": predicted_class,
             "confidence_score": round(confidence, 3),
             "class_probabilities": {c: round(float(p), 3) for c, p in zip(classes, probs)},
             "model_accuracy": self.metrics["risk_model"]["accuracy"],
-            "model_used": "RandomForestClassifier"
+            "model_used": "RandomForestClassifier",
+            "what": f"Urban Risk Level: {predicted_class}",
+            "where": location,
+            "when": "Immediate operational state",
+            "confidence": f"{int(confidence * 100)}%",
+            "impact": predicted_class,
+            "why": f"Multi-variate interaction between {top_feat} and local environmental telemetry.",
+            "recommended_action": "Increase operator monitoring and flag zone for priority response."
         }
 
     def detect_anomaly(self, record: Dict[str, Any]) -> Dict[str, Any]:

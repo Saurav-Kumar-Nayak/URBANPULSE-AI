@@ -203,17 +203,17 @@ export const Navbar = () => {
               }}
             >
               <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f8fafc', marginBottom: '8px', borderBottom: '1px solid #1e293b', paddingBottom: '6px' }}>
-                System Alerts (3 Unread)
+                Operational Alerts & Telemetry
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.75rem' }}>
                 <div style={{ color: '#fb7185', background: 'rgba(244,63,94,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🔴 <strong>Zone 4:</strong> Traffic surge predicted (+18%)
+                  🔴 <strong>Jayadev Vihar:</strong> Congestion index surge (+18% above baseline)
                 </div>
                 <div style={{ color: '#fbbf24', background: 'rgba(245,158,11,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🟠 <strong>Zone 2:</strong> AQI deterioration (112 AQI)
+                  🟠 <strong>Patia Main Road:</strong> AQI elevation (129.7 AQI)
                 </div>
                 <div style={{ color: '#38bdf8', background: 'rgba(6,182,212,0.1)', padding: '6px 8px', borderRadius: '6px' }}>
-                  🔵 <strong>ML Engine:</strong> Retrained on 5,200 records
+                  🔵 <strong>ML Engine:</strong> Real Scikit-learn inference active (250 records)
                 </div>
               </div>
             </div>

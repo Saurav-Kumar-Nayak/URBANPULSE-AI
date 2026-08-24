@@ -1,0 +1,12 @@
+==================================================================
+ URBANPULSE AI — UNIFIED SINGLE-SERVER PLATFORM (FRONTEND + BACKEND) 
+==================================================================
+ Single Link URL (Both Frontend & APIs): http://127.0.0.1:8000
+ API Documentation (OpenAPI):           http://127.0.0.1:8000/docs
+ Health Check API:                      http://127.0.0.1:8000/api/health
+==================================================================
+[Startup] Initializing database tables...
+[Startup] Running database seeder...
+[Seeder] Database already contains 5200 urban records. Skipping seed.
+[ML Engine] Scikit-learn ML models trained. AQI R²=0.976, Traffic R²=0.98, Risk Acc=0.963.
+[Startup] UrbanPulse AI Backend initialized successfully!
