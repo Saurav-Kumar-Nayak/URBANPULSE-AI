@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -14,8 +14,35 @@ import {
   Legend 
 } from 'recharts';
 import { Car, Clock, TrendingUp, AlertTriangle } from 'lucide-react';
+import { api } from '../services/api';
+import { LoadingSpinner } from './ui/LoadingSpinner';
 
-export default function TrafficIntelligenceView({ trafficData = null }) {
+export default function TrafficIntelligenceView({ trafficData: initialData = null }) {
+  const [data, setData] = useState(initialData);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
+    let isMounted = true;
+    api.getTraffic()
+      .then((res) => {
+        if (isMounted) {
+          setData(res);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch traffic data:", err);
+        if (isMounted) setLoading(false);
+      });
+    return () => { isMounted = false; };
+  }, [initialData]);
+
+  const trafficData = data;
   const hourly = trafficData?.hourly_trends || [];
   const locations = trafficData?.location_rankings || [];
   const weekdayWeekend = trafficData?.weekday_vs_weekend || [];

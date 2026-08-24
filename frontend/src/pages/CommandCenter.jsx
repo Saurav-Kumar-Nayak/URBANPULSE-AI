@@ -1,55 +1,188 @@
-import React from 'react';
-import { PageContainer } from '../components/layout/PageContainer';
-import { Badge } from '../components/ui/Badge';
-import { LoadingSpinner } from '../components/ui/LoadingSpinner';
-import { EmptyState } from '../components/ui/EmptyState';
+import React, { useState, useEffect } from 'react';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import EmptyState from '../components/ui/EmptyState';
 import { useDashboard } from '../hooks/useDashboard';
-import KpiCards from '../components/KpiCards';
+import { useUrbanPulseContext } from '../context/UrbanPulseContext';
+import dashboardService from '../services/dashboardService';
+
 import LiveCityMap from '../components/LiveCityMap';
-import TrafficIntelligenceView from '../components/TrafficIntelligenceView';
-import AnomalyRadar from '../components/AnomalyRadar';
-import InsightEngineView from '../components/InsightEngineView';
-import PollutionIntelligenceView from '../components/PollutionIntelligenceView';
+import KpiCards from '../components/KpiCards';
+import LeftIntelligencePanel from '../components/dashboard/LeftIntelligencePanel';
+import LiveTrafficFeed from '../components/dashboard/LiveTrafficFeed';
+import ActiveAlertCenter from '../components/dashboard/ActiveAlertCenter';
+import DynamicCharts from '../components/dashboard/DynamicCharts';
+
+import { Sparkles } from 'lucide-react';
 
 export const CommandCenter = () => {
   const { data, loading, error, refetch } = useDashboard();
+  const { isCopilotOpen, toggleCopilot } = useUrbanPulseContext();
+  const [selectedZone, setSelectedZone] = useState('LOC-01');
 
-  if (loading) return <PageContainer><LoadingSpinner label="Initializing Command Center Telemetry..." /></PageContainer>;
-  if (error) return <PageContainer><EmptyState title="Telemetry Error" message={error} onRetry={refetch} /></PageContainer>;
+  // Dynamic Timeframe State
+  const [activeTimeframe, setActiveTimeframe] = useState('24h');
+  const [trafficData, setTrafficData] = useState(null);
+  const [pollutionData, setPollutionData] = useState(null);
+  const [anomaliesData, setAnomaliesData] = useState(null);
+  const [trendLoading, setTrendLoading] = useState(false);
+
+  // User location override state
+  const [userLocation, setUserLocation] = useState(null);
+
+  // Fetch trend datasets when timeframe changes
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTrends = async () => {
+      setTrendLoading(true);
+      try {
+        const [tRes, pRes, aRes] = await Promise.all([
+          dashboardService.getTraffic({ timeframe: activeTimeframe }),
+          dashboardService.getPollution({ timeframe: activeTimeframe }),
+          dashboardService.getAnomalies()
+        ]);
+        if (isMounted) {
+          setTrafficData(tRes);
+          setPollutionData(pRes);
+          setAnomaliesData(aRes);
+        }
+      } catch (e) {
+        console.warn("Failed to fetch timeframe data:", e);
+      } finally {
+        if (isMounted) setTrendLoading(false);
+      }
+    };
+    fetchTrends();
+    return () => { isMounted = false; };
+  }, [activeTimeframe]);
+
+  if (loading) {
+    return (
+      <div style={{ padding: '40px', display: 'flex', justifyContent: 'center' }}>
+        <LoadingSpinner label="Initializing Metropolitan Digital Twin Command Center..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '40px' }}>
+        <EmptyState title="Telemetry Sync Error" message={error} onRetry={refetch} />
+      </div>
+    );
+  }
 
   return (
-    <PageContainer
-      title="URBANPULSE AI"
-      subtitle="Urban Intelligence Command Center — Real-Time Metropolitan Analytics & ML Predictive Operations"
-      badge={<Badge variant="cyan">Command Mode</Badge>}
-    >
-      {/* Hero KPIs Header */}
-      <KpiCards kpis={data?.kpis || []} />
+    <div style={{ padding: '16px 20px 30px 20px', background: '#0b0f17', minHeight: '100vh', color: '#f8fafc' }}>
+      
+      {/* MAIN 2-COLUMN COMMAND CENTER GRID */}
+      <div 
+        style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '280px 1fr', 
+          gap: '16px',
+          alignItems: 'start' 
+        }} 
+        className="command-center-layout"
+      >
+        
+        {/* LEFT COLUMN: CURRENT LOCATION & URBAN INTELLIGENCE */}
+        <LeftIntelligencePanel 
+          overview={data} 
+          activeZone={selectedZone}
+          onLocationDetected={(loc) => setUserLocation(loc)} 
+        />
 
-      {/* Main Grid: Live City Map & Intelligence Panels */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1.2fr', gap: '20px', marginBottom: '24px' }}>
-        <div className="card-panel" style={{ padding: '20px', minHeight: '520px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#f8fafc' }}>
-              Live Urban Geospatial Intelligence
-            </h3>
-            <Badge variant="healthy">Live Map Layer</Badge>
+        {/* RIGHT MAIN CONTAINER */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          
+          {/* 1. TOP 5 KPI STRIP */}
+          <KpiCards kpis={data?.kpis || []} overview={data} activeZone={selectedZone} />
+
+          {/* 2. MIDDLE ROW: MAP (LEFT) & LIVE TRAFFIC / ALERTS (RIGHT) */}
+          <div 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: '1fr 330px', 
+              gap: '16px',
+              alignItems: 'stretch' 
+            }}
+            className="command-center-map-grid"
+          >
+            {/* Live Geospatial Twin City Map */}
+            <LiveCityMap 
+              locations={data?.locations || []} 
+              selectedZone={selectedZone} 
+              onSelectZone={setSelectedZone} 
+              mapHeight="510px"
+              userLocation={userLocation}
+            />
+
+            {/* Right Feed Stack */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <LiveTrafficFeed 
+                locationRankings={trafficData?.location_rankings || []}
+                activeZone={selectedZone}
+                onSelectZone={setSelectedZone}
+                loading={trendLoading}
+              />
+              <ActiveAlertCenter 
+                anomalies={anomaliesData?.recent_anomalies || []}
+                activeZone={selectedZone}
+                onSelectZone={setSelectedZone}
+                loading={trendLoading}
+              />
+            </div>
           </div>
-          <LiveCityMap />
+
+          {/* 3. BOTTOM ROW: 4 DYNAMIC ANALYTICS CHARTS */}
+          <DynamicCharts
+            pollutionData={pollutionData}
+            trafficData={trafficData}
+            anomaliesData={anomaliesData}
+            overviewData={data}
+            activeZone={selectedZone}
+            activeTimeframe={activeTimeframe}
+            onTimeframeChange={(tf) => setActiveTimeframe(tf)}
+            loading={trendLoading}
+          />
+
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <InsightEngineView />
-          <AnomalyRadar />
-        </div>
       </div>
 
-      {/* Analytics & Traffic Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-        <TrafficIntelligenceView />
-        <PollutionIntelligenceView />
-      </div>
-    </PageContainer>
+      {/* FLOATING AI COPILOT BUTTON (ONLY SHOWN WHEN DRAWER IS CLOSED) */}
+      {!isCopilotOpen && (
+        <button
+          onClick={toggleCopilot}
+          className="copilot-floating-btn"
+          id="btn-floating-copilot"
+          title="Open UrbanPulse AI Copilot"
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            zIndex: 1050,
+            background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
+            border: 'none',
+            borderRadius: '9999px',
+            padding: '10px 18px',
+            color: '#ffffff',
+            fontWeight: 800,
+            fontSize: '0.82rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 8px 24px rgba(6, 182, 212, 0.4)',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <Sparkles size={16} color="#ffffff" />
+          <span>✦ Ask AI</span>
+        </button>
+      )}
+
+    </div>
   );
 };
 

@@ -1,14 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { AlertTriangle, ShieldAlert, Cpu, CheckCircle2, Play } from 'lucide-react';
 import { api } from '../services/api';
 
-export default function AnomalyRadar({ anomalies = [], stats = null, onRefresh }) {
+export default function AnomalyRadar({ anomalies: initialAnomalies = [], stats: initialStats = null, onRefresh }) {
   const [simulating, setSimulating] = useState(false);
   const [simResult, setSimResult] = useState(null);
+  const [fetchedAnomalies, setFetchedAnomalies] = useState(initialAnomalies);
+  const [fetchedStats, setFetchedStats] = useState(initialStats);
 
-  const severityBreakdown = stats?.severity_breakdown || { Critical: 45, High: 82, Medium: 91 };
-  const typeCounts = stats?.anomaly_types || { "Traffic Bottleneck": 68, "Air Quality Hazard": 54, "Severe Gridlock": 42 };
+  const fetchAnomaliesData = async () => {
+    try {
+      const res = await api.getAnomalies();
+      if (res) {
+        setFetchedAnomalies(res.recent_anomalies || []);
+        setFetchedStats({
+          severity_breakdown: res.severity_breakdown,
+          anomaly_types: res.anomaly_types
+        });
+      }
+    } catch (err) {
+      console.error("Failed to load anomalies telemetry:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (initialAnomalies && initialAnomalies.length > 0) {
+      setFetchedAnomalies(initialAnomalies);
+      setFetchedStats(initialStats);
+    } else {
+      fetchAnomaliesData();
+    }
+  }, [initialAnomalies, initialStats]);
+
+  const anomalies = fetchedAnomalies;
+  const stats = fetchedStats;
+
+  const severityBreakdown = stats?.severity_breakdown || { Critical: 71, High: 47, Medium: 123 };
+  const typeCounts = stats?.anomaly_types || { "Air Quality Hazard": 56, "Multi-Vector Urban Risk": 54, "Severe Gridlock": 67, "Traffic Bottleneck": 64 };
 
   const barData = Object.keys(typeCounts).map(key => ({
     name: key,
@@ -29,6 +58,7 @@ export default function AnomalyRadar({ anomalies = [], stats = null, onRefresh }
       };
       const res = await api.detectAnomaly(testPayload);
       setSimResult(res.detection);
+      await fetchAnomaliesData();
       if (onRefresh) onRefresh();
     } catch (e) {
       console.error("Anomaly test simulation error:", e);
@@ -121,29 +151,39 @@ export default function AnomalyRadar({ anomalies = [], stats = null, onRefresh }
           <table className="data-table">
             <thead>
               <tr>
-                <th>Record Code</th>
-                <th>Location</th>
-                <th>Timestamp</th>
-                <th>Anomaly Type</th>
-                <th>Severity</th>
-                <th>Risk Score</th>
-                <th>Evidence Explanation</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Record Code</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Location</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Timestamp</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Anomaly Type</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Severity</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Risk Score</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Evidence Explanation</th>
               </tr>
             </thead>
             <tbody>
               {anomalies.map((anom) => (
                 <tr key={anom.id || anom.record_code}>
-                  <td style={{ fontWeight: 700, color: 'var(--primary-cyan)' }}>{anom.record_code}</td>
-                  <td>{anom.location_name}</td>
-                  <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{anom.timestamp}</td>
-                  <td>{anom.anomaly_type}</td>
-                  <td>
+                  <td style={{ fontWeight: 700, color: 'var(--primary-cyan)', whiteSpace: 'nowrap' }}>{anom.record_code}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{anom.location_name}</td>
+                  <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{anom.timestamp}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>{anom.anomaly_type}</td>
+                  <td style={{ whiteSpace: 'nowrap' }}>
                     <span className={`badge ${anom.severity === 'Critical' ? 'badge-rose' : (anom.severity === 'High' ? 'badge-amber' : 'badge-subtle')}`}>
                       {anom.severity}
                     </span>
                   </td>
-                  <td style={{ fontWeight: 700 }}>{anom.risk_score}</td>
-                  <td style={{ fontSize: '0.78rem', color: 'var(--text-muted)', maxWidth: '300px' }}>
+                  <td style={{ fontWeight: 700, whiteSpace: 'nowrap' }}>{anom.risk_score}</td>
+                  <td 
+                    title={anom.explanation}
+                    style={{ 
+                      fontSize: '0.78rem', 
+                      color: 'var(--text-muted)', 
+                      maxWidth: '300px', 
+                      whiteSpace: 'nowrap', 
+                      overflow: 'hidden', 
+                      textOverflow: 'ellipsis' 
+                    }}
+                  >
                     {anom.explanation}
                   </td>
                 </tr>

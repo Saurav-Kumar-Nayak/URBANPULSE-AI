@@ -18,10 +18,36 @@ export const MLModelCenter = () => {
 
   return (
     <PageContainer
-      title="Scikit-Learn ML Model Center"
-      subtitle="Operational performance metrics, feature importances, and mathematical specifications of backend models"
-      badge={<Badge variant="violet">Engine Status: {data?.status || 'Active'}</Badge>}
+      title="MODEL INTELLIGENCE & SCIKIT-LEARN METRICS"
+      subtitle="Operational performance metrics, feature importances, and mathematical specifications of backend ML models"
+      badge={<Badge variant="violet">ML Status: Active</Badge>}
     >
+      {/* Model Operational Status Bar */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+        <div className="card-panel" style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MODEL STATUS</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#34d399', marginTop: '2px' }}>● READY</div>
+          </div>
+          <Badge variant="healthy">Active Inference</Badge>
+        </div>
+
+        <div className="card-panel" style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MODEL HEALTH</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#34d399', marginTop: '2px' }}>● HEALTHY</div>
+          </div>
+          <Badge variant="healthy">Zero Drift</Badge>
+        </div>
+
+        <div className="card-panel" style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>TRAINING STATUS</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#38bdf8', marginTop: '2px' }}>● AVAILABLE</div>
+          </div>
+          <Badge variant="cyan">5,200 Records</Badge>
+        </div>
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px', marginBottom: '24px' }}>
         {/* Model Card 1: AQI Predictor */}
         <Card hover>

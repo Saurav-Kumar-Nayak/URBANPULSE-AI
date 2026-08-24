@@ -40,7 +40,7 @@ export const LiveCity = () => {
             </div>
           </div>
           <div style={{ flex: 1, borderRadius: '10px', overflow: 'hidden' }}>
-            <LiveCityMap />
+            <LiveCityMap locations={locations} anomalies={anomalies} />
           </div>
         </Card>
 

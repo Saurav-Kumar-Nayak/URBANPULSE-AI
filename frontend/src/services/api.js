@@ -24,14 +24,14 @@ export const api = {
   },
 
   // Traffic
-  getTraffic: async () => {
-    const res = await apiClient.get('/traffic');
+  getTraffic: async (params = {}) => {
+    const res = await apiClient.get('/traffic', { params });
     return res.data;
   },
 
   // Pollution
-  getPollution: async () => {
-    const res = await apiClient.get('/pollution');
+  getPollution: async (params = {}) => {
+    const res = await apiClient.get('/pollution', { params });
     return res.data;
   },
 

@@ -1,64 +1,157 @@
 import React from 'react';
-import { Database, Wind, Car, ShieldAlert, AlertTriangle, MapPin, TrendingUp, TrendingDown } from 'lucide-react';
+import { Users, Building2, MapPin, Database, AlertTriangle, ArrowRight } from 'lucide-react';
+import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 
-export default function KpiCards({ kpis = [], overview = null, loading = false }) {
+export default function KpiCards({ overview = null, activeZone = null, kpis = [], loading = false }) {
+  const { setActiveTab } = useUrbanPulseContext();
+
   if (loading) {
     return (
-      <div className="kpi-grid">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="kpi-card skeleton">
-            <div className="skeleton-title"></div>
-            <div className="skeleton-value"></div>
-          </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="skeleton" style={{ height: '76px', borderRadius: '12px' }} />
         ))}
       </div>
     );
   }
 
-  const icons = {
-    "Total Urban Records": Database,
-    "Air Quality Index (AQI)": Wind,
-    "Traffic Congestion": Car,
-    "Urban Risk Score": ShieldAlert,
-    "Active Anomalies": AlertTriangle,
-    "Monitored Zones": MapPin
-  };
+  // Zone specific metrics or default city metrics
+  const popVal = activeZone?.population || '968K';
+  const areaVal = activeZone?.areaSqKm ? `${activeZone.areaSqKm} sq km` : '176 sq km';
+  const zonesVal = activeZone?.sensorNodes ? `${activeZone.sensorNodes}` : '52';
+  const sourcesVal = activeZone?.dataSources ? `${activeZone.dataSources}` : '128+';
+  const alertsVal = activeZone?.alertsCount !== undefined ? `${activeZone.alertsCount}` : (overview?.anomaly_count ? `${overview.anomaly_count}` : '3');
 
-  const displayKpis = kpis.length > 0 ? kpis : [
-    { title: "Total Urban Records", value: overview?.total_records ? `${overview.total_records.toLocaleString()}` : "5,200", unit: "records", change: "+4.2%", status: "normal" },
-    { title: "Air Quality Index (AQI)", value: overview?.avg_aqi || 68, unit: "AQI", change: overview?.aqi_status || "Moderate", status: "normal" },
-    { title: "Traffic Congestion", value: overview?.avg_congestion_pct || "48%", unit: "index", change: `${overview?.avg_congestion_index || 0.48}`, status: "warning" },
-    { title: "Urban Risk Score", value: overview?.urban_risk_score || 46.5, unit: "/100", change: overview?.risk_level || "Medium", status: "normal" },
-    { title: "Active Anomalies", value: overview?.anomaly_count || 218, unit: "events", change: "4.2%", status: "warning" },
-    { title: "Monitored Zones", value: overview?.active_zones || 8, unit: "zones", change: "Active", status: "normal" }
+  const cards = [
+    {
+      id: 'population',
+      title: 'Population',
+      value: popVal,
+      trend: '↑ 2.3%',
+      icon: Users,
+      color: '#38bdf8',
+      bg: 'rgba(56, 189, 248, 0.15)'
+    },
+    {
+      id: 'area',
+      title: 'Area',
+      value: areaVal,
+      icon: Building2,
+      color: '#38bdf8',
+      bg: 'rgba(56, 189, 248, 0.15)'
+    },
+    {
+      id: 'zones',
+      title: 'Monitoring Zones',
+      value: zonesVal,
+      icon: MapPin,
+      color: '#38bdf8',
+      bg: 'rgba(56, 189, 248, 0.15)'
+    },
+    {
+      id: 'sources',
+      title: 'Data Sources',
+      value: sourcesVal,
+      icon: Database,
+      color: '#38bdf8',
+      bg: 'rgba(56, 189, 248, 0.15)'
+    },
+    {
+      id: 'alerts',
+      title: 'Active Alerts',
+      value: alertsVal,
+      icon: AlertTriangle,
+      color: '#f43f5e',
+      bg: 'rgba(244, 63, 94, 0.2)',
+      isAction: true
+    }
   ];
 
   return (
-    <div className="kpi-grid">
-      {displayKpis.map((card, idx) => {
-        const IconComponent = icons[card.title] || Database;
-        const isCritical = card.status === 'critical' || card.status === 'warning';
-
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }} className="top-kpi-strip">
+      {cards.map((card) => {
+        const IconComponent = card.icon;
         return (
-          <div key={idx} className={`kpi-card ${isCritical ? 'kpi-warning' : ''}`}>
-            <div className="kpi-card-header">
-              <span className="kpi-title">{card.title}</span>
-              <div className="kpi-icon-wrapper">
-                <IconComponent size={18} className="kpi-icon" />
+          <div 
+            key={card.id}
+            className="card-panel"
+            onClick={() => {
+              if (card.id === 'alerts') setActiveTab('risk');
+              else if (card.id === 'zones') setActiveTab('liveMap');
+              else setActiveTab('analytics');
+            }}
+            style={{ 
+              padding: '12px 16px',
+              borderRadius: '12px',
+              background: 'rgba(13, 19, 28, 0.92)',
+              border: card.isAction ? '1px solid rgba(244, 63, 94, 0.4)' : '1px solid var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div 
+                style={{ 
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '10px',
+                  background: card.bg,
+                  color: card.color,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <IconComponent size={20} />
+              </div>
+
+              <div>
+                <div style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.03em', fontWeight: 600 }}>
+                  {card.title}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginTop: '2px' }}>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', fontFamily: 'var(--font-mono)' }}>
+                    {card.value}
+                  </span>
+                  {card.trend && (
+                    <span style={{ fontSize: '0.68rem', color: '#34d399', fontWeight: 700 }}>
+                      {card.trend}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="kpi-body">
-              <span className="kpi-value">{card.value}</span>
-              {card.unit && <span className="kpi-unit"> {card.unit}</span>}
-            </div>
-
-            <div className="kpi-footer">
-              <span className={`kpi-badge ${card.status || 'normal'}`}>
-                {card.change}
-              </span>
-              <span className="kpi-subtext">Real Backend Telemetry</span>
-            </div>
+            {card.isAction && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTab('risk');
+                }}
+                style={{
+                  background: 'rgba(244, 63, 94, 0.2)',
+                  border: '1px solid rgba(244, 63, 94, 0.5)',
+                  color: '#fb7185',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <span>View All</span>
+                <ArrowRight size={12} />
+              </button>
+            )}
           </div>
         );
       })}

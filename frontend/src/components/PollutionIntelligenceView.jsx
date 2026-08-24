@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ResponsiveContainer, 
   AreaChart, 
@@ -14,8 +14,37 @@ import {
   Legend 
 } from 'recharts';
 import { Wind, CloudRain, AlertCircle, Thermometer } from 'lucide-react';
+import { api } from '../services/api';
+import { LoadingSpinner } from './ui/LoadingSpinner';
 
-export default function PollutionIntelligenceView({ pollutionData = null }) {
+export default function PollutionIntelligenceView({ pollutionData: initialData = null }) {
+  const [data, setData] = useState(initialData);
+  const [loading, setLoading] = useState(!initialData);
+
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
+    let isMounted = true;
+    api.getPollution()
+      .then((res) => {
+        if (isMounted) {
+          setData(res);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch pollution data:", err);
+        if (isMounted) setLoading(false);
+      });
+    return () => { isMounted = false; };
+  }, [initialData]);
+
+  if (loading) return <LoadingSpinner label="Loading Environmental Telemetry..." />;
+
+  const pollutionData = data;
   const trends = pollutionData?.aqi_trends || [];
   const pmBreakdown = pollutionData?.pm_breakdown || [];
   const weatherCorr = pollutionData?.weather_correlation || [];
@@ -51,11 +80,11 @@ export default function PollutionIntelligenceView({ pollutionData = null }) {
       </div>
 
       {/* 2. AQI & Particulate Time Series */}
-      <div className="glass-panel" style={{ padding: '20px' }}>
+      <div className="glass-panel" style={{ padding: '20px', minWidth: 0 }}>
         <h3 style={{ fontSize: '1.0rem', fontWeight: 700, marginBottom: '16px' }}>
           Air Quality Index & Particulate Concentration Trends
         </h3>
-        <div style={{ height: '300px', width: '100%' }}>
+        <div style={{ height: '300px', width: '100%', minWidth: 0 }}>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={trends}>
               <defs>
@@ -83,11 +112,11 @@ export default function PollutionIntelligenceView({ pollutionData = null }) {
       {/* 3. Weather Correlation & Location Pollution Rankings */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
         {/* Weather vs AQI */}
-        <div className="glass-panel" style={{ padding: '20px' }}>
+        <div className="glass-panel" style={{ padding: '20px', minWidth: 0 }}>
           <h3 style={{ fontSize: '0.98rem', fontWeight: 700, marginBottom: '16px' }}>
             Weather Condition vs AQI Correlation
           </h3>
-          <div style={{ height: '240px', width: '100%' }}>
+          <div style={{ height: '240px', width: '100%', minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={weatherCorr}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />

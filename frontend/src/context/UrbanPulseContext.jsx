@@ -5,13 +5,13 @@ const UrbanPulseContext = createContext();
 
 const getInitialTab = () => {
   const path = window.location.pathname.replace(/^\//, '').trim();
-  if (!path || path === '/') return 'command-center';
+  if (!path || path === '/' || path === 'home') return 'home';
   const knownTabs = [
-    'command-center', 'live-city', 'predictions', 'traffic', 
-    'environment', 'risk', 'analytics', 'ml-models', 
-    'ai-copilot', 'api-docs', 'settings'
+    'home', 'command-center', 'dashboard', 'live-city', 'predictions', 'traffic', 
+    'environment', 'pollution', 'weather', 'risk', 'what-if', 
+    'analytics', 'ml-models', 'ai-copilot', 'api-docs', 'settings'
   ];
-  return knownTabs.includes(path) ? path : 'command-center';
+  return knownTabs.includes(path) ? path : 'home';
 };
 
 export const UrbanPulseProvider = ({ children }) => {
@@ -20,12 +20,24 @@ export const UrbanPulseProvider = ({ children }) => {
   const [selectedZone, setSelectedZone] = useState('ALL');
   const [lastUpdated, setLastUpdated] = useState(new Date().toLocaleTimeString());
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [copilotInitialQuery, setCopilotInitialQuery] = useState('');
 
   const setActiveTab = (tab) => {
     setActiveTabState(tab);
-    if (window.location.pathname !== `/${tab}`) {
-      window.history.pushState({}, '', `/${tab}`);
+    const targetPath = tab === 'home' ? '/' : `/${tab}`;
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({}, '', targetPath);
     }
+  };
+
+  const openCopilotWithQuery = (query = '') => {
+    setCopilotInitialQuery(query);
+    setIsCopilotOpen(true);
+  };
+
+  const toggleCopilot = () => {
+    setIsCopilotOpen(prev => !prev);
   };
 
   useEffect(() => {
@@ -68,6 +80,11 @@ export const UrbanPulseProvider = ({ children }) => {
         lastUpdated,
         refreshTrigger,
         triggerGlobalRefresh,
+        isCopilotOpen,
+        setIsCopilotOpen,
+        toggleCopilot,
+        copilotInitialQuery,
+        openCopilotWithQuery,
       }}
     >
       {children}

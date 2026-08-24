@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
+from typing import Optional
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract
 from app.core.database import get_db
@@ -9,15 +11,33 @@ router = APIRouter(tags=["Pollution Intelligence"])
 
 @router.get("/pollution", response_model=PollutionResponseSchema)
 @router.get("/v1/pollution", response_model=PollutionResponseSchema)
-def get_pollution_intelligence(db: Session = Depends(get_db)):
-    avg_aqi = db.query(func.avg(UrbanRecord.aqi)).scalar() or 0
-    max_aqi = db.query(func.max(UrbanRecord.aqi)).scalar() or 0
+def get_pollution_intelligence(
+    timeframe: Optional[str] = Query("24h"),
+    db: Session = Depends(get_db)
+):
+    max_ts = db.query(func.max(UrbanRecord.timestamp)).scalar() or datetime.utcnow()
+    tf_lower = (timeframe or "24h").lower()
+    if tf_lower == "1h":
+        start_ts = max_ts - timedelta(hours=1)
+    elif tf_lower == "6h":
+        start_ts = max_ts - timedelta(hours=6)
+    elif tf_lower == "7d":
+        start_ts = max_ts - timedelta(days=7)
+    elif tf_lower == "30d":
+        start_ts = max_ts - timedelta(days=30)
+    else:
+        start_ts = max_ts - timedelta(hours=24)
+
+    base_query = db.query(UrbanRecord).filter(UrbanRecord.timestamp >= start_ts)
+
+    avg_aqi = base_query.with_entities(func.avg(UrbanRecord.aqi)).scalar() or 0
+    max_aqi = base_query.with_entities(func.max(UrbanRecord.aqi)).scalar() or 0
 
     # 1. AQI & Particulate Trends (by hour of day)
     aqi_trends = []
     for h in range(24):
         h_str = f"{h:02d}:00"
-        stats = db.query(
+        stats = base_query.with_entities(
             func.avg(UrbanRecord.aqi),
             func.avg(UrbanRecord.pm25),
             func.avg(UrbanRecord.pm10)
@@ -34,21 +54,21 @@ def get_pollution_intelligence(db: Session = Depends(get_db)):
     pm_breakdown = [
         {
             "pollutant": "PM2.5 (Fine Particulate)",
-            "avg_value": round(float(db.query(func.avg(UrbanRecord.pm25)).scalar() or 28.5), 1),
+            "avg_value": round(float(base_query.with_entities(func.avg(UrbanRecord.pm25)).scalar() or 28.5), 1),
             "unit": "µg/m³",
             "threshold_safe": 35.0,
             "status": "Moderate"
         },
         {
             "pollutant": "PM10 (Coarse Particulate)",
-            "avg_value": round(float(db.query(func.avg(UrbanRecord.pm10)).scalar() or 58.2), 1),
+            "avg_value": round(float(base_query.with_entities(func.avg(UrbanRecord.pm10)).scalar() or 58.2), 1),
             "unit": "µg/m³",
             "threshold_safe": 50.0,
             "status": "Moderate"
         },
         {
             "pollutant": "CO2 Concentration",
-            "avg_value": round(float(db.query(func.avg(UrbanRecord.co2_ppm)).scalar() or 445.0), 1),
+            "avg_value": round(float(base_query.with_entities(func.avg(UrbanRecord.co2_ppm)).scalar() or 445.0), 1),
             "unit": "ppm",
             "threshold_safe": 450.0,
             "status": "Normal"
@@ -59,7 +79,7 @@ def get_pollution_intelligence(db: Session = Depends(get_db)):
     weathers = ["Clear", "Partly Cloudy", "Rain", "Heavy Rain", "Fog", "Haze"]
     weather_correlation = []
     for w in weathers:
-        w_stats = db.query(
+        w_stats = base_query.with_entities(
             func.avg(UrbanRecord.aqi),
             func.avg(UrbanRecord.pm25),
             func.avg(UrbanRecord.temperature_c),
@@ -75,7 +95,7 @@ def get_pollution_intelligence(db: Session = Depends(get_db)):
             })
 
     # 4. Location Rankings
-    loc_stats = db.query(
+    loc_stats = base_query.with_entities(
         UrbanRecord.location_id,
         UrbanRecord.location_name,
         func.avg(UrbanRecord.aqi),

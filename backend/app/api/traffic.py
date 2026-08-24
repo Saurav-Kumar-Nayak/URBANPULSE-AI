@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
+from typing import Optional
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract
 from app.core.database import get_db
@@ -9,12 +11,30 @@ router = APIRouter(tags=["Traffic Intelligence"])
 
 @router.get("/traffic", response_model=TrafficResponseSchema)
 @router.get("/v1/traffic", response_model=TrafficResponseSchema)
-def get_traffic_intelligence(db: Session = Depends(get_db)):
+def get_traffic_intelligence(
+    timeframe: Optional[str] = Query("24h"),
+    db: Session = Depends(get_db)
+):
+    # Filter base query by timeframe relative to maximum timestamp in DB
+    max_ts = db.query(func.max(UrbanRecord.timestamp)).scalar() or datetime.utcnow()
+    tf_lower = (timeframe or "24h").lower()
+    if tf_lower == "1h":
+        start_ts = max_ts - timedelta(hours=1)
+    elif tf_lower == "6h":
+        start_ts = max_ts - timedelta(hours=6)
+    elif tf_lower == "7d":
+        start_ts = max_ts - timedelta(days=7)
+    elif tf_lower == "30d":
+        start_ts = max_ts - timedelta(days=30)
+    else:
+        start_ts = max_ts - timedelta(hours=24)
+
+    base_query = db.query(UrbanRecord).filter(UrbanRecord.timestamp >= start_ts)
     # 1. Hourly Traffic Breakdown
     hourly_trends = []
     for h in range(24):
         h_str = f"{h:02d}:00"
-        records_h = db.query(
+        records_h = base_query.with_entities(
             func.avg(UrbanRecord.traffic_density),
             func.avg(UrbanRecord.congestion_index),
             func.avg(UrbanRecord.avg_speed_kmh)
@@ -36,7 +56,7 @@ def get_traffic_intelligence(db: Session = Depends(get_db)):
     peak_hours = [x.hour for x in sorted_h[:4]]
 
     # 2. Location Congestion Rankings
-    loc_stats = db.query(
+    loc_stats = base_query.with_entities(
         UrbanRecord.location_id,
         UrbanRecord.location_name,
         func.avg(UrbanRecord.congestion_index),

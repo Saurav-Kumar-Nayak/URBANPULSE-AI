@@ -8,14 +8,14 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.
 CSV_PATH = os.path.join(DATA_DIR, "urbanpulse_dataset.csv")
 
 LOCATIONS_META = [
-    {"location_id": "LOC-01", "location_name": "Downtown Central", "area_type": "Commercial", "latitude": 40.7128, "longitude": -74.0060, "base_traffic": 180, "base_aqi": 75},
-    {"location_id": "LOC-02", "location_name": "Midtown Financial", "area_type": "Financial", "latitude": 40.7589, "longitude": -73.9851, "base_traffic": 210, "base_aqi": 85},
-    {"location_id": "LOC-03", "location_name": "Harbor Industrial", "area_type": "Industrial", "latitude": 40.6720, "longitude": -74.0090, "base_traffic": 150, "base_aqi": 115},
-    {"location_id": "LOC-04", "location_name": "Tech Corridor West", "area_type": "Technology", "latitude": 40.7410, "longitude": -74.0040, "base_traffic": 130, "base_aqi": 55},
-    {"location_id": "LOC-05", "location_name": "North Residential", "area_type": "Residential", "latitude": 40.7900, "longitude": -73.9600, "base_traffic": 85, "base_aqi": 42},
-    {"location_id": "LOC-06", "location_name": "Suburb South Ridge", "area_type": "Suburban", "latitude": 40.6300, "longitude": -74.0800, "base_traffic": 65, "base_aqi": 35},
-    {"location_id": "LOC-07", "location_name": "Airport Transit Hub", "area_type": "Transit", "latitude": 40.6413, "longitude": -73.7781, "base_traffic": 190, "base_aqi": 95},
-    {"location_id": "LOC-08", "location_name": "University District", "area_type": "Educational", "latitude": 40.7290, "longitude": -73.9960, "base_traffic": 110, "base_aqi": 50}
+    {"location_id": "LOC-01", "location_name": "Patia Main Road", "area_type": "Commercial", "latitude": 20.3533, "longitude": 85.8197, "base_traffic": 180, "base_aqi": 75},
+    {"location_id": "LOC-02", "location_name": "Jayadev Vihar", "area_type": "Financial", "latitude": 20.3010, "longitude": 85.8239, "base_traffic": 210, "base_aqi": 85},
+    {"location_id": "LOC-03", "location_name": "Saheed Nagar", "area_type": "Industrial", "latitude": 20.2872, "longitude": 85.8415, "base_traffic": 150, "base_aqi": 115},
+    {"location_id": "LOC-04", "location_name": "Khandagiri", "area_type": "Technology", "latitude": 20.2588, "longitude": 85.7836, "base_traffic": 130, "base_aqi": 55},
+    {"location_id": "LOC-05", "location_name": "Vani Vihar", "area_type": "Educational", "latitude": 20.2974, "longitude": 85.8364, "base_traffic": 85, "base_aqi": 42},
+    {"location_id": "LOC-06", "location_name": "Bhubaneswar Railway Station", "area_type": "Transit", "latitude": 20.2657, "longitude": 85.8436, "base_traffic": 190, "base_aqi": 95},
+    {"location_id": "LOC-07", "location_name": "Nandankanan Road", "area_type": "Commercial", "latitude": 20.3700, "longitude": 85.8250, "base_traffic": 160, "base_aqi": 60},
+    {"location_id": "LOC-08", "location_name": "Kalarahanga Road", "area_type": "Suburban", "latitude": 20.3800, "longitude": 85.8300, "base_traffic": 110, "base_aqi": 50}
 ]
 
 def ensure_dataset_exists():

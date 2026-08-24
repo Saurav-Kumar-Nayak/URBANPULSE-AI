@@ -1,12 +1,15 @@
 import React from 'react';
 import { UrbanPulseProvider, useUrbanPulseContext } from './context/UrbanPulseContext';
 import AppLayout from './components/layout/AppLayout';
+import LandingPage from './pages/LandingPage';
 import CommandCenter from './pages/CommandCenter';
 import LiveCity from './pages/LiveCity';
 import Predictions from './pages/Predictions';
 import TrafficIntelligence from './pages/TrafficIntelligence';
 import EnvironmentalIntelligence from './pages/EnvironmentalIntelligence';
+import WeatherIntelligence from './pages/WeatherIntelligence';
 import RiskAnomalies from './pages/RiskAnomalies';
+import WhatIfSimulator from './pages/WhatIfSimulator';
 import AnalyticsWorkspace from './pages/AnalyticsWorkspace';
 import MLModelCenter from './pages/MLModelCenter';
 import AICopilotPage from './pages/AICopilotPage';
@@ -18,6 +21,8 @@ function AppContent() {
 
   const renderActivePage = () => {
     switch (activeTab) {
+      case 'home':
+        return <LandingPage key={refreshTrigger} />;
       case 'command-center':
       case 'dashboard':
         return <CommandCenter key={refreshTrigger} />;
@@ -30,9 +35,14 @@ function AppContent() {
       case 'environment':
       case 'pollution':
         return <EnvironmentalIntelligence key={refreshTrigger} />;
+      case 'weather':
+        return <WeatherIntelligence key={refreshTrigger} />;
       case 'risk':
       case 'anomalies':
         return <RiskAnomalies key={refreshTrigger} />;
+      case 'what-if':
+      case 'simulator':
+        return <WhatIfSimulator key={refreshTrigger} />;
       case 'analytics':
       case 'explorer':
         return <AnalyticsWorkspace key={refreshTrigger} />;
@@ -47,7 +57,7 @@ function AppContent() {
       case 'settings':
         return <SettingsPage key={refreshTrigger} />;
       default:
-        return <CommandCenter key={refreshTrigger} />;
+        return <LandingPage key={refreshTrigger} />;
     }
   };
 

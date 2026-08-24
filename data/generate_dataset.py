@@ -16,75 +16,75 @@ CSV_PATH = os.path.join(DATA_DIR, "urbanpulse_dataset.csv")
 LOCATIONS = [
     {
         "location_id": "LOC-01",
-        "location_name": "Downtown Central",
-        "latitude": 40.7128,
-        "longitude": -74.0060,
+        "location_name": "Patia Main Road",
+        "latitude": 20.3533,
+        "longitude": 85.8197,
         "base_traffic": 180,
         "base_aqi": 75,
         "type": "Commercial"
     },
     {
         "location_id": "LOC-02",
-        "location_name": "Midtown Financial",
-        "latitude": 40.7589,
-        "longitude": -73.9851,
+        "location_name": "Jayadev Vihar",
+        "latitude": 20.3010,
+        "longitude": 85.8239,
         "base_traffic": 210,
         "base_aqi": 85,
         "type": "Financial"
     },
     {
         "location_id": "LOC-03",
-        "location_name": "Harbor Industrial",
-        "latitude": 40.6720,
-        "longitude": -74.0090,
+        "location_name": "Saheed Nagar",
+        "latitude": 20.2872,
+        "longitude": 85.8415,
         "base_traffic": 150,
         "base_aqi": 115,
         "type": "Industrial"
     },
     {
         "location_id": "LOC-04",
-        "location_name": "Tech Corridor West",
-        "latitude": 40.7410,
-        "longitude": -74.0040,
+        "location_name": "Khandagiri",
+        "latitude": 20.2588,
+        "longitude": 85.7836,
         "base_traffic": 130,
         "base_aqi": 55,
         "type": "Technology"
     },
     {
         "location_id": "LOC-05",
-        "location_name": "North Residential",
-        "latitude": 40.7900,
-        "longitude": -73.9600,
+        "location_name": "Vani Vihar",
+        "latitude": 20.2974,
+        "longitude": 85.8364,
         "base_traffic": 85,
         "base_aqi": 42,
-        "type": "Residential"
+        "type": "Educational"
     },
     {
         "location_id": "LOC-06",
-        "location_name": "Suburb South Ridge",
-        "latitude": 40.6300,
-        "longitude": -74.0800,
-        "base_traffic": 65,
-        "base_aqi": 35,
-        "type": "Suburban"
-    },
-    {
-        "location_id": "LOC-07",
-        "location_name": "Airport Transit Hub",
-        "latitude": 40.6413,
-        "longitude": -73.7781,
+        "location_name": "Bhubaneswar Railway Station",
+        "latitude": 20.2657,
+        "longitude": 85.8436,
         "base_traffic": 190,
         "base_aqi": 95,
         "type": "Transit"
     },
     {
+        "location_id": "LOC-07",
+        "location_name": "Nandankanan Road",
+        "latitude": 20.3700,
+        "longitude": 85.8250,
+        "base_traffic": 160,
+        "base_aqi": 60,
+        "type": "Commercial"
+    },
+    {
         "location_id": "LOC-08",
-        "location_name": "University District",
-        "latitude": 40.7290,
-        "longitude": -73.9960,
+        "location_name": "Kalarahanga Road",
+        "latitude": 20.3800,
+        "longitude": 85.8300,
         "base_traffic": 110,
         "base_aqi": 50,
-        "type": "Educational"
+        "type": "Suburban"
     }
 ]
 
