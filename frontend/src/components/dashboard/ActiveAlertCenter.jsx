@@ -22,7 +22,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
               {
                 id: 1,
                 record_code: "REC-8842",
-                location_name: "Downtown Central Corridor",
+                location_name: "Saheed Nagar Corridor",
                 anomaly_type: "Traffic Bottleneck",
                 severity: "CRITICAL",
                 risk_score: 84.5,
@@ -33,7 +33,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
               {
                 id: 2,
                 record_code: "REC-9104",
-                location_name: "Industrial Harbor Sector",
+                location_name: "Patia Industrial Sector",
                 anomaly_type: "Particulate Surge",
                 severity: "WARNING",
                 risk_score: 68.2,
@@ -44,7 +44,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
               {
                 id: 3,
                 record_code: "REC-7512",
-                location_name: "Tech Corridor North",
+                location_name: "Jayadev Vihar North",
                 anomaly_type: "Sensor Variance",
                 severity: "ADVISORY",
                 risk_score: 42.0,

@@ -333,7 +333,7 @@ def generate_analytical_insights(records: List[Dict[str, Any]]) -> List[Dict[str
         "contributing_factors": [
             "Synchronized office & school commute hours",
             "Single-occupancy vehicle concentration",
-            "Transit corridor bottleneck at Midtown connections"
+            "Transit corridor bottleneck at Saheed Nagar connections"
         ],
         "risk_level": "High",
         "recommended_action": "Incentivize staggered work hours and boost public transit frequency during 07:30-09:30 and 16:30-19:00.",

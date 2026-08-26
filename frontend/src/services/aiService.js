@@ -17,7 +17,7 @@ export const aiService = {
 
       if (queryLower.includes('highest congestion') || queryLower.includes('traffic') || queryLower.includes('congestion')) {
         const sorted = [...locations].sort((a, b) => b.congestion_index - a.congestion_index);
-        const highest = sorted[0] || { location_name: 'Midtown Financial', congestion_index: 0.88 };
+        const highest = sorted[0] || { location_name: 'Saheed Nagar', congestion_index: 0.88 };
         return {
           answer: `Currently, **${highest.location_name}** exhibits the highest vehicular congestion index at **${Math.round((highest.congestion_index || 0.85) * 100)}%**. Peak commute vectors indicate bottleneck congestion along major arterial corridors.`,
           metrics: [
@@ -33,7 +33,7 @@ export const aiService = {
       if (queryLower.includes('air quality') || queryLower.includes('aqi') || queryLower.includes('pollution')) {
         const avgAqi = overview?.avg_aqi || 97;
         const status = overview?.aqi_status || 'Moderate';
-        const highestPollution = [...locations].sort((a, b) => b.aqi - a.aqi)[0] || { location_name: 'Harbor Industrial', aqi: 135 };
+        const highestPollution = [...locations].sort((a, b) => b.aqi - a.aqi)[0] || { location_name: 'Patia Main Road', aqi: 135 };
 
         return {
           answer: `Metropolitan Air Quality Index averages **${avgAqi} AQI (${status})**. Peak particulate concentrations are concentrated near **${highestPollution.location_name}** (AQI ${highestPollution.aqi}).`,
@@ -50,7 +50,7 @@ export const aiService = {
       if (queryLower.includes('risk') || queryLower.includes('anomaly') || queryLower.includes('anomalies')) {
         const riskScore = overview?.urban_risk_score || 48.7;
         const anomaliesCount = overview?.anomaly_count || 241;
-        const highestRisk = [...locations].sort((a, b) => b.risk_score - a.risk_score)[0] || { location_name: 'Midtown Financial', risk_score: 78.5 };
+        const highestRisk = [...locations].sort((a, b) => b.risk_score - a.risk_score)[0] || { location_name: 'Saheed Nagar', risk_score: 78.5 };
 
         return {
           answer: `Citywide Urban Risk Score is **${riskScore}/100 (${overview?.risk_level || 'Medium'})**. IsolationForest anomaly engine has logged **${anomaliesCount} multivariate anomalies** over the last 30 days. Highest risk zone: **${highestRisk.location_name}** (${highestRisk.risk_score}/100).`,
@@ -60,7 +60,7 @@ export const aiService = {
             { label: 'Highest Risk Location', value: highestRisk.location_name }
           ],
           confidence: '94.8%',
-          recommendation: 'Initiate priority incident dispatch to Harbor and Midtown corridors.'
+          recommendation: 'Initiate priority incident dispatch to Saheed Nagar and Patia corridors.'
         };
       }
 

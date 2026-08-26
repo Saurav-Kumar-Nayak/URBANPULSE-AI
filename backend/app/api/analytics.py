@@ -27,6 +27,8 @@ def get_kpi_summary(db: Session = Depends(get_db)):
     anomaly_rate = round((total_anomalies / total_records) * 100, 2)
     co2_saved = round((total_records * 0.15) / 1000, 2)
 
+    active_vehicles = db.query(func.sum(LocationZone.base_traffic)).scalar() or 1225
+
     return {
         "total_trips": total_records,
         "total_anomalies": total_anomalies,
@@ -34,7 +36,7 @@ def get_kpi_summary(db: Session = Depends(get_db)):
         "avg_congestion_index": round(float(avg_congestion), 2),
         "avg_speed_kmh": round(float(avg_speed), 1),
         "total_revenue_usd": round(float(total_records * 14.5), 2),
-        "active_vehicles_count": 1450,
+        "active_vehicles_count": int(active_vehicles),
         "co2_saved_tons": co2_saved
     }
 

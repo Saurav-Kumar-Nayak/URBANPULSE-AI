@@ -38,7 +38,7 @@ export const WhatIfSimulator = () => {
                 🏭 Industrial Emission Deterioration
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
-                Simulates +60% AQI spike in Harbor Industrial district with stagnant low wind speed.
+                Simulates +60% AQI spike in Saheed Nagar district with stagnant low wind speed.
               </p>
               <div style={{ fontSize: '0.72rem', color: '#fbbf24', fontWeight: 700 }}>
                 Est. Risk: MODERATE (AQI 142)

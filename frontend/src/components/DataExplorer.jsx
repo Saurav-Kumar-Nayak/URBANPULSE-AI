@@ -93,16 +93,16 @@ export default function DataExplorer() {
           <button type="submit" className="btn-subtle">Filter</button>
         </form>
 
-        <select className="input-field" style={{ width: '170px' }} value={location} onChange={(e) => { setLocation(e.target.value); setPage(1); }}>
+        <select className="input-field" style={{ width: '190px' }} value={location} onChange={(e) => { setLocation(e.target.value); setPage(1); }}>
           <option value="ALL">All Locations</option>
-          <option value="Downtown Central">Downtown Central</option>
-          <option value="Midtown Financial">Midtown Financial</option>
-          <option value="Harbor Industrial">Harbor Industrial</option>
-          <option value="Tech Corridor West">Tech Corridor West</option>
-          <option value="North Residential">North Residential</option>
-          <option value="Suburb South Ridge">Suburb South Ridge</option>
-          <option value="Airport Transit Hub">Airport Transit Hub</option>
-          <option value="University District">University District</option>
+          <option value="Patia Main Road">Patia Main Road</option>
+          <option value="Jayadev Vihar">Jayadev Vihar</option>
+          <option value="Saheed Nagar">Saheed Nagar</option>
+          <option value="Khandagiri">Khandagiri</option>
+          <option value="Vani Vihar">Vani Vihar</option>
+          <option value="Bhubaneswar Railway Station">Bhubaneswar Railway Station</option>
+          <option value="Nandankanan Road">Nandankanan Road</option>
+          <option value="Kalarahanga Road">Kalarahanga Road</option>
         </select>
 
         <select className="input-field" style={{ width: '140px' }} value={riskLevel} onChange={(e) => { setRiskLevel(e.target.value); setPage(1); }}>

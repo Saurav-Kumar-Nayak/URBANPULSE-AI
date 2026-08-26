@@ -67,7 +67,7 @@ export default function PollutionIntelligenceView({ pollutionData: initialData =
           <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--accent-rose)', margin: '4px 0' }}>
             {pollutionData?.max_aqi || 188} <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>AQI</span>
           </div>
-          <div className="badge badge-rose">Harbor Industrial Spike</div>
+          <div className="badge badge-rose">Saheed Nagar Industrial Spike</div>
         </div>
 
         <div className="glass-panel" style={{ padding: '20px' }}>

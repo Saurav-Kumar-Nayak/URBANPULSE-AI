@@ -108,7 +108,7 @@ export const AICityInsights = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, overflowY: 'auto', paddingRight: '4px' }}>
           {insights.slice(0, 3).map((item, idx) => {
             const isHighRisk = item.risk_level === 'Critical' || item.risk_level === 'High' || idx === 0;
-            const zoneName = item.where || `Sector ${idx + 1} (${item.location_name || 'Tech Corridor'})`;
+            const zoneName = item.where || `Sector ${idx + 1} (${item.location_name || 'Patia Corridor'})`;
 
             return (
               <div
