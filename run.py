@@ -57,8 +57,9 @@ if __name__ == "__main__":
     print(" URBANPULSE AI — UNIFIED SINGLE-SERVER PLATFORM (FRONTEND + BACKEND) ")
     print("==================================================================")
     print(" Local Browser URL:                      http://127.0.0.1:8000")
-    print(f" Mobile / LAN Network Link:              http://{local_ip}:8000")
-    print(" API Documentation (OpenAPI):           http://127.0.0.1:8000/docs")
+    port = int(os.environ.get("PORT", 8000))
+    print(f" Server Port:                           {port}")
     print("==================================================================")
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=False, app_dir=backend_dir)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False, app_dir=backend_dir)
+
 
