@@ -18,16 +18,20 @@ LOCATIONS_META = [
     {"location_id": "LOC-08", "location_name": "Kalarahanga Road", "area_type": "Suburban", "latitude": 20.3800, "longitude": 85.8300, "base_traffic": 110, "base_aqi": 50}
 ]
 
+import sys
+
 def ensure_dataset_exists():
     if not os.path.exists(CSV_PATH):
         print(f"[Seeder] CSV dataset not found at {CSV_PATH}. Generating synthetic dataset...")
+        root_dir = os.path.dirname(DATA_DIR)
+        if root_dir not in sys.path:
+            sys.path.insert(0, root_dir)
         try:
             from data.generate_dataset import save_dataset
             save_dataset()
         except Exception as e:
             print(f"[Seeder] Direct import failed: {e}. Generating programmatically...")
             os.makedirs(DATA_DIR, exist_ok=True)
-            # Create dataset programmatically
             from data.generate_dataset import generate_records
             records = generate_records(5200)
             fieldnames = list(records[0].keys())
@@ -35,6 +39,7 @@ def ensure_dataset_exists():
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(records)
+
 
 def seed_database(db: Session):
     # 1. Seed Location Zones if empty

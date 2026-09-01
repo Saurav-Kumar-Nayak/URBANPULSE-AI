@@ -30,8 +30,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY backend/requirements.txt ./backend/requirements.txt
 RUN pip install --no-cache-dir -r ./backend/requirements.txt
 
-# Copy backend code & compiled frontend assets
+ENV PYTHONPATH=/app:/app/backend
+
+# Copy backend code, data directory & compiled frontend assets
 COPY backend/ ./backend/
+COPY data/ ./data/
 COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
 EXPOSE 8000
@@ -41,3 +44,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 
 WORKDIR /app/backend
 CMD ["python", "run.py"]
+
