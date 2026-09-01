@@ -105,5 +105,50 @@ class TestUrbanPulseBackend(unittest.TestCase):
         self.assertEqual(data["target"], "Urban Risk Classification")
         self.assertIn("predicted_risk_level", data["prediction_result"])
 
+    def test_07_readiness_endpoint(self):
+        res = self.client.get("/api/readiness")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertTrue(data["ready"])
+        self.assertTrue(data["database_connected"])
+        self.assertEqual(data["status"], "OPERATIONAL")
+
+    def test_08_data_quality_validator(self):
+        from app.ml.data_quality import data_quality_validator
+        valid_rec = {"aqi": 80, "pm25": 25.5, "temperature_c": 25.0, "humidity_pct": 50.0}
+        is_valid, violations = data_quality_validator.validate_record(valid_rec)
+        self.assertTrue(is_valid)
+        self.assertEqual(len(violations), 0)
+
+        invalid_rec = {"aqi": 999, "pm25": -10.0, "temperature_c": 100.0}
+        is_valid_inv, violations_inv = data_quality_validator.validate_record(invalid_rec)
+        self.assertFalse(is_valid_inv)
+        self.assertGreater(len(violations_inv), 0)
+
+    def test_09_incident_lifecycle_status_update(self):
+        # Fetch an anomaly ID
+        res_list = self.client.get("/api/anomalies?limit=1")
+        self.assertEqual(res_list.status_code, 200)
+        anomalies = res_list.json()["recent_anomalies"]
+        if anomalies:
+            anom_id = anomalies[0]["id"]
+            res_patch = self.client.patch(f"/api/anomalies/{anom_id}/status", json={"status": "ACKNOWLEDGED"})
+            self.assertEqual(res_patch.status_code, 200)
+            self.assertEqual(res_patch.json()["updated_status"], "ACKNOWLEDGED")
+
+    def test_10_invalid_prediction_input(self):
+        res = self.client.post("/api/predictions/predict", json={"target": "invalid_target"})
+        self.assertEqual(res.status_code, 400)
+
+    def test_11_anomalies_location_filter(self):
+        res = self.client.get("/api/anomalies?location=Patia")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("recent_anomalies", data)
+
+    def test_12_nonexistent_anomaly_id_404(self):
+        res = self.client.patch("/api/anomalies/999999/status", json={"status": "RESOLVED"})
+        self.assertEqual(res.status_code, 404)
+
 if __name__ == "__main__":
     unittest.main()

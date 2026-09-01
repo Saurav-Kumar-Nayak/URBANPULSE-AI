@@ -4,6 +4,7 @@ from sqlalchemy import func
 from app.core.database import get_db
 from app.db.models import UrbanRecord, LocationZone, AnomalyLog
 from app.ml.engine import ml_engine
+from app.ml.data_quality import data_quality_validator
 from app.schemas.models import OverviewResponseSchema, KpiCardSchema
 
 router = APIRouter(tags=["Executive Overview"])
@@ -38,6 +39,10 @@ def get_executive_overview(db: Session = Depends(get_db)):
     latest_record = db.query(UrbanRecord).order_by(UrbanRecord.timestamp.desc()).first()
     data_freshness = latest_record.timestamp.strftime("%Y-%m-%d %H:%M:%S") if latest_record else "Live Telemetry"
 
+    # Evaluate dataset data quality status
+    recent_sample = db.query(UrbanRecord).order_by(UrbanRecord.timestamp.desc()).limit(200).all()
+    dq_health = data_quality_validator.evaluate_dataset_health(recent_sample)
+
     # Dynamic KPI Cards
     kpis = [
         KpiCardSchema(title="Total Urban Records", value=f"{total_records:,}", unit="records", change="+4.2%", trend="up", status="normal"),
@@ -53,6 +58,7 @@ def get_executive_overview(db: Session = Depends(get_db)):
         "aqi_model_r2": ml_engine.metrics["aqi_model"]["r2"],
         "traffic_model_r2": ml_engine.metrics["traffic_model"]["r2"],
         "risk_model_accuracy": ml_engine.metrics["risk_model"]["accuracy"],
+        "data_quality": dq_health["status"],
         "forecast_status": "ML Engine Active & Operational"
     }
 

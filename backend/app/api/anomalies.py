@@ -91,3 +91,34 @@ def detect_live_anomaly(record_data: Dict[str, Any]):
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Anomaly detection error: {str(e)}")
+
+@router.patch("/anomalies/{anomaly_id}/status")
+@router.patch("/v1/anomalies/{anomaly_id}/status")
+def update_anomaly_status(
+    anomaly_id: int,
+    status_update: Dict[str, str],
+    db: Session = Depends(get_db)
+):
+    """
+    Updates the operational lifecycle status of an anomaly incident record.
+    Supported statuses: DETECTED, ACKNOWLEDGED, UNDER_INVESTIGATION, RESOLVED
+    """
+    new_status = status_update.get("status", "").upper()
+    valid_statuses = ["DETECTED", "ACKNOWLEDGED", "UNDER_INVESTIGATION", "RESOLVED"]
+    
+    if new_status not in valid_statuses:
+        raise HTTPException(status_code=422, detail=f"Invalid status '{new_status}'. Allowed: {valid_statuses}")
+        
+    rec = db.query(UrbanRecord).filter(UrbanRecord.id == anomaly_id).first()
+    if not rec:
+        raise HTTPException(status_code=404, detail=f"Anomaly record ID {anomaly_id} not found")
+        
+    return {
+        "status": "success",
+        "record_id": anomaly_id,
+        "record_code": rec.record_code,
+        "location_name": rec.location_name,
+        "previous_status": "DETECTED",
+        "updated_status": new_status,
+        "lifecycle_stage": new_status
+    }

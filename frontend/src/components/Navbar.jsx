@@ -9,16 +9,14 @@ import {
   Wind, 
   CloudSun, 
   Sliders, 
-  Cpu, 
   Sparkles, 
-  Bell, 
   RefreshCw, 
   Menu, 
   X, 
   User, 
   LogOut,
-  Radio,
-  Lock
+  Lock,
+  ShieldCheck
 } from 'lucide-react';
 import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 
@@ -38,16 +36,7 @@ export const Navbar = () => {
   } = useUrbanPulseContext();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [timeStr, setTimeStr] = useState(new Date().toLocaleTimeString());
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeStr(new Date().toLocaleTimeString());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   const publicNavItems = [
     { id: 'home', label: 'Home', icon: HomeIcon },
@@ -84,28 +73,59 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="top-nav-container">
+    <header className="top-nav-container" style={{
+      background: '#0B1730',
+      borderBottom: '1px solid rgba(120, 170, 255, 0.15)',
+      padding: '0 20px',
+      gap: '16px',
+      height: '60px',
+      display: 'flex',
+      alignItems: 'center',
+      justify: 'space-between',
+      boxShadow: '0 4px 16px rgba(0,0,0,0.3)'
+    }}>
       {/* LEFT: Brand Logo & Title */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
         <button 
           onClick={() => handleNavClick('home')} 
           className="top-nav-brand"
           title="UrbanPulse AI Home"
+          style={{
+            background: 'none',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            cursor: 'pointer',
+            padding: '4px'
+          }}
         >
-          <div className="top-nav-logo">
-            <Activity size={19} />
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '8px',
+            background: 'linear-gradient(135deg, #1EA7FF 0%, #0284c7 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            color: '#ffffff',
+            boxShadow: '0 2px 8px rgba(30, 167, 255, 0.3)'
+          }}>
+            <Activity size={18} />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'left' }}>
-            <div className="top-nav-title">UrbanPulse AI</div>
-            <div className="top-nav-subtitle">
-              {isAuthenticated ? `${role} MODE` : 'MUNICIPAL TELEMETRY'}
+          <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 900, color: '#F5F8FF', letterSpacing: '-0.01em', lineHeight: 1.2 }}>
+              UrbanPulse AI
+            </div>
+            <div style={{ fontSize: '0.62rem', fontWeight: 700, color: '#91A4C5', letterSpacing: '0.05em' }}>
+              {isAuthenticated ? `${role} CONTROL ROOM` : 'MUNICIPAL TELEMETRY'}
             </div>
           </div>
         </button>
       </div>
 
       {/* CENTER: Navigation Tabs (Desktop & Tablet) */}
-      <nav className="top-nav-links">
+      <nav className="top-nav-links" style={{ display: 'flex', gap: '4px', overflowX: 'auto', padding: '4px 0' }}>
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id || 
@@ -118,68 +138,77 @@ export const Navbar = () => {
               onClick={() => handleNavClick(item.id)}
               className={`top-nav-link ${isActive ? 'active' : ''}`}
               id={`nav-link-${item.id}`}
+              style={{
+                background: isActive ? 'rgba(30, 167, 255, 0.15)' : 'transparent',
+                border: isActive ? '1px solid rgba(30, 167, 255, 0.4)' : '1px solid transparent',
+                borderRadius: '8px',
+                color: isActive ? '#20D9FF' : '#91A4C5',
+                padding: '6px 12px',
+                fontSize: '0.78rem',
+                fontWeight: isActive ? 800 : 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.15s ease'
+              }}
             >
-              <Icon size={15} color={isActive ? '#38bdf8' : '#94a3b8'} />
+              <Icon size={14} color={isActive ? '#20D9FF' : '#91A4C5'} />
               <span>{item.id === 'command-center' ? 'Dashboard' : item.label}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* RIGHT: Actions & Controls */}
-      <div className="top-nav-actions">
-        {/* System Online Badge */}
+      {/* RIGHT: Actions & Login Controls */}
+      <div className="top-nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+        
+        {/* Compact System Online Badge */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
             padding: '4px 10px',
-            borderRadius: '9999px',
-            backgroundColor: isBackendOnline ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
-            border: `1px solid ${isBackendOnline ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
-            fontSize: '0.72rem',
-            fontWeight: 700,
-            color: isBackendOnline ? '#34d399' : '#fb7185',
+            borderRadius: '20px',
+            backgroundColor: isBackendOnline ? 'rgba(39, 209, 127, 0.12)' : 'rgba(255, 90, 103, 0.12)',
+            border: `1px solid ${isBackendOnline ? 'rgba(39, 209, 127, 0.35)' : 'rgba(255, 90, 103, 0.35)'}`,
+            fontSize: '0.68rem',
+            fontWeight: 800,
+            color: isBackendOnline ? '#27D17F' : '#FF5A67',
+            whiteSpace: 'nowrap'
           }}
-          title={isBackendOnline ? 'FastAPI Backend & SQLite connected' : 'Backend offline'}
+          title={isBackendOnline ? 'FastAPI & Sensors Connected' : 'Backend Offline'}
         >
-          <span className={`pulse-dot ${isBackendOnline ? 'online' : 'warning'}`} />
-          <span>{isBackendOnline ? '● SYSTEM ONLINE' : '● SYSTEM OFFLINE'}</span>
-        </div>
-
-        {/* Data Freshness Timestamp */}
-        <div
-          style={{
-            fontSize: '0.75rem',
-            fontFamily: 'var(--font-mono)',
-            color: 'var(--text-muted)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'rgba(17, 25, 35, 0.6)',
-            padding: '5px 10px',
-            borderRadius: '6px',
-            border: '1px solid var(--border-color)'
-          }}
-          className="desktop-only"
-        >
-          <Radio size={13} color="#38bdf8" className="spin" />
-          <span>{timeStr}</span>
+          <span style={{
+            width: '6px',
+            height: '6px',
+            borderRadius: '50%',
+            backgroundColor: isBackendOnline ? '#27D17F' : '#FF5A67',
+            boxShadow: `0 0 6px ${isBackendOnline ? '#27D17F' : '#FF5A67'}`
+          }} />
+          <span>ONLINE</span>
         </div>
 
         {/* Refresh / Sync Button */}
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          title={`Last updated ${lastUpdated}`}
-          className="btn-subtle"
+          title={`Last synced: ${lastUpdated}`}
           style={{
-            padding: '7px 10px',
-            borderRadius: '9999px',
+            background: '#101E3A',
+            border: '1px solid rgba(120, 170, 255, 0.2)',
+            color: '#91A4C5',
+            borderRadius: '8px',
+            padding: '6px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center'
           }}
         >
-          <RefreshCw size={15} className={refreshing ? 'spin' : ''} />
+          <RefreshCw size={13} className={refreshing ? 'spin' : ''} />
         </button>
 
         {/* AI Copilot Trigger (Operator Only) */}
@@ -187,89 +216,130 @@ export const Navbar = () => {
           <button
             onClick={toggleCopilot}
             style={{
-              background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2))',
-              border: '1px solid rgba(6, 182, 212, 0.4)',
+              background: 'rgba(30, 167, 255, 0.15)',
+              border: '1px solid rgba(30, 167, 255, 0.4)',
               borderRadius: '8px',
               padding: '6px 12px',
-              color: '#38bdf8',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-            id="top-nav-copilot-btn"
-          >
-            <Sparkles size={14} color="#38bdf8" />
-            <span>✦ AI Copilot</span>
-          </button>
-        )}
-
-        {/* USER AUTH / OPERATOR ACCESS CONTROL BUTTON */}
-        {isAuthenticated ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div 
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '4px 10px',
-                borderRadius: '8px',
-                background: role === 'ADMIN' ? 'rgba(168, 85, 247, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                border: `1px solid ${role === 'ADMIN' ? 'rgba(168, 85, 247, 0.3)' : 'rgba(56, 189, 248, 0.3)'}`,
-                color: role === 'ADMIN' ? '#c084fc' : '#38bdf8',
-                fontSize: '0.75rem',
-                fontWeight: 800
-              }}
-            >
-              <User size={14} />
-              <span>{user?.name?.split(' ')[0] || role}</span>
-            </div>
-
-            <button
-              onClick={logout}
-              title="Logout session"
-              style={{
-                padding: '6px 12px',
-                borderRadius: '8px',
-                background: 'rgba(244, 63, 94, 0.15)',
-                border: '1px solid rgba(244, 63, 94, 0.3)',
-                color: '#fb7185',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-            >
-              <LogOut size={13} />
-              <span>Logout</span>
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsLoginModalOpen(true)}
-            style={{
-              padding: '6px 14px',
-              borderRadius: '8px',
-              background: 'linear-gradient(135deg, #0284c7, #0369a1)',
-              border: '1px solid rgba(56, 189, 248, 0.4)',
-              color: '#ffffff',
-              fontSize: '0.78rem',
+              color: '#20D9FF',
+              fontSize: '0.76rem',
               fontWeight: 800,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)'
+              gap: '5px',
+              whiteSpace: 'nowrap'
             }}
+            id="top-nav-copilot-btn"
+          >
+            <Sparkles size={14} color="#20D9FF" />
+            <span>AI Copilot</span>
+          </button>
+        )}
+
+        {/* Distinct User Login & Operator Login Buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          
+          {/* USER LOGIN BUTTON */}
+          <button
+            onClick={() => handleNavClick('login')}
+            title="Open Citizen User Login Page"
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: activeTab === 'login' ? 'rgba(32, 217, 255, 0.2)' : 'rgba(16, 30, 58, 0.8)',
+              border: '1px solid rgba(32, 217, 255, 0.4)',
+              color: '#20D9FF',
+              fontSize: '0.76rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.15s ease'
+            }}
+            id="nav-user-login-btn"
+          >
+            <User size={13} />
+            <span>User Login</span>
+          </button>
+
+          {/* OPERATOR LOGIN BUTTON */}
+          <button
+            onClick={() => setIsLoginModalOpen(true)}
+            title="Open Municipal Operator Access Portal"
+            style={{
+              padding: '6px 14px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #1EA7FF 0%, #0284c7 100%)',
+              border: 'none',
+              color: '#ffffff',
+              fontSize: '0.76rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 2px 10px rgba(30, 167, 255, 0.3)',
+              transition: 'all 0.15s ease'
+            }}
+            id="nav-operator-login-btn"
           >
             <Lock size={13} />
             <span>Operator Login</span>
           </button>
-        )}
+
+          {/* Logged in User Profile & Logout */}
+          {isAuthenticated && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '2px' }}>
+              <button 
+                onClick={() => handleNavClick('user-dashboard')}
+                title="View Profile & Dashboard"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  background: role === 'ADMIN' ? 'rgba(124, 92, 255, 0.2)' : 'rgba(39, 209, 127, 0.2)',
+                  border: `1px solid ${role === 'ADMIN' ? 'rgba(124, 92, 255, 0.4)' : 'rgba(39, 209, 127, 0.4)'}`,
+                  color: role === 'ADMIN' ? '#7C5CFF' : '#27D17F',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}
+                id="nav-profile-btn"
+              >
+                <ShieldCheck size={13} />
+                <span>{user?.name?.split(' ')[0] || role}</span>
+              </button>
+
+              <button
+                onClick={logout}
+                title="Logout session"
+                style={{
+                  padding: '6px 8px',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 90, 103, 0.12)',
+                  border: '1px solid rgba(255, 90, 103, 0.3)',
+                  color: '#FF5A67',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justify: 'center'
+                }}
+                id="nav-logout-btn"
+              >
+                <LogOut size={13} />
+              </button>
+            </div>
+          )}
+
+        </div>
 
         {/* Mobile Hamburger Toggle */}
         <button
@@ -277,14 +347,14 @@ export const Navbar = () => {
           style={{
             background: 'none',
             border: 'none',
-            color: '#f8fafc',
+            color: '#F5F8FF',
             cursor: 'pointer',
             padding: '4px',
             display: 'none'
           }}
           className="mobile-hamburger-btn"
         >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
@@ -293,19 +363,34 @@ export const Navbar = () => {
         <div
           style={{
             position: 'fixed',
-            top: '64px',
+            top: '60px',
             left: 0,
             right: 0,
-            background: '#0b0f17',
-            borderBottom: '1px solid var(--border-color)',
+            background: '#0B1730',
+            borderBottom: '1px solid rgba(120, 170, 255, 0.2)',
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px',
+            gap: '10px',
             zIndex: 110,
             boxShadow: '0 10px 30px rgba(0,0,0,0.8)'
           }}
         >
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+            <button
+              onClick={() => handleNavClick('login')}
+              style={{ padding: '10px', borderRadius: '8px', background: 'rgba(32, 217, 255, 0.15)', border: '1px solid rgba(32, 217, 255, 0.4)', color: '#20D9FF', fontWeight: 800, fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+            >
+              <User size={16} /> User Login
+            </button>
+            <button
+              onClick={() => { setMobileMenuOpen(false); setIsLoginModalOpen(true); }}
+              style={{ padding: '10px', borderRadius: '8px', background: 'linear-gradient(135deg, #1EA7FF, #0284c7)', border: 'none', color: '#ffffff', fontWeight: 800, fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+            >
+              <Lock size={16} /> Operator Login
+            </button>
+          </div>
+
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -319,11 +404,11 @@ export const Navbar = () => {
                   gap: '12px',
                   padding: '12px',
                   borderRadius: '8px',
-                  backgroundColor: isActive ? 'rgba(56, 189, 248, 0.15)' : 'rgba(17, 25, 35, 0.6)',
-                  color: isActive ? '#38bdf8' : '#cbd5e1',
-                  border: `1px solid ${isActive ? 'rgba(56, 189, 248, 0.4)' : 'transparent'}`,
+                  backgroundColor: isActive ? 'rgba(30, 167, 255, 0.15)' : 'rgba(16, 30, 58, 0.6)',
+                  color: isActive ? '#20D9FF' : '#91A4C5',
+                  border: `1px solid ${isActive ? 'rgba(30, 167, 255, 0.4)' : 'transparent'}`,
                   fontWeight: 600,
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   textAlign: 'left'
                 }}
               >

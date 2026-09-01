@@ -1,0 +1,205 @@
+/* ==============================================================================
+   URBANPULSE AI — REALISTIC 3D CITIZEN DASHBOARD STYLES
+   ============================================================================== */
+
+/* Main 3D Container */
+.dashboard-3d-root {
+  min-height: 100vh;
+  width: 100%;
+  background: #060a14;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 70%),
+    radial-gradient(circle at 10% 40%, rgba(2, 132, 199, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+  color: #ffffff;
+  padding-bottom: 80px;
+  perspective: 1200px;
+}
+
+/* 3D Hero Banner */
+.hero-3d-banner {
+  position: relative;
+  background: linear-gradient(135deg, rgba(11, 20, 38, 0.95) 0%, rgba(7, 12, 24, 0.98) 100%);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 48px 32px 36px 32px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.hero-3d-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #38bdf8 50%, transparent 100%);
+  box-shadow: 0 0 16px #38bdf8;
+}
+
+.hero-3d-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* 3D Profile Card */
+.profile-3d-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 20px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    0 0 20px rgba(56, 189, 248, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: preserve-3d;
+}
+
+.profile-3d-card:hover {
+  transform: translateY(-4px) rotateX(4deg) rotateY(-4deg);
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 
+    0 24px 48px rgba(0, 0, 0, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 30px rgba(56, 189, 248, 0.4);
+}
+
+.avatar-3d-orb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0284c7 70%, #0369a1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 1.15rem;
+  box-shadow: 
+    0 0 16px rgba(56, 189, 248, 0.6),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  animation: orbGlow 3s infinite alternate;
+}
+
+/* 3D Telemetry Cards Grid */
+.telemetry-3d-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 24px;
+}
+
+/* 3D Holographic Stage Card */
+.card-3d-stage {
+  position: relative;
+  background: linear-gradient(145deg, rgba(17, 27, 49, 0.9) 0%, rgba(10, 16, 30, 0.96) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12),
+    0 0 20px rgba(56, 189, 248, 0.08);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backdrop-filter: blur(16px);
+}
+
+.card-3d-stage::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: 20px 20px 0 0;
+}
+
+.card-3d-stage:hover {
+  transform: translateY(-8px) scale3d(1.02, 1.02, 1.02);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 
+    0 28px 56px rgba(0, 0, 0, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25),
+    0 0 35px rgba(56, 189, 248, 0.3);
+}
+
+.card-3d-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 30% 30%, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.1) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(56, 189, 248, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.card-3d-stage:hover .card-3d-icon-box {
+  transform: translateZ(20px) scale(1.1);
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px #38bdf8;
+}
+
+/* 3D Digital Twin City Preview Card */
+.digital-twin-3d-card {
+  background: linear-gradient(135deg, rgba(13, 22, 40, 0.95), rgba(7, 12, 24, 0.98));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 
+    0 24px 48px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(20px);
+  margin-top: 40px;
+}
+
+/* 3D Explorer Button */
+.explorer-3d-tile {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(11, 18, 33, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: left;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.explorer-3d-tile:hover {
+  transform: translateY(-4px);
+  border-color: #38bdf8;
+  background: linear-gradient(145deg, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+@keyframes orbGlow {
+  0% { box-shadow: 0 0 16px rgba(56, 189, 248, 0.5); }
+  100% { box-shadow: 0 0 28px rgba(56, 189, 248, 0.9), 0 0 8px #ffffff; }
+}

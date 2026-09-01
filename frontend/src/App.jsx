@@ -15,6 +15,10 @@ import MLModelCenter from './pages/MLModelCenter';
 import AICopilotPage from './pages/AICopilotPage';
 import ApiDocsPage from './pages/ApiDocsPage';
 import SettingsPage from './pages/SettingsPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import UserDashboardPage from './pages/UserDashboardPage';
 
 function AppContent() {
   const { activeTab, refreshTrigger } = useUrbanPulseContext();
@@ -23,6 +27,16 @@ function AppContent() {
     switch (activeTab) {
       case 'home':
         return <LandingPage key={refreshTrigger} />;
+      case 'login':
+        return <LoginPage key={refreshTrigger} />;
+      case 'signup':
+        return <SignupPage key={refreshTrigger} />;
+      case 'forgot-password':
+        return <ForgotPasswordPage key={refreshTrigger} />;
+      case 'user-dashboard':
+      case 'profile':
+      case 'citizen-dashboard':
+        return <UserDashboardPage key={refreshTrigger} />;
       case 'command-center':
       case 'dashboard':
         return <CommandCenter key={refreshTrigger} />;

@@ -76,3 +76,18 @@ class InsightLog(Base):
     recommended_action = Column(Text)
     evidence_type = Column(String)  # Statistical, Predictive, Assumption
     generated_at = Column(DateTime, default=datetime.utcnow)
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    full_name = Column(String, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=True)  # Nullable for OAuth users
+    is_verified = Column(Boolean, default=False)
+    auth_provider = Column(String, default="email")  # "email" or "google"
+    verification_code = Column(String, nullable=True)
+    reset_token = Column(String, nullable=True)
+    avatar_url = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+

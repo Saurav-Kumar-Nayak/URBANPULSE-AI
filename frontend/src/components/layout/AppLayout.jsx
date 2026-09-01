@@ -8,15 +8,16 @@ import { Sparkles } from 'lucide-react';
 export const AppLayout = ({ children }) => {
   const { activeTab, toggleCopilot, isAuthenticated } = useUrbanPulseContext();
   const isHome = activeTab === 'home';
+  const isAuthPage = activeTab === 'login' || activeTab === 'signup' || activeTab === 'forgot-password';
 
   return (
     <div className="app-layout" style={{ minHeight: '100vh', background: '#070b12', color: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
-      {/* Top Header Command Navigation (Hidden on Landing Page to prevent duplicate navbar) */}
-      {!isHome && <Navbar />}
+      {/* Top Header Command Navigation (Shown on Home and Dashboard pages) */}
+      {!isAuthPage && <Navbar />}
 
       {/* Main Content Area */}
       <div className="main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <main style={isHome ? { flex: 1, width: '100%', padding: 0 } : { flex: 1, padding: '24px', maxWidth: '1800px', width: '100%', margin: '0 auto' }}>
+        <main style={isAuthPage ? { flex: 1, width: '100%', padding: 0 } : { flex: 1, padding: isHome ? '0' : '24px', maxWidth: '1800px', width: '100%', margin: '0 auto' }}>
           {children}
         </main>
       </div>

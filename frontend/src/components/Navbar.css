@@ -1,0 +1,357 @@
+/* ==============================================================================
+   URBANPULSE AI — REDESIGNED TOP HEADER NAVIGATION SYSTEM
+   ============================================================================== */
+
+/* Level 1 Header Container */
+.navbar-header-root {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(7, 12, 24, 0.93);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-inner-wrapper {
+  max-width: 1800px;
+  height: 64px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* Left Brand Logo Area */
+.navbar-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Center Primary Navigation Items */
+.navbar-center-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.nav-link-btn:hover {
+  color: #f8fafc;
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.15);
+}
+
+.nav-link-btn.active {
+  color: #38bdf8;
+  font-weight: 800;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.nav-link-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8, 0 0 4px #38bdf8;
+  border-radius: 2px;
+}
+
+/* Right Action Buttons & User Profile */
+.navbar-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-action-icon-btn {
+  position: relative;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-action-icon-btn:hover {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+/* Notifications Popover Dropdown */
+.notifications-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 310px;
+  background: rgba(11, 18, 33, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+  z-index: 1100;
+  animation: navDropdownSlide 0.2s ease-out;
+}
+
+/* User Profile Trigger & Menu */
+.user-profile-trigger {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 4px 12px 4px 6px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.user-profile-trigger:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.user-avatar-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 0.78rem;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 210px;
+  background: rgba(11, 18, 33, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+  z-index: 1100;
+  animation: navDropdownSlide 0.2s ease-out;
+}
+
+.dropdown-item-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.dropdown-item-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+
+.dropdown-item-btn.danger:hover {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+/* ==============================================================================
+   LEVEL 2 — SYSTEM STATUS STRIP
+   ============================================================================== */
+.status-bar-root {
+  background: #060a12;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  height: 28px;
+  display: flex;
+  align-items: center;
+  font-size: 0.70rem;
+  color: #94a3b8;
+  font-family: var(--font-mono, monospace);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.status-bar-root::-webkit-scrollbar {
+  display: none;
+}
+
+.status-bar-container {
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  white-space: nowrap;
+}
+
+.status-badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: statusPulse 2s infinite;
+}
+
+/* Animations */
+@keyframes navDropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes statusPulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Mobile Hamburger Toggle */
+.mobile-nav-toggle-btn {
+  display: none;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #f8fafc;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Mobile Drawer */
+.mobile-nav-drawer {
+  display: none;
+}
+
+/* ==============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================== */
+@media (max-width: 1280px) {
+  .nav-link-btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+  .navbar-inner-wrapper {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar-center-links {
+    gap: 2px;
+  }
+  .nav-link-btn {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  .hide-on-tablet {
+    display: none !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .navbar-center-links {
+    display: none;
+  }
+  .mobile-nav-toggle-btn {
+    display: flex;
+  }
+  .mobile-nav-drawer {
+    display: flex;
+    position: fixed;
+    top: 92px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(7, 12, 24, 0.97);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 24px 20px;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999;
+    overflow-y: auto;
+    border-top: 1px solid rgba(56, 189, 248, 0.2);
+    animation: navDropdownSlide 0.25s ease-out;
+  }
+
+  .mobile-nav-drawer .nav-link-btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.92rem;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .mobile-nav-drawer .nav-link-btn.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+}

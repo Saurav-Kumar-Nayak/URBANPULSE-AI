@@ -17,6 +17,10 @@ class Settings:
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     DATABASE_URL: str = DATABASE_URL
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "urbanpulse_citizen_auth_secret_key_2026")
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_ANON_KEY: str = os.getenv("SUPABASE_ANON_KEY", "")
     CORS_ORIGINS: list = [
         "http://localhost:5173",
         "http://localhost:3000",

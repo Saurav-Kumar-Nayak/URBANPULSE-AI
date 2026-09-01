@@ -1055,7 +1055,24 @@ button:active, .btn-3d:active {
   border-color: rgba(6, 182, 212, 0.45) !important;
 }
 
+/* ==========================================
+   LEAFLET MAP DARK THEME OVERRIDES
+   ========================================== */
+.leaflet-popup-content-wrapper {
+  background: #0d131c !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+  padding: 4px !important;
+}
 
+.leaflet-popup-tip {
+  background: #0d131c !important;
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+}
 
-
-
+.leaflet-container {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  background: #070b12 !important;
+}

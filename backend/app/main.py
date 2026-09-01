@@ -28,14 +28,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from app.core.logging_config import setup_logging
+import logging
+
+setup_logging(os.getenv("LOG_LEVEL", "INFO"))
+logger = logging.getLogger("app.main")
+
 @app.on_event("startup")
 def startup_event():
-    print("[Startup] Initializing database tables...")
+    logger.info("[Startup] Initializing database tables...")
     Base.metadata.create_all(bind=engine)
     
     db = SessionLocal()
     try:
-        print("[Startup] Running database seeder...")
+        logger.info("[Startup] Running database seeder...")
         seed_database(db)
 
         # Train ML models on database dataset
@@ -58,7 +64,7 @@ def startup_event():
             for r in records
         ]
         ml_engine.train_models(records_data)
-        print("[Startup] UrbanPulse AI Backend initialized successfully!")
+        logger.info("[Startup] UrbanPulse AI Backend initialized successfully!")
     finally:
         db.close()
 
@@ -72,6 +78,33 @@ def health_check():
         "version": settings.VERSION,
         "ml_engine_trained": ml_engine.is_trained,
         "database": "SQLite (urbanpulse.db)"
+    }
+
+from sqlalchemy import text
+
+@app.get("/readiness", tags=["Health"])
+@app.get("/api/readiness", tags=["Health"])
+@app.get("/api/v1/readiness", tags=["Health"])
+def readiness_check():
+    db = SessionLocal()
+    db_ok = False
+    try:
+        db.execute(text("SELECT 1"))
+        db_ok = True
+    except Exception as e:
+        logger.error(f"Database readiness ping failed: {e}")
+    finally:
+        db.close()
+
+    is_ready = db_ok and ml_engine.is_trained
+    if not is_ready:
+        raise HTTPException(status_code=503, detail="System component not ready")
+
+    return {
+        "ready": True,
+        "database_connected": db_ok,
+        "ml_engine_trained": ml_engine.is_trained,
+        "status": "OPERATIONAL"
     }
 
 # Register API Routers directly at both root `/api` and `/api/v1`

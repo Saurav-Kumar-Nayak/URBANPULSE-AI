@@ -30,6 +30,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
+  const markersLayerRef = useRef(null);
   const imageContainerRef = useRef(null);
   
   const [mapMode, setMapMode] = useState('3d'); // '3d' | 'live' | 'satellite'
@@ -168,43 +169,132 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
     }
   }, [userLocation]);
 
-  // Leaflet map setup for 'live' or 'satellite' mode
+  // Leaflet map setup and lifecycle for 'live' or 'satellite' mode
   useEffect(() => {
     if (mapMode === 'live' || mapMode === 'satellite') {
       if (!mapContainerRef.current) return;
 
       const center = [activePin.lat || 20.2961, activePin.lng || 85.8245];
 
+      const tileUrl = mapMode === 'satellite'
+        ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+      const tileAttribution = mapMode === 'satellite'
+        ? '&copy; Esri, Maxar, Earthstar Geographics'
+        : '&copy; OpenStreetMap contributors';
+
       if (!mapInstanceRef.current) {
         const map = L.map(mapContainerRef.current, {
           center: center,
           zoom: 13,
-          zoomControl: false
+          zoomControl: false,
+          attributionControl: true
         });
 
-        const tileUrl = mapMode === 'satellite'
-          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-          : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-
         tileLayerRef.current = L.tileLayer(tileUrl, {
-          attribution: '&copy; CARTO / OpenStreetMap',
+          attribution: tileAttribution,
           maxZoom: 19
         }).addTo(map);
 
+        const markersGroup = L.layerGroup().addTo(map);
+        markersLayerRef.current = markersGroup;
+
         mapInstanceRef.current = map;
-      } else if (tileLayerRef.current) {
-        const tileUrl = mapMode === 'satellite'
-          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-          : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-        tileLayerRef.current.setUrl(tileUrl);
-        mapInstanceRef.current.setView(center, 13);
+      } else {
+        if (tileLayerRef.current) {
+          tileLayerRef.current.setUrl(tileUrl);
+        }
       }
 
-      setTimeout(() => {
-        mapInstanceRef.current?.invalidateSize();
-      }, 200);
+      // Smoothly update center view
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.setView(center, mapInstanceRef.current.getZoom() || 13);
+      }
+
+      // Render interactive markers on Leaflet map
+      if (markersLayerRef.current) {
+        markersLayerRef.current.clearLayers();
+
+        BHUBANESWAR_ZONES.forEach((zone) => {
+          const isActive = activePin.id === zone.id || activePin.name === zone.name;
+          const riskColor = zone.risk === 'High Risk' ? '#f43f5e' : (zone.risk === 'Medium Risk' ? '#f59e0b' : '#34d399');
+          const bg = isActive ? '#2563eb' : '#0f172a';
+          const border = isActive ? '2px solid #38bdf8' : `1.5px solid ${riskColor}`;
+
+          const iconHtml = `
+            <div style="
+              background: ${bg};
+              border: ${border};
+              border-radius: 8px;
+              padding: 4px 8px;
+              color: #ffffff;
+              font-family: Inter, system-ui, sans-serif;
+              font-size: 11px;
+              font-weight: 700;
+              white-space: nowrap;
+              box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              cursor: pointer;
+            ">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: ${riskColor}; box-shadow: 0 0 6px ${riskColor};"></span>
+              <span>${zone.name}</span>
+              <span style="font-size: 9px; opacity: 0.85; background: rgba(255,255,255,0.15); padding: 1px 4px; border-radius: 3px;">${zone.speed} km/h</span>
+            </div>
+          `;
+
+          const customIcon = L.divIcon({
+            className: 'custom-leaflet-zone-marker',
+            html: iconHtml,
+            iconSize: [120, 28],
+            iconAnchor: [60, 14]
+          });
+
+          const marker = L.marker([zone.lat, zone.lng], { icon: customIcon });
+
+          marker.on('click', () => {
+            const updated = { ...zone, isUserLocation: false };
+            setActivePin(updated);
+            if (onSelectZone) onSelectZone(updated);
+          });
+
+          markersLayerRef.current.addLayer(marker);
+        });
+      }
+
+      // Ensure proper Leaflet container sizing after display toggle
+      const timer = setTimeout(() => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize();
+        }
+      }, 100);
+
+      return () => clearTimeout(timer);
     }
   }, [mapMode, activePin]);
+
+  // Window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      if (mapInstanceRef.current && (mapMode === 'live' || mapMode === 'satellite')) {
+        mapInstanceRef.current.invalidateSize();
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mapMode]);
+
+  // Cleanup Leaflet map instance on component unmount
+  useEffect(() => {
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
 
   // Handle clicking ANYWHERE on the 3D map canvas
   const handleMapClick = (e) => {
@@ -426,207 +516,209 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
       </div>
 
       {/* 3. MAIN MAP DISPLAY AREA (DYNAMIC ZOOM & PAN IN 3D MODE) */}
-      {mapMode === '3d' ? (
-        <div 
-          ref={imageContainerRef}
-          onClick={handleMapClick}
-          onWheel={handle3dWheel}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          style={{ 
-            position: 'relative', 
-            width: '100%', 
-            height: '100%', 
-            overflow: 'hidden', 
-            cursor: isDragging ? 'grabbing' : (zoomLevel > 1.0 ? 'grab' : 'crosshair') 
+      <div 
+        ref={imageContainerRef}
+        onClick={handleMapClick}
+        onWheel={handle3dWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        style={{ 
+          display: mapMode === '3d' ? 'block' : 'none',
+          position: 'relative', 
+          width: '100%', 
+          height: '100%', 
+          overflow: 'hidden', 
+          cursor: isDragging ? 'grabbing' : (zoomLevel > 1.0 ? 'grab' : 'crosshair') 
+        }}
+      >
+        {/* ZOOM & PAN SCALABLE CANVAS CONTAINER */}
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
+            transformOrigin: 'center center',
+            transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+            willChange: 'transform'
           }}
         >
-          {/* ZOOM & PAN SCALABLE CANVAS CONTAINER */}
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              transform: `scale(${zoomLevel}) translate(${panOffset.x / zoomLevel}px, ${panOffset.y / zoomLevel}px)`,
-              transformOrigin: 'center center',
-              transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              willChange: 'transform'
+          {/* 3D DIGITAL TWIN MAP VISUALIZATION */}
+          <img 
+            src="/photorealistic_gis_satellite_map.png" 
+            alt="Bhubaneswar 3D Digital Twin Command Map" 
+            style={{ 
+              width: '100%', 
+              height: 'calc(100% - 42px)', 
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              imageRendering: '-webkit-optimize-contrast',
+              filter: 'contrast(1.05) saturate(1.08) brightness(1.02)',
+              willChange: 'filter, transform'
+            }} 
+          />
+
+          {/* CRISP FLOATING 3D AREA NAME BADGES & INTERACTIVE HOTSPOTS OVER ALL LOCATIONS */}
+          {BHUBANESWAR_ZONES.map((zone, idx) => {
+            const isActive = activePin.name === zone.name || activePin.id === zone.id;
+            return (
+              <div
+                key={zone.id}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const updated = { ...zone, isUserLocation: false };
+                  setActivePin(updated);
+                  if (onSelectZone) onSelectZone(updated);
+                }}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  setShowInspector(true);
+                }}
+                onMouseEnter={() => setHoveredZone(zone)}
+                onMouseLeave={() => setHoveredZone(null)}
+                style={{
+                  position: 'absolute',
+                  top: `${zone.y}%`,
+                  left: `${zone.x}%`,
+                  transform: 'translate(-50%, -50%)',
+                  cursor: 'pointer',
+                  zIndex: isActive ? 15 : 6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {!isActive && (
+                  <div 
+                    className="crisp-area-badge crisp-area-badge-floating" 
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '6px',
+                      animationDelay: `${idx * 0.35}s` 
+                    }}
+                  >
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: zone.risk === 'High Risk' ? '#f43f5e' : (zone.risk === 'Medium Risk' ? '#f59e0b' : '#34d399'), boxShadow: '0 0 6px currentColor' }} />
+                    <span>{zone.name}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* SUBTLE GIS RADAR ZONE & PROFESSIONAL LOCATION PIN */}
+          <div 
+            style={{ 
+              position: 'absolute', 
+              top: `${activePin.y}%`, 
+              left: `${activePin.x}%`, 
+              transform: 'translate(-50%, -50%)', 
+              pointerEvents: 'none',
+              zIndex: 10,
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
-            {/* SVG SHARPENING FILTER FOR 100% CLEAR ROADS, WATER BODIES & BUILDINGS */}
-            <svg style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
-              <filter id="urbanMapSharpen">
-                <feConvolveMatrix order="3 3" preserveAlpha="true" kernelMatrix="0 -0.6 0 -0.6 3.4 -0.6 0 -0.6 0" />
-              </filter>
-            </svg>
-
-            {/* HIGH-RES 3D ISOMETRIC CITY VISUALIZATION WITH ULTRA-SHARP LINES & CLEAR WATER */}
-            <img 
-              src="/bhubaneswar_3d_twin.jpg" 
-              alt="Bhubaneswar 3D Digital Twin Command Map" 
-              style={{ 
-                width: '100%', 
-                height: 'calc(100% - 42px)', 
-                objectFit: 'cover',
-                objectPosition: 'center top',
-                imageRendering: '-webkit-optimize-contrast',
-                filter: 'url(#urbanMapSharpen) contrast(1.22) saturate(1.28) brightness(1.04)',
-                willChange: 'filter, transform'
-              }} 
-            />
-
-            {/* CRISP FLOATING 3D AREA NAME BADGES & INTERACTIVE HOTSPOTS OVER ALL LOCATIONS */}
-            {BHUBANESWAR_ZONES.map((zone, idx) => {
-              const isActive = activePin.name === zone.name || activePin.id === zone.id;
-              return (
-                <div
-                  key={zone.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const updated = { ...zone, isUserLocation: false };
-                    setActivePin(updated);
-                    if (onSelectZone) onSelectZone(updated);
-                  }}
-                  onDoubleClick={(e) => {
-                    e.stopPropagation();
-                    setShowInspector(true);
-                  }}
-                  onMouseEnter={() => setHoveredZone(zone)}
-                  onMouseLeave={() => setHoveredZone(null)}
-                  style={{
-                    position: 'absolute',
-                    top: `${zone.y}%`,
-                    left: `${zone.x}%`,
-                    transform: 'translate(-50%, -50%)',
-                    cursor: 'pointer',
-                    zIndex: isActive ? 15 : 6,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  {!isActive && (
-                    <div 
-                      className="crisp-area-badge crisp-area-badge-floating" 
-                      style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '6px',
-                        animationDelay: `${idx * 0.35}s` 
-                      }}
-                    >
-                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: zone.risk === 'High Risk' ? '#f43f5e' : (zone.risk === 'Medium Risk' ? '#f59e0b' : '#34d399'), boxShadow: '0 0 6px currentColor' }} />
-                      <span>{zone.name}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            {/* REAL 3D FLOATING RADAR CIRCLE + FLOATING MARKER PIN */}
+            {/* SUBTLE GIS RADAR CIRCLE */}
             <div 
               style={{ 
                 position: 'absolute', 
-                top: `${activePin.y}%`, 
-                left: `${activePin.x}%`, 
-                transform: 'translate(-50%, -50%)', 
-                pointerEvents: 'none',
-                zIndex: 10,
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            >
-              {/* REAL-LIKE 3D FLOATING RADAR CIRCLE */}
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)',
+                width: '140px', 
+                height: '80px', 
+                borderRadius: '50%', 
+                background: activePin.isUserLocation
+                  ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0) 70%)'
+                  : 'radial-gradient(ellipse at center, rgba(2, 132, 199, 0.2) 0%, rgba(2, 132, 199, 0) 70%)',
+                border: activePin.isUserLocation ? '1px dashed rgba(16, 185, 129, 0.6)' : '1px dashed rgba(56, 189, 248, 0.6)',
+                boxShadow: activePin.isUserLocation ? '0 0 12px rgba(16, 185, 129, 0.2)' : '0 0 12px rgba(56, 189, 248, 0.2)',
+                pointerEvents: 'none'
+              }} 
+            />
+
+            {/* PROFESSIONAL GIS TELEMETRY BADGE & PIN */}
+            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div 
-                className={activePin.isUserLocation ? "radar-circle-floating-gps" : "radar-circle-floating"}
                 style={{ 
-                  position: 'absolute', 
-                  top: '50%', 
-                  left: '50%', 
-                  width: '180px', 
-                  height: '110px', 
-                  borderRadius: '50%', 
-                  background: activePin.isUserLocation
-                    ? 'radial-gradient(ellipse at center, rgba(52, 211, 153, 0.45) 0%, rgba(52, 211, 153, 0.15) 60%, rgba(52, 211, 153, 0) 100%)'
-                    : 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.45) 0%, rgba(59, 130, 246, 0.15) 60%, rgba(59, 130, 246, 0) 100%)',
-                  border: activePin.isUserLocation ? '1.8px dashed rgba(52, 211, 153, 0.85)' : '1.8px dashed rgba(56, 189, 248, 0.85)',
-                  boxShadow: activePin.isUserLocation ? '0 0 35px rgba(52, 211, 153, 0.7)' : '0 0 35px rgba(56, 189, 248, 0.7)',
-                  pointerEvents: 'none'
-                }} 
-              />
-
-              {/* FLOATING LIVE TELEMETRY BADGE & PIN BOBBING IN 3D SPACE */}
-              <div className="pin-floating-bob" style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div 
-                  style={{ 
-                    background: activePin.isUserLocation ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #2563eb, #1d4ed8)', 
-                    color: '#ffffff', 
-                    padding: '5px 14px', 
-                    borderRadius: '10px', 
-                    fontSize: '0.80rem', 
-                    fontWeight: 800, 
-                    boxShadow: '0 6px 20px rgba(0,0,0,0.7), 0 0 15px rgba(56, 189, 248, 0.4)', 
-                    border: '1px solid rgba(255,255,255,0.45)',
-                    whiteSpace: 'nowrap',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    pointerEvents: 'auto',
-                    cursor: 'pointer'
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowInspector(true);
-                  }}
-                >
-                  <span>{activePin.isUserLocation ? "📍 " + activePin.name : activePin.name}</span>
-                  <span style={{ fontSize: '0.68rem', background: 'rgba(0,0,0,0.35)', padding: '2px 7px', borderRadius: '5px', fontWeight: 700 }}>
-                    {activePin.speed} km/h • {activePin.aqi} AQI
-                  </span>
-                  <Maximize2 size={12} color="#ffffff" style={{ marginLeft: '2px' }} />
-                </div>
-
-                {/* Glowing Map Pin Icon */}
-                <div style={{ width: '30px', height: '38px', marginTop: '2px', filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.9))' }}>
-                  <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 0C5.37 0 0 5.37 0 12C0 21 12 32 12 32C12 32 24 21 24 12C24 5.37 18.63 0 12 0Z" fill={activePin.isUserLocation ? '#10b981' : '#3b82f6'}/>
-                    <circle cx="12" cy="12" r="5" fill="#ffffff"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Hover Tooltip when mouse hovers a zone */}
-            {hoveredZone && (
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: `${hoveredZone.y - 12}%`,
-                  left: `${hoveredZone.x}%`,
-                  transform: 'translateX(-50%)',
-                  background: 'rgba(13, 19, 28, 0.95)',
-                  border: '1px solid #38bdf8',
-                  borderRadius: '6px',
-                  padding: '4px 8px',
-                  color: '#38bdf8',
-                  fontSize: '0.70rem',
-                  fontWeight: 700,
-                  pointerEvents: 'none',
-                  zIndex: 20,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+                  background: 'rgba(11, 17, 30, 0.94)', 
+                  color: '#ffffff', 
+                  padding: '5px 12px', 
+                  borderRadius: '8px', 
+                  fontSize: '0.78rem', 
+                  fontWeight: 700, 
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.6)', 
+                  border: activePin.isUserLocation ? '1px solid rgba(16, 185, 129, 0.6)' : '1px solid rgba(56, 189, 248, 0.5)',
+                  backdropFilter: 'blur(10px)',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  pointerEvents: 'auto',
+                  cursor: 'pointer'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowInspector(true);
                 }}
               >
-                Click or Double-Click to inspect {hoveredZone.name}
+                <span>{activePin.isUserLocation ? "📍 " + activePin.name : activePin.name}</span>
+                <span style={{ fontSize: '0.66rem', background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: '4px', color: '#38bdf8', fontWeight: 600 }}>
+                  {activePin.speed} km/h • {activePin.aqi} AQI
+                </span>
+                <Maximize2 size={12} color="#94a3b8" style={{ marginLeft: '2px' }} />
               </div>
-            )}
+
+              {/* Clean Map Pin Icon */}
+              <div style={{ width: '24px', height: '30px', marginTop: '2px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.7))' }}>
+                <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 0C5.37 0 0 5.37 0 12C0 21 12 32 12 32C12 32 24 21 24 12C24 5.37 18.63 0 12 0Z" fill={activePin.isUserLocation ? '#10b981' : '#0284c7'}/>
+                  <circle cx="12" cy="12" r="4.5" fill="#ffffff"/>
+                </svg>
+              </div>
+            </div>
           </div>
+
+          {/* Hover Tooltip when mouse hovers a zone */}
+          {hoveredZone && (
+            <div 
+              style={{
+                position: 'absolute',
+                top: `${hoveredZone.y - 12}%`,
+                left: `${hoveredZone.x}%`,
+                transform: 'translateX(-50%)',
+                background: 'rgba(13, 19, 28, 0.95)',
+                border: '1px solid #38bdf8',
+                borderRadius: '6px',
+                padding: '4px 8px',
+                color: '#38bdf8',
+                fontSize: '0.70rem',
+                fontWeight: 700,
+                pointerEvents: 'none',
+                zIndex: 20,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+              }}
+            >
+              Click or Double-Click to inspect {hoveredZone.name}
+            </div>
+          )}
         </div>
-      ) : (
-        /* LEAFLET INTERACTIVE CONTAINER */
-        <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
-      )}
+      </div>
+
+      {/* LEAFLET INTERACTIVE CONTAINER FOR LIVE MAP & SATELLITE MODES */}
+      <div 
+        ref={mapContainerRef} 
+        style={{ 
+          display: mapMode !== '3d' ? 'block' : 'none', 
+          position: 'relative', 
+          width: '100%', 
+          height: 'calc(100% - 42px)', 
+          zIndex: 2 
+        }} 
+      />
 
       {/* 4. BOTTOM MAP LEGEND OVERLAY BAR (SOLID OPAQUE - NO DUPLICATE / OVERLAPPED TEXT) */}
       <div 
