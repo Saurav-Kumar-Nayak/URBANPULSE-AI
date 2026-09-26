@@ -1,5 +1,9 @@
+import os
 import uvicorn
 
 if __name__ == "__main__":
-    print("Starting UrbanPulse AI Backend Server on http://127.0.0.1:8000 ...")
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "8000"))
+    reload_flag = os.environ.get("RELOAD", "false").lower() == "true"
+    print(f"Starting UrbanPulse AI Backend Server on http://{host}:{port} ...")
+    uvicorn.run("app.main:app", host=host, port=port, reload=reload_flag)
