@@ -21,12 +21,31 @@ class Settings:
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_ANON_KEY: str = os.getenv("SUPABASE_ANON_KEY", "")
-    CORS_ORIGINS: list = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "*"
-    ]
+    def _get_cors_origins(self) -> list:
+        env_cors = os.getenv("CORS_ORIGINS")
+        if env_cors:
+            if env_cors.startswith("["):
+                import json
+                try:
+                    return json.loads(env_cors)
+                except Exception:
+                    pass
+            return [o.strip() for o in env_cors.split(",") if o.strip()]
+        
+        frontend_url = os.getenv("FRONTEND_URL")
+        if frontend_url:
+            return [frontend_url.strip(), "http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173", "http://127.0.0.1:3000"]
+        
+        return [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:3000",
+            "*"
+        ]
+
+    @property
+    def CORS_ORIGINS(self) -> list:
+        return self._get_cors_origins()
 
 settings = Settings()

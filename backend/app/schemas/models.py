@@ -85,6 +85,7 @@ class AnomalyItemSchema(BaseModel):
     severity: str
     risk_score: float
     explanation: str
+    status: Optional[str] = "DETECTED"
 
 class AnomalyResponseSchema(BaseModel):
     total_anomalies: int

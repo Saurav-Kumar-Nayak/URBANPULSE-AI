@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : '/api';
+const rawBase = import.meta.env.VITE_API_BASE_URL ? import.meta.env.VITE_API_BASE_URL.trim().replace(/\/+$/, '') : '';
+const API_BASE = rawBase ? (rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`) : '/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE,
@@ -70,6 +71,10 @@ export const api = {
     const res = await apiClient.post('/anomalies/detect', payload);
     return res.data;
   },
+  updateAnomalyStatus: async (anomalyId, status) => {
+    const res = await apiClient.patch(`/anomalies/${anomalyId}/status`, { status });
+    return res.data;
+  },
 
   // Predictions
   getPredictionsMeta: async () => {
@@ -94,14 +99,23 @@ export const api = {
   },
 
   // Data Explorer
-  getExplorerData: async (params = {}) => {
-    const res = await apiClient.get('/explorer', { params });
+  getRecords: async (params = {}) => {
+    const res = await apiClient.get('/records', { params });
     return res.data;
+  },
+  getExplorerData: async (params = {}) => {
+    const res = await apiClient.get('/records', { params });
+    return res.data;
+  },
+  getExportUrl: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    const base = API_BASE.replace(/\/+$/, '');
+    return `${base}/records/export${queryString ? `?${queryString}` : ''}`;
   },
 
   // Analytics
   getAnalytics: async () => {
-    const res = await apiClient.get('/analytics');
+    const res = await apiClient.get('/analytics/kpis');
     return res.data;
   }
 };

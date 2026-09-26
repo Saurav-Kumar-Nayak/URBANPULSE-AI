@@ -73,21 +73,174 @@ const FORECAST_DATA = [
   { time: '+12h', actual: null, predicted: 0.38, confidenceUpper: 0.44, confidenceLower: 0.32 }
 ];
 
-const TOP_CORRIDORS = [
-  { id: 1, name: 'Jayadev Vihar', avgSpeed: '19.7 km/h', congestion: 69, status: 'severe' },
-  { id: 2, name: 'Bhubaneswar Railway Station', avgSpeed: '20.4 km/h', congestion: 65, status: 'heavy' },
-  { id: 3, name: 'Patia Main Road', avgSpeed: '20.1 km/h', congestion: 64, status: 'heavy' },
-  { id: 4, name: 'Nandankanan Road', avgSpeed: '24.9 km/h', congestion: 58, status: 'heavy' },
-  { id: 5, name: 'KIIT Road', avgSpeed: '28.2 km/h', congestion: 53, status: 'moderate' }
+const BHUBANESWAR_CORRIDORS = [
+  { 
+    id: 1, 
+    name: 'Jayadev Vihar Junction', 
+    avgSpeed: '19.7 km/h', 
+    congestion: 69, 
+    status: 'severe', 
+    color: '#ef4444', 
+    weight: 7,
+    points: [
+      [20.2980, 85.8245],
+      [20.3120, 85.8235],
+      [20.3280, 85.8215],
+      [20.3440, 85.8195],
+      [20.3588, 85.8184]
+    ]
+  },
+  { 
+    id: 2, 
+    name: 'Bhubaneswar Railway Station', 
+    avgSpeed: '20.4 km/h', 
+    congestion: 65, 
+    status: 'heavy', 
+    color: '#f97316', 
+    weight: 6,
+    points: [
+      [20.2650, 85.8400],
+      [20.2750, 85.8380],
+      [20.2885, 85.8420],
+      [20.2910, 85.8580]
+    ]
+  },
+  { 
+    id: 3, 
+    name: 'Patia Main Road', 
+    avgSpeed: '28.5 km/h', 
+    congestion: 32, 
+    status: 'smooth', 
+    color: '#10b981', 
+    weight: 6,
+    points: [
+      [20.3588, 85.8184],
+      [20.3620, 85.8080],
+      [20.3660, 85.7980],
+      [20.3700, 85.7880]
+    ]
+  },
+  { 
+    id: 4, 
+    name: 'Nandankanan Road', 
+    avgSpeed: '24.9 km/h', 
+    congestion: 58, 
+    status: 'heavy', 
+    color: '#f59e0b', 
+    weight: 6,
+    points: [
+      [20.3700, 85.8300],
+      [20.3550, 85.8320],
+      [20.3350, 85.8340],
+      [20.3150, 85.8320],
+      [20.2980, 85.8245]
+    ]
+  },
+  { 
+    id: 5, 
+    name: 'KIIT Road', 
+    avgSpeed: '28.2 km/h', 
+    congestion: 53, 
+    status: 'moderate', 
+    color: '#f59e0b', 
+    weight: 6,
+    points: [
+      [20.3530, 85.8150],
+      [20.3560, 85.8250],
+      [20.3600, 85.8350],
+      [20.3650, 85.8450]
+    ]
+  },
+  {
+    id: 6,
+    name: 'Khandagiri Bypass Highway',
+    avgSpeed: '34.1 km/h',
+    congestion: 28,
+    status: 'smooth',
+    color: '#10b981',
+    weight: 6,
+    points: [
+      [20.2600, 85.7850],
+      [20.2750, 85.7980],
+      [20.2880, 85.8120],
+      [20.2980, 85.8245]
+    ]
+  }
 ];
 
+const TOP_CORRIDORS = BHUBANESWAR_CORRIDORS;
+
 const INCIDENTS_DATA = [
-  { type: 'Accident', location: 'Jayadev Vihar', impact: 'High', time: '10:38 PM', severityColor: '#FF5A67' },
-  { type: 'Road Construction', location: 'Nandankanan Road', impact: 'Moderate', time: '10:19 PM', severityColor: '#FFB020' },
-  { type: 'Signal Failure', location: 'Patia Main Road', impact: 'Moderate', time: '10:12 PM', severityColor: '#FFB020' },
-  { type: 'Road Closure', location: 'KIIT Square', impact: 'High', time: '09:58 PM', severityColor: '#FF5A67' },
-  { type: 'Vehicle Breakdown', location: 'Cuttack Road', impact: 'Low', time: '09:41 PM', severityColor: '#27D17F' }
+  { id: 'inc-1', type: 'Accident', location: 'Jayadev Vihar Junction', impact: 'High', time: '10:38 PM', severityColor: '#ef4444', lat: 20.2980, lng: 85.8245, status: 'Active Emergency Dispatch' },
+  { id: 'inc-2', type: 'Road Construction', location: 'Nandankanan Road', impact: 'Moderate', time: '10:19 PM', severityColor: '#f59e0b', lat: 20.3550, lng: 85.8320, status: 'Lane Restrict 1/2' },
+  { id: 'inc-3', type: 'Signal Failure', location: 'Patia Main Road', impact: 'Moderate', time: '10:12 PM', severityColor: '#f59e0b', lat: 20.3588, lng: 85.8184, status: 'Manual Controller Onsite' },
+  { id: 'inc-4', type: 'Road Closure', location: 'KIIT Square', impact: 'High', time: '09:58 PM', severityColor: '#ef4444', lat: 20.3530, lng: 85.8150, status: 'Duct Maintenance' },
+  { id: 'inc-5', type: 'Vehicle Breakdown', location: 'Bhubaneswar Railway Station', impact: 'Low', time: '09:41 PM', severityColor: '#27d17f', lat: 20.2650, lng: 85.8400, status: 'Towing Unit En Route' }
 ];
+
+const CAMERA_LOCATIONS = [
+  { id: 'cam-101', name: 'Jayadev Vihar Junction 4K', lat: 20.2985, lng: 85.8248, status: 'online', uptime: '99.8%' },
+  { id: 'cam-102', name: 'Patia Main Square Feed', lat: 20.3592, lng: 85.8188, status: 'online', uptime: '100%' },
+  { id: 'cam-103', name: 'Nandankanan Rd Corridor', lat: 20.3555, lng: 85.8322, status: 'online', uptime: '98.9%' },
+  { id: 'cam-104', name: 'Saheed Nagar Entry Gate', lat: 20.2888, lng: 85.8422, status: 'offline', uptime: '89.2%' },
+  { id: 'cam-105', name: 'Railway Station Plaza Cam', lat: 20.2655, lng: 85.8405, status: 'online', uptime: '99.1%' },
+  { id: 'cam-106', name: 'KIIT Square Traffic Sensor', lat: 20.3535, lng: 85.8155, status: 'maintenance', uptime: '94.0%' },
+  { id: 'cam-107', name: 'Vani Vihar Flyover Cam', lat: 20.2915, lng: 85.8585, status: 'online', uptime: '99.6%' }
+];
+
+// INITIAL SIMULATED VEHICLE FLEET CONSTRAINED TO ROAD POLYLINES
+const INITIAL_VEHICLES = [
+  { id: 'v1', type: 'car', color: '#38bdf8', corridorIndex: 0, progress: 0.15, direction: 1, lane: 1, baseSpeed: 0.0018 },
+  { id: 'v2', type: 'car', color: '#34d399', corridorIndex: 0, progress: 0.65, direction: 1, lane: 1, baseSpeed: 0.0022 },
+  { id: 'v3', type: 'bus', color: '#f59e0b', corridorIndex: 0, progress: 0.40, direction: -1, lane: -1, baseSpeed: 0.0014 },
+  { id: 'v4', type: 'car', color: '#ffffff', corridorIndex: 1, progress: 0.20, direction: 1, lane: 1, baseSpeed: 0.0020 },
+  { id: 'v5', type: 'car', color: '#f87171', corridorIndex: 1, progress: 0.70, direction: 1, lane: 1, baseSpeed: 0.0023 },
+  { id: 'v6', type: 'twowheeler', color: '#06b6d4', corridorIndex: 1, progress: 0.50, direction: -1, lane: -1, baseSpeed: 0.0026 },
+  { id: 'v7', type: 'car', color: '#a855f7', corridorIndex: 2, progress: 0.35, direction: 1, lane: 1, baseSpeed: 0.0028 },
+  { id: 'v8', type: 'bus', color: '#f59e0b', corridorIndex: 2, progress: 0.60, direction: -1, lane: -1, baseSpeed: 0.0018 },
+  { id: 'v9', type: 'truck', color: '#eab308', corridorIndex: 3, progress: 0.25, direction: 1, lane: 1, baseSpeed: 0.0012 },
+  { id: 'v10', type: 'car', color: '#ef4444', corridorIndex: 3, progress: 0.75, direction: -1, lane: -1, baseSpeed: 0.0019 },
+  { id: 'v11', type: 'twowheeler', color: '#38bdf8', corridorIndex: 4, progress: 0.30, direction: 1, lane: 1, baseSpeed: 0.0027 },
+  { id: 'v12', type: 'car', color: '#34d399', corridorIndex: 4, progress: 0.80, direction: -1, lane: -1, baseSpeed: 0.0022 },
+  { id: 'v13', type: 'car', color: '#38bdf8', corridorIndex: 5, progress: 0.40, direction: 1, lane: 1, baseSpeed: 0.0030 },
+  { id: 'v14', type: 'bus', color: '#f59e0b', corridorIndex: 5, progress: 0.70, direction: -1, lane: -1, baseSpeed: 0.0020 }
+];
+
+// POLYLINE INTERPOLATION WITH TANGENT HEADING AND LANE DISPLACEMENT
+const getPolylineSample = (points, progress, direction = 1, lane = 1) => {
+  if (!points || points.length < 2) return { lat: 20.2961, lng: 85.8245, heading: 0 };
+
+  const totalSegments = points.length - 1;
+  const clampedProgress = Math.max(0, Math.min(1, progress));
+  const scaledIndex = clampedProgress * totalSegments;
+  const segIdx = Math.min(Math.floor(scaledIndex), totalSegments - 1);
+  const t = scaledIndex - segIdx;
+
+  const p1 = points[segIdx];
+  const p2 = points[segIdx + 1];
+
+  const baseLat = p1[0] + (p2[0] - p1[0]) * t;
+  const baseLng = p1[1] + (p2[1] - p1[1]) * t;
+
+  const dLat = p2[0] - p1[0];
+  const dLng = p2[1] - p1[1];
+  const angleRad = Math.atan2(dLat, dLng);
+  const headingDeg = direction === 1 
+    ? Math.round(angleRad * (180 / Math.PI)) 
+    : Math.round((angleRad + Math.PI) * (180 / Math.PI));
+
+  // Perpendicular lane displacement (approx 15-20 meters offset)
+  const laneOffsetGis = 0.00018;
+  const perpLat = -Math.sin(angleRad) * laneOffsetGis * lane * direction;
+  const perpLng = Math.cos(angleRad) * laneOffsetGis * lane * direction;
+
+  return {
+    lat: baseLat + perpLat,
+    lng: baseLng + perpLng,
+    heading: headingDeg
+  };
+};
+
 
 export default function TrafficIntelligenceView() {
   const [userLocation, setUserLocation] = useState(CITY_PRESETS[0]);
@@ -97,56 +250,29 @@ export default function TrafficIntelligenceView() {
   const [lastUpdated, setLastUpdated] = useState('10:42:22 PM');
   const [layersOpen, setLayersOpen] = useState(false);
 
-  const [mapStyle, setMapStyle] = useState('Vibrant Street'); // 'Vibrant Street' | 'Satellite' | 'Dark GIS'
+  const [mapStyle, setMapStyle] = useState('Dark GIS'); // 'Dark GIS' | 'Vibrant Street' | 'Satellite'
+  const [selectedCorridorId, setSelectedCorridorId] = useState(null);
+  const [selectedIncidentId, setSelectedIncidentId] = useState(null);
+
   const mapTileLayerRef = useRef(null);
   const mapLabelsLayerRef = useRef(null);
 
   const trafficMapContainerRef = useRef(null);
   const trafficMapInstanceRef = useRef(null);
   const trafficLayerGroupRef = useRef(null);
+  const vehicleLayerGroupRef = useRef(null);
+  const leafletVehicleMarkersRef = useRef({});
 
-  // Dynamic GPS Geolocation
-  const handleDetectLocation = () => {
-    setIsLocating(true);
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          setUserLocation({
-            city: 'Detected Location',
-            region: 'GPS Telemetry',
-            country: 'Live Coordinates',
-            lat: latitude,
-            lng: longitude,
-            vehicles: '22,480',
-            congestion: 0.65,
-            avgSpeed: 23.8,
-            flow: '70%',
-            incidents: 6
-          });
-          setIsLocating(false);
-          setIsLocationModalOpen(false);
-        },
-        () => setIsLocating(false),
-        { timeout: 8000 }
-      );
-    } else {
-      setIsLocating(false);
-    }
-  };
-
-  const handleSelectCity = (preset) => {
-    setUserLocation(preset);
-    setIsLocationModalOpen(false);
-    setLastUpdated(new Date().toLocaleTimeString('en-US'));
-  };
+  const vehiclesRef = useRef(JSON.parse(JSON.stringify(INITIAL_VEHICLES)));
+  const animationFrameRef = useRef(null);
 
   const [gisLayers, setGisLayers] = useState({
     trafficFlow: true,
     incidents: true,
     roadClosures: true,
     construction: true,
-    cameras: true
+    cameras: true,
+    vehicles: true
   });
 
   const handleToggleLayer = (layerKey) => {
@@ -156,34 +282,36 @@ export default function TrafficIntelligenceView() {
     }));
   };
 
-  // Helper to update map tile layers
+  // Helper to update map tile layers with professional GIS basemaps
   const updateMapTiles = (map, style) => {
     if (mapTileLayerRef.current) map.removeLayer(mapTileLayerRef.current);
     if (mapLabelsLayerRef.current) map.removeLayer(mapLabelsLayerRef.current);
 
     if (style === 'Vibrant Street') {
-      // High-contrast, clear OpenStreetMap tile layer
-      mapTileLayerRef.current = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // CartoDB Voyager High-Contrast Cartographic Basemap
+      mapTileLayerRef.current = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap'
+        subdomains: 'abcd',
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(map);
       mapLabelsLayerRef.current = null;
     } else if (style === 'Satellite') {
-      // Esri World Imagery Satellite + Place Labels
+      // Esri World Imagery Satellite + Reference Place Labels
       mapTileLayerRef.current = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 18
+        maxZoom: 18,
+        attribution: '&copy; Esri & Maxar'
       }).addTo(map);
       mapLabelsLayerRef.current = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18
       }).addTo(map);
     } else {
-      // Dark GIS Command Center Basemap
-      mapTileLayerRef.current = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
+      // CartoDB Dark Matter Enterprise GIS Basemap
+      mapTileLayerRef.current = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        subdomains: 'abcd',
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(map);
-      mapLabelsLayerRef.current = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16
-      }).addTo(map);
+      mapLabelsLayerRef.current = null;
     }
   };
 
@@ -194,6 +322,74 @@ export default function TrafficIntelligenceView() {
     }
   }, [mapStyle]);
 
+  // Handle corridor selection click (Highlights polyline & pans/zooms map)
+  const handleSelectCorridor = (corridor) => {
+    setSelectedCorridorId(corridor.id);
+    if (trafficMapInstanceRef.current && corridor.points && corridor.points.length > 0) {
+      const bounds = L.latLngBounds(corridor.points);
+      trafficMapInstanceRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+    }
+  };
+
+  // Handle incident selection click (Pans/zooms to incident GPS point)
+  const handleSelectIncident = (inc) => {
+    setSelectedIncidentId(inc.id);
+    if (trafficMapInstanceRef.current && inc.lat && inc.lng) {
+      trafficMapInstanceRef.current.setView([inc.lat, inc.lng], 16, { animate: true });
+    }
+  };
+
+  // 60 FPS RequestAnimationFrame Vehicle Navigation Engine
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const animate = (now) => {
+      const deltaTime = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (gisLayers.vehicles) {
+        vehiclesRef.current.forEach((veh) => {
+          const corridor = BHUBANESWAR_CORRIDORS[veh.corridorIndex];
+          if (!corridor || !corridor.points) return;
+
+          // Adjust speed based on corridor congestion level
+          const speedMultiplier = corridor.status === 'severe' ? 0.35 : (corridor.status === 'heavy' ? 0.6 : 1.0);
+          veh.progress += veh.baseSpeed * veh.direction * speedMultiplier;
+
+          if (veh.progress > 1.0) {
+            veh.progress = 1.0;
+            veh.direction = -1;
+          } else if (veh.progress < 0.0) {
+            veh.progress = 0.0;
+            veh.direction = 1;
+          }
+
+          const sample = getPolylineSample(corridor.points, veh.progress, veh.direction, veh.lane);
+
+          const marker = leafletVehicleMarkersRef.current[veh.id];
+          if (marker) {
+            marker.setLatLng([sample.lat, sample.lng]);
+            const iconEl = marker.getElement();
+            if (iconEl) {
+              const rotContainer = iconEl.querySelector('.vehicle-rotator');
+              if (rotContainer) {
+                rotContainer.style.transform = `rotate(${sample.heading}deg)`;
+              }
+            }
+          }
+        });
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, [gisLayers.vehicles]);
+
   // Initialize & Update Traffic GIS Map
   useEffect(() => {
     if (!trafficMapContainerRef.current) return;
@@ -201,7 +397,7 @@ export default function TrafficIntelligenceView() {
     if (!trafficMapInstanceRef.current) {
       const map = L.map(trafficMapContainerRef.current, {
         center: [userLocation.lat, userLocation.lng],
-        zoom: 14,
+        zoom: 13,
         zoomControl: false,
         attributionControl: false
       });
@@ -209,116 +405,156 @@ export default function TrafficIntelligenceView() {
       updateMapTiles(map, mapStyle);
 
       const layerGroup = L.layerGroup().addTo(map);
+      const vehicleGroup = L.layerGroup().addTo(map);
+
       trafficLayerGroupRef.current = layerGroup;
+      vehicleLayerGroupRef.current = vehicleGroup;
       trafficMapInstanceRef.current = map;
 
       setTimeout(() => {
         if (map) map.invalidateSize();
       }, 300);
     } else {
-      trafficMapInstanceRef.current.setView([userLocation.lat, userLocation.lng], 14);
+      trafficMapInstanceRef.current.setView([userLocation.lat, userLocation.lng], 13);
       setTimeout(() => {
         if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.invalidateSize();
       }, 200);
     }
 
-    // Render Real GIS Road Geometry Polylines with Popups & Markers
+    // Render Real GIS Road Geometry Polylines, Incidents, Cameras & Vehicles
     if (trafficLayerGroupRef.current) {
       trafficLayerGroupRef.current.clearLayers();
 
-      const bLat = userLocation.lat;
-      const bLng = userLocation.lng;
-
-      // 1. TRAFFIC FLOW POLYLINES
+      // 1. REAL ROAD TRAFFIC FLOW POLYLINES
       if (gisLayers.trafficFlow) {
-        // Smooth Flow Corridor (Green)
-        const p1 = L.polyline([
-          [bLat + 0.05, bLng - 0.04],
-          [bLat + 0.02, bLng - 0.02],
-          [bLat, bLng],
-          [bLat - 0.03, bLng + 0.02]
-        ], { color: '#10b981', weight: 6, opacity: 0.95 }).addTo(trafficLayerGroupRef.current);
-        p1.bindTooltip('<b>Patia Main Road</b><br/>Status: Smooth Flow (28 km/h)', { permanent: false });
+        BHUBANESWAR_CORRIDORS.forEach((corridor) => {
+          const isSelected = selectedCorridorId === corridor.id;
+          const polyWeight = isSelected ? 10 : corridor.weight;
+          const opacity = isSelected ? 1.0 : 0.88;
 
-        // Moderate Flow Corridor (Amber)
-        const p2 = L.polyline([
-          [bLat - 0.04, bLng - 0.05],
-          [bLat - 0.01, bLng - 0.02],
-          [bLat, bLng],
-          [bLat + 0.02, bLng + 0.03]
-        ], { color: '#f59e0b', weight: 6, opacity: 0.95 }).addTo(trafficLayerGroupRef.current);
-        p2.bindTooltip('<b>Nandankanan Road</b><br/>Status: Moderate (24 km/h)', { permanent: false });
+          const polyline = L.polyline(corridor.points, {
+            color: corridor.color,
+            weight: polyWeight,
+            opacity: opacity,
+            lineCap: 'round',
+            lineJoin: 'round'
+          }).addTo(trafficLayerGroupRef.current);
 
-        // Severe Congestion Corridor (Red)
-        const p3 = L.polyline([
-          [bLat - 0.01, bLng - 0.04],
-          [bLat + 0.01, bLng - 0.01],
-          [bLat + 0.02, bLng + 0.02],
-          [bLat + 0.04, bLng + 0.04]
-        ], { color: '#ef4444', weight: 7, opacity: 0.95 }).addTo(trafficLayerGroupRef.current);
-        p3.bindTooltip('<b>Jayadev Vihar Junction</b><br/>Status: Severe Congestion (19 km/h)', { permanent: false });
+          polyline.bindTooltip(
+            `<div style="font-family: sans-serif; font-size: 11px;">` +
+              `<strong style="color: ${corridor.color}">${corridor.name}</strong><br/>` +
+              `Status: ${corridor.status.toUpperCase()} (${corridor.avgSpeed})<br/>` +
+              `Congestion Index: ${corridor.congestion}%` +
+            `</div>`, 
+            { permanent: false }
+          );
 
-        // Heavy Congestion Corridor (Orange)
-        const p4 = L.polyline([
-          [bLat + 0.04, bLng - 0.06],
-          [bLat + 0.02, bLng - 0.03],
-          [bLat - 0.01, bLng + 0.01]
-        ], { color: '#f97316', weight: 6, opacity: 0.95 }).addTo(trafficLayerGroupRef.current);
-        p4.bindTooltip('<b>Railway Station Corridor</b><br/>Status: Heavy Congestion (20 km/h)', { permanent: false });
+          polyline.on('click', () => handleSelectCorridor(corridor));
+        });
       }
 
       // 2. INCIDENTS MARKERS
       if (gisLayers.incidents) {
-        const accidentHtml = `<div style="background:#ef4444; color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 0 10px #ef4444; border:2px solid #fff;">🚨</div>`;
-        L.marker([bLat + 0.01, bLng - 0.01], {
-          icon: L.divIcon({ html: accidentHtml, className: 'incident-icon', iconSize: [28, 28], iconAnchor: [14, 14] })
-        }).bindPopup('<b>Accident Detected</b><br/>Jayadev Vihar • High Impact').addTo(trafficLayerGroupRef.current);
+        INCIDENTS_DATA.forEach((inc) => {
+          const isSelected = selectedIncidentId === inc.id;
+          const borderStyle = isSelected ? '3px solid #ffffff' : '2px solid rgba(255,255,255,0.8)';
+          const boxGlow = isSelected ? `0 0 16px ${inc.severityColor}` : `0 2px 8px rgba(0,0,0,0.5)`;
 
-        const signalHtml = `<div style="background:#f59e0b; color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:13px; box-shadow:0 0 8px #f59e0b; border:2px solid #fff;">🚦</div>`;
-        L.marker([bLat - 0.015, bLng + 0.015], {
-          icon: L.divIcon({ html: signalHtml, className: 'incident-icon', iconSize: [26, 26], iconAnchor: [13, 13] })
-        }).bindPopup('<b>Signal Failure</b><br/>Patia Square • Manual Dispatch').addTo(trafficLayerGroupRef.current);
+          const incHtml = `
+            <div style="background:${inc.severityColor}; color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-size:13px; box-shadow:${boxGlow}; border:${borderStyle}; cursor:pointer;">
+              ${inc.type === 'Accident' ? '🚨' : inc.type === 'Signal Failure' ? '🚦' : inc.type === 'Road Closure' ? '⛔' : '🚧'}
+            </div>
+          `;
+
+          const incMarker = L.marker([inc.lat, inc.lng], {
+            icon: L.divIcon({ html: incHtml, className: 'incident-gis-icon', iconSize: [28, 28], iconAnchor: [14, 14] })
+          }).bindPopup(
+            `<div style="font-family: sans-serif; font-size: 11px; padding: 2px;">` +
+              `<strong style="color:${inc.severityColor}">${inc.type}</strong><br/>` +
+              `<b>${inc.location}</b><br/>` +
+              `Impact: ${inc.impact} • ${inc.time}<br/>` +
+              `<span style="color: #91A4C5">${inc.status}</span>` +
+            `</div>`
+          ).addTo(trafficLayerGroupRef.current);
+
+          incMarker.on('click', () => setSelectedIncidentId(inc.id));
+        });
       }
 
-      // 3. ROAD CLOSURES MARKERS
-      if (gisLayers.roadClosures) {
-        const closureHtml = `<div style="background:#dc2626; color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:12px; box-shadow:0 0 8px #dc2626; border:2px solid #fff;">⛔</div>`;
-        L.marker([bLat + 0.025, bLng - 0.02], {
-          icon: L.divIcon({ html: closureHtml, className: 'closure-icon', iconSize: [26, 26], iconAnchor: [13, 13] })
-        }).bindPopup('<b>Road Closure</b><br/>KIIT Square • Utility Maintenance Work').addTo(trafficLayerGroupRef.current);
-      }
-
-      // 4. CONSTRUCTION MARKERS
-      if (gisLayers.construction) {
-        const constrHtml = `<div style="background:#f59e0b; color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:12px; box-shadow:0 0 8px #f59e0b; border:2px solid #fff;">🚧</div>`;
-        L.marker([bLat - 0.02, bLng - 0.03], {
-          icon: L.divIcon({ html: constrHtml, className: 'incident-icon', iconSize: [26, 26], iconAnchor: [13, 13] })
-        }).bindPopup('<b>Road Construction</b><br/>Nandankanan Road • Lane Restricted').addTo(trafficLayerGroupRef.current);
-      }
-
-      // 5. CAMERAS MARKERS
+      // 3. CAMERAS MARKERS
       if (gisLayers.cameras) {
-        const camHtml = `<div style="background:#0284c7; color:#fff; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:11px; box-shadow:0 0 8px #0284c7; border:2px solid #fff;">📷</div>`;
-        L.marker([bLat + 0.03, bLng + 0.02], {
-          icon: L.divIcon({ html: camHtml, className: 'cam-icon', iconSize: [24, 24], iconAnchor: [12, 12] })
-        }).bindPopup('<b>AI Traffic Camera #104</b><br/>Live 4K Stream • 98% Accuracy').addTo(trafficLayerGroupRef.current);
+        CAMERA_LOCATIONS.forEach((cam) => {
+          const statusBg = cam.status === 'online' ? '#0284c7' : (cam.status === 'offline' ? '#ef4444' : '#f59e0b');
+          const camHtml = `
+            <div style="background:${statusBg}; color:#fff; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:11px; box-shadow:0 0 8px ${statusBg}; border:1.5px solid #fff; cursor:pointer;">
+              📹
+            </div>
+          `;
 
-        L.marker([bLat - 0.03, bLng - 0.01], {
-          icon: L.divIcon({ html: camHtml, className: 'cam-icon', iconSize: [24, 24], iconAnchor: [12, 12] })
-        }).bindPopup('<b>AI Traffic Camera #108</b><br/>Vani Vihar Junction • Operational').addTo(trafficLayerGroupRef.current);
+          L.marker([cam.lat, cam.lng], {
+            icon: L.divIcon({ html: camHtml, className: 'cam-gis-icon', iconSize: [24, 24], iconAnchor: [12, 12] })
+          }).bindPopup(
+            `<div style="font-family: sans-serif; font-size: 11px;">` +
+              `<strong>${cam.name}</strong><br/>` +
+              `Status: <span style="text-transform:uppercase; font-weight:bold; color:${statusBg}">${cam.status}</span><br/>` +
+              `System Uptime: ${cam.uptime}` +
+            `</div>`
+          ).addTo(trafficLayerGroupRef.current);
+        });
       }
 
-      // Central Location Marker Node (Always Visible)
+      // 4. CENTRAL COMMAND NODE
       const userMarkerHtml = `
         <div style="position: relative; width: 28px; height: 28px;">
-          <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(30, 167, 255, 0.5); animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+          <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(30, 167, 255, 0.4); animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
           <div style="position: absolute; inset: 4px; border-radius: 50%; background: #1EA7FF; border: 2px solid #ffffff; box-shadow: 0 0 12px rgba(30, 167, 255, 0.9);"></div>
         </div>
       `;
       const userIcon = L.divIcon({ html: userMarkerHtml, className: 'custom-traffic-user-icon', iconSize: [28, 28], iconAnchor: [14, 14] });
-      L.marker([bLat, bLng], { icon: userIcon }).bindPopup(`<b>${userLocation.city} Control Center Node</b><br/>Congestion: ${Math.round(userLocation.congestion * 100)}%`).addTo(trafficLayerGroupRef.current);
+      L.marker([userLocation.lat, userLocation.lng], { icon: userIcon })
+        .bindPopup(`<b>${userLocation.city} Control Center Node</b><br/>Congestion: ${Math.round(userLocation.congestion * 100)}%`)
+        .addTo(trafficLayerGroupRef.current);
     }
-  }, [userLocation, gisLayers]);
+
+    // 5. VEHICLE TELEMETRY MARKERS LAYER
+    if (vehicleLayerGroupRef.current) {
+      vehicleLayerGroupRef.current.clearLayers();
+      leafletVehicleMarkersRef.current = {};
+
+      if (gisLayers.vehicles) {
+        vehiclesRef.current.forEach((veh) => {
+          const corridor = BHUBANESWAR_CORRIDORS[veh.corridorIndex];
+          if (!corridor || !corridor.points) return;
+
+          const sample = getPolylineSample(corridor.points, veh.progress, veh.direction, veh.lane);
+
+          let svgContent = '';
+          if (veh.type === 'bus') {
+            svgContent = `<svg width="22" height="10" viewBox="0 0 22 10" fill="none"><rect x="2" y="1" width="18" height="8" rx="1.5" fill="${veh.color}" stroke="#000" stroke-width="0.8"/><circle cx="18" cy="3" r="0.8" fill="#fef08a"/><circle cx="18" cy="7" r="0.8" fill="#fef08a"/></svg>`;
+          } else if (veh.type === 'truck') {
+            svgContent = `<svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="2" y="1" width="14" height="9" rx="1" fill="${veh.color}" stroke="#000" stroke-width="0.8"/><rect x="16" y="2" width="6" height="7" rx="1" fill="#475569"/><circle cx="21" cy="3.5" r="0.8" fill="#fef08a"/></svg>`;
+          } else if (veh.type === 'twowheeler') {
+            svgContent = `<svg width="14" height="7" viewBox="0 0 14 7" fill="none"><rect x="2" y="1" width="10" height="5" rx="1" fill="${veh.color}" stroke="#000" stroke-width="0.6"/><circle cx="11" cy="2" r="0.6" fill="#fef08a"/></svg>`;
+          } else {
+            svgContent = `<svg width="18" height="9" viewBox="0 0 18 9" fill="none"><rect x="2" y="1" width="14" height="7" rx="1.5" fill="${veh.color}" stroke="#000" stroke-width="0.8"/><circle cx="14.5" cy="2.5" r="0.7" fill="#fef08a"/><circle cx="14.5" cy="6.5" r="0.7" fill="#fef08a"/></svg>`;
+          }
+
+          const vehHtml = `
+            <div class="vehicle-rotator" style="transform: rotate(${sample.heading}deg); transition: transform 0.05s linear; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));">
+              ${svgContent}
+            </div>
+          `;
+
+          const vMarker = L.marker([sample.lat, sample.lng], {
+            icon: L.divIcon({ className: 'vehicle-gis-marker', html: vehHtml, iconSize: [22, 10], iconAnchor: [11, 5] })
+          });
+
+          vehicleLayerGroupRef.current.addLayer(vMarker);
+          leafletVehicleMarkersRef.current[veh.id] = vMarker;
+        });
+      }
+    }
+  }, [userLocation, gisLayers, selectedCorridorId, selectedIncidentId]);
 
   const handleZoomIn = () => { if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.zoomIn(); };
   const handleZoomOut = () => { if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.zoomOut(); };
@@ -336,17 +572,27 @@ export default function TrafficIntelligenceView() {
           75%, 100% { transform: scale(2.2); opacity: 0; }
         }
         .enterprise-traffic-card {
-          background: #0B1730;
-          border: 1px solid rgba(120, 170, 255, 0.18);
-          border-radius: 14px;
-          padding: 18px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-          transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+          background: linear-gradient(145deg, rgba(13, 21, 36, 0.92) 0%, rgba(8, 14, 24, 0.96) 100%);
+          border: 1px solid rgba(120, 170, 255, 0.16);
+          border-radius: 18px;
+          padding: 20px;
+          box-shadow: 
+            0 16px 36px -10px rgba(0, 0, 0, 0.75),
+            0 0 20px rgba(6, 182, 212, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.14);
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          position: relative;
+          overflow: hidden;
         }
         .enterprise-traffic-card:hover {
-          border-color: rgba(32, 217, 255, 0.35);
-          transform: translateY(-2px);
-          box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+          border-color: rgba(32, 217, 255, 0.45);
+          transform: translateY(-5px);
+          box-shadow: 
+            0 24px 50px -12px rgba(0, 0, 0, 0.88),
+            0 0 35px rgba(32, 217, 255, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
       `}</style>
 
@@ -638,6 +884,14 @@ export default function TrafficIntelligenceView() {
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', userSelect: 'none' }}>
               <input 
                 type="checkbox" 
+                checked={gisLayers.vehicles} 
+                onChange={() => handleToggleLayer('vehicles')}
+                style={{ cursor: 'pointer', accentColor: '#1EA7FF' }} 
+              /> Live Vehicles
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', userSelect: 'none' }}>
+              <input 
+                type="checkbox" 
                 checked={gisLayers.incidents} 
                 onChange={() => handleToggleLayer('incidents')}
                 style={{ cursor: 'pointer', accentColor: '#1EA7FF' }} 
@@ -799,24 +1053,43 @@ export default function TrafficIntelligenceView() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {TOP_CORRIDORS.map((item) => (
-                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#101E3A', borderRadius: '8px', fontSize: '0.76rem', border: '1px solid rgba(120, 170, 255, 0.1)' }}>
-                  <div>
-                    <span style={{ color: '#91A4C5', marginRight: '8px', fontWeight: 800 }}>#{item.id}</span>
-                    <span style={{ color: '#F5F8FF', fontWeight: 800 }}>{item.name}</span>
-                    <div style={{ fontSize: '0.66rem', color: '#91A4C5', marginTop: '1px' }}>Avg Speed: {item.avgSpeed}</div>
+              {TOP_CORRIDORS.map((item) => {
+                const isSelected = selectedCorridorId === item.id;
+                return (
+                  <div 
+                    key={item.id} 
+                    onClick={() => handleSelectCorridor(item)}
+                    style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center', 
+                      padding: '8px 10px', 
+                      background: isSelected ? 'rgba(30, 167, 255, 0.15)' : '#101E3A', 
+                      borderRadius: '8px', 
+                      fontSize: '0.76rem', 
+                      border: isSelected ? '1px solid #1EA7FF' : '1px solid rgba(120, 170, 255, 0.1)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div>
+                      <span style={{ color: '#91A4C5', marginRight: '8px', fontWeight: 800 }}>#{item.id}</span>
+                      <span style={{ color: '#F5F8FF', fontWeight: 800 }}>{item.name}</span>
+                      <div style={{ fontSize: '0.66rem', color: '#91A4C5', marginTop: '1px' }}>Avg Speed: {item.avgSpeed}</div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ 
+                        fontSize: '0.82rem', 
+                        fontWeight: 900, 
+                        color: item.congestion > 65 ? '#FF5A67' : (item.congestion > 55 ? '#FF7E20' : '#FFB020') 
+                      }}>
+                        {item.congestion}%
+                      </span>
+                      <div style={{ fontSize: '0.6rem', color: '#20D9FF', textTransform: 'uppercase', fontWeight: 700 }}>Focus GIS</div>
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ 
-                      fontSize: '0.82rem', 
-                      fontWeight: 900, 
-                      color: item.congestion > 65 ? '#FF5A67' : (item.congestion > 55 ? '#FF7E20' : '#FFB020') 
-                    }}>
-                      {item.congestion}%
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -906,21 +1179,39 @@ export default function TrafficIntelligenceView() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {INCIDENTS_DATA.slice(0, 3).map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: '#101E3A', borderRadius: '8px', fontSize: '0.74rem', border: '1px solid rgba(120, 170, 255, 0.1)' }}>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <AlertTriangle size={15} color={item.severityColor} />
-                    <div>
-                      <div style={{ fontWeight: 800, color: '#F5F8FF' }}>{item.type}</div>
-                      <div style={{ fontSize: '0.66rem', color: '#91A4C5' }}>{item.location}</div>
+              {INCIDENTS_DATA.slice(0, 4).map((item) => {
+                const isSelected = selectedIncidentId === item.id;
+                return (
+                  <div 
+                    key={item.id} 
+                    onClick={() => handleSelectIncident(item)}
+                    style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center', 
+                      padding: '8px 10px', 
+                      background: isSelected ? 'rgba(255, 90, 103, 0.15)' : '#101E3A', 
+                      borderRadius: '8px', 
+                      fontSize: '0.74rem', 
+                      border: isSelected ? `1px solid ${item.severityColor}` : '1px solid rgba(120, 170, 255, 0.1)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <AlertTriangle size={15} color={item.severityColor} />
+                      <div>
+                        <div style={{ fontWeight: 800, color: '#F5F8FF' }}>{item.type}</div>
+                        <div style={{ fontSize: '0.66rem', color: '#91A4C5' }}>{item.location}</div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ fontSize: '0.68rem', color: item.severityColor, fontWeight: 800 }}>{item.impact}</span>
+                      <div style={{ fontSize: '0.62rem', color: '#91A4C5' }}>{item.time}</div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{ fontSize: '0.68rem', color: item.severityColor, fontWeight: 800 }}>{item.impact}</span>
-                    <div style={{ fontSize: '0.62rem', color: '#91A4C5' }}>{item.time}</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -944,11 +1235,11 @@ export default function TrafficIntelligenceView() {
               </div>
               <div style={{ background: '#101E3A', padding: '8px', borderRadius: '8px', border: '1px solid rgba(120, 170, 255, 0.1)' }}>
                 <div style={{ fontSize: '0.64rem', color: '#91A4C5' }}>Offline</div>
-                <div style={{ fontSize: '1rem', fontWeight: 900, color: '#FF5A67' }}>16</div>
+                <div style={{ fontSize: '1rem', fontWeight: 900, color: '#FF5A67' }}>11</div>
               </div>
               <div style={{ background: '#101E3A', padding: '8px', borderRadius: '8px', border: '1px solid rgba(120, 170, 255, 0.1)' }}>
-                <div style={{ fontSize: '0.64rem', color: '#91A4C5' }}>Junctions</div>
-                <div style={{ fontSize: '1rem', fontWeight: 900, color: '#20D9FF' }}>67</div>
+                <div style={{ fontSize: '0.64rem', color: '#91A4C5' }}>Maint.</div>
+                <div style={{ fontSize: '1rem', fontWeight: 900, color: '#FFB020' }}>5</div>
               </div>
             </div>
           </div>

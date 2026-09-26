@@ -61,9 +61,15 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
     }
   }, [anomalies]);
 
-  const handleAcknowledge = (id, e) => {
+  const handleAcknowledge = async (id, status = 'ACKNOWLEDGED', e) => {
     if (e) e.stopPropagation();
     setAcknowledgedIds(prev => new Set([...prev, id]));
+    try {
+      await api.updateAnomalyStatus(id, status);
+      setAlertsList(prev => prev.map(item => item.id === id ? { ...item, status: status } : item));
+    } catch (err) {
+      console.warn("Failed to persist anomaly status:", err);
+    }
   };
 
   return (
@@ -72,9 +78,12 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <AlertTriangle size={16} color="#f43f5e" />
-          <h3 style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <h3 style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f8fafc', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
             Operational Alert Radar
           </h3>
+          <span style={{ fontSize: '0.58rem', fontWeight: 800, background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.4)', color: '#fb7185', padding: '1px 6px', borderRadius: '4px', letterSpacing: '0.05em' }}>
+            LIVE TELEMETRY
+          </span>
         </div>
         <button
           onClick={() => setActiveTab('anomalies')}
@@ -89,7 +98,8 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
       {/* Alert Cards List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '300px', overflowY: 'auto' }}>
         {alertsList.map((alert) => {
-          const isAck = acknowledgedIds.has(alert.id);
+          const statusVal = alert.status || (acknowledgedIds.has(alert.id) ? 'ACKNOWLEDGED' : 'DETECTED');
+          const isAck = statusVal !== 'DETECTED';
           const severity = (alert.severity || 'WARNING').toUpperCase();
           const badgeBg = severity === 'CRITICAL' ? 'rgba(244, 63, 94, 0.2)' : (severity === 'WARNING' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(56, 189, 248, 0.2)');
           const badgeColor = severity === 'CRITICAL' ? '#fb7185' : (severity === 'WARNING' ? '#fbbf24' : '#38bdf8');
@@ -121,7 +131,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '0.62rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', background: badgeBg, color: badgeColor }}>
-                    {isAck ? 'ACKNOWLEDGED' : severity}
+                    {statusVal}
                   </span>
                 </div>
               </div>
@@ -138,7 +148,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
                 </span>
                 {!isAck ? (
                   <button
-                    onClick={(e) => handleAcknowledge(alert.id, e)}
+                    onClick={(e) => handleAcknowledge(alert.id, 'ACKNOWLEDGED', e)}
                     className="btn-subtle"
                     style={{ fontSize: '0.65rem', padding: '2px 8px', color: '#34d399', background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', cursor: 'pointer' }}
                   >
@@ -146,7 +156,7 @@ export const ActiveAlertCenter = ({ anomalies = [], activeZone = null, onSelectZ
                   </button>
                 ) : (
                   <span style={{ fontSize: '0.65rem', color: '#34d399', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <ShieldCheck size={11} /> Ack Logged
+                    <ShieldCheck size={11} /> {statusVal}
                   </span>
                 )}
               </div>

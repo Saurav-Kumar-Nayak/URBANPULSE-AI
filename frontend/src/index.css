@@ -1076,3 +1076,296 @@ button:active, .btn-3d:active {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   background: #070b12 !important;
 }
+
+/* ==============================================================================
+   URBANPULSE AI — REALISTIC 3D CARD TRANSFORMATION SYSTEM
+   ============================================================================== */
+
+/* Scoped 3D Card Base with Layered Perspective & Elevation */
+.card-3d-enterprise {
+  position: relative;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.92) 0%, rgba(10, 15, 26, 0.96) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 
+    0 12px 30px -8px rgba(0, 0, 0, 0.75),
+    0 1px 0 inset rgba(255, 255, 255, 0.12),
+    0 0 20px -5px rgba(6, 182, 212, 0.08);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.card-3d-enterprise::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), transparent);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.card-3d-enterprise:hover {
+  transform: translateY(-5px) scale(1.015);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 
+    0 22px 48px -12px rgba(0, 0, 0, 0.88),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 35px rgba(6, 182, 212, 0.22);
+}
+
+.card-3d-enterprise:hover::before {
+  opacity: 1;
+}
+
+/* Category-specific 3D Treatments */
+.card-3d-traffic {
+  background: linear-gradient(145deg, rgba(14, 26, 42, 0.94) 0%, rgba(8, 14, 26, 0.98) 100%);
+  border-color: rgba(52, 211, 153, 0.22);
+}
+.card-3d-traffic:hover {
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.88),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 35px rgba(52, 211, 153, 0.2);
+}
+
+.card-3d-aqi {
+  background: linear-gradient(145deg, rgba(28, 25, 14, 0.94) 0%, rgba(12, 15, 24, 0.98) 100%);
+  border-color: rgba(251, 191, 36, 0.22);
+}
+.card-3d-aqi:hover {
+  border-color: rgba(251, 191, 36, 0.55);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.88),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 35px rgba(251, 191, 36, 0.2);
+}
+
+.card-3d-weather {
+  background: linear-gradient(145deg, rgba(14, 26, 44, 0.94) 0%, rgba(9, 14, 25, 0.98) 100%);
+  border-color: rgba(56, 189, 248, 0.22);
+}
+.card-3d-weather:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.88),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 35px rgba(56, 189, 248, 0.25);
+}
+
+.card-3d-risk {
+  background: linear-gradient(145deg, rgba(36, 14, 24, 0.94) 0%, rgba(15, 9, 18, 0.98) 100%);
+  border-color: rgba(244, 63, 94, 0.28);
+}
+.card-3d-risk:hover {
+  border-color: rgba(244, 63, 94, 0.6);
+  box-shadow: 
+    0 24px 50px -12px rgba(0, 0, 0, 0.88),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 35px rgba(244, 63, 94, 0.25);
+}
+
+/* Capability Cards Interactive Hover Effects */
+.card-capability-3d {
+  position: relative;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(8, 14, 27, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 14px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.card-capability-3d:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(56, 189, 248, 0.45);
+  background: linear-gradient(145deg, rgba(20, 32, 58, 0.92) 0%, rgba(10, 18, 34, 0.98) 100%);
+  box-shadow: 
+    0 20px 45px -10px rgba(0, 0, 0, 0.8),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 30px rgba(6, 182, 212, 0.25);
+}
+
+.card-capability-3d .capability-arrow {
+  transition: transform 0.22s ease, color 0.22s ease;
+}
+
+.card-capability-3d:hover .capability-arrow {
+  transform: translateX(6px);
+  color: #38bdf8;
+}
+
+.card-capability-3d:hover .capability-icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+/* Workflow 01-02-03 Operational Step Cards */
+.workflow-step-3d {
+  position: relative;
+  background: linear-gradient(145deg, rgba(14, 22, 38, 0.88) 0%, rgba(8, 13, 24, 0.96) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 14px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.workflow-step-3d:hover {
+  transform: translateY(-5px);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 
+    0 18px 36px -8px rgba(0, 0, 0, 0.8),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 25px rgba(6, 182, 212, 0.2);
+}
+
+/* CTA Command Panel 3D */
+.cta-panel-3d {
+  position: relative;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.2) 0%, rgba(14, 23, 42, 0.92) 50%, rgba(6, 11, 22, 0.98) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 20px;
+  padding: 44px 52px;
+  box-shadow: 
+    0 24px 60px -15px rgba(0, 0, 0, 0.85),
+    0 1px 0 inset rgba(255, 255, 255, 0.2),
+    0 0 40px rgba(2, 132, 199, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.cta-panel-3d:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 
+    0 30px 70px -15px rgba(0, 0, 0, 0.9),
+    0 1px 0 inset rgba(255, 255, 255, 0.3),
+    0 0 55px rgba(2, 132, 199, 0.35);
+}
+
+
+/* ==============================================================================
+   URBANPULSE AI — REAL-WORLD PHOTOGRAPHIC 3D CARD SYSTEM
+   ============================================================================== */
+
+/* Scoped Home Cards Container */
+.urbanpulse-home-cards .card-photo-base {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 
+    0 14px 32px -8px rgba(0, 0, 0, 0.85),
+    0 1px 0 inset rgba(255, 255, 255, 0.15);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Category Photographic Card Overlays */
+.urbanpulse-home-cards .card-photo-traffic {
+  background-image: 
+    linear-gradient(180deg, rgba(8, 16, 30, 0.82) 0%, rgba(6, 12, 22, 0.94) 100%),
+    url('/images/cards/traffic_bg.png');
+  border: 1px solid rgba(52, 211, 153, 0.28);
+}
+.urbanpulse-home-cards .card-photo-traffic:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(52, 211, 153, 0.6);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 25px rgba(52, 211, 153, 0.2);
+}
+
+.urbanpulse-home-cards .card-photo-aqi {
+  background-image: 
+    linear-gradient(180deg, rgba(16, 18, 26, 0.82) 0%, rgba(7, 12, 20, 0.94) 100%),
+    url('/images/cards/aqi_bg.png');
+  border: 1px solid rgba(251, 191, 36, 0.28);
+}
+.urbanpulse-home-cards .card-photo-aqi:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 25px rgba(251, 191, 36, 0.2);
+}
+
+.urbanpulse-home-cards .card-photo-weather {
+  background-image: 
+    linear-gradient(180deg, rgba(10, 20, 36, 0.82) 0%, rgba(6, 12, 24, 0.94) 100%),
+    url('/images/cards/weather_bg.png');
+  border: 1px solid rgba(56, 189, 248, 0.28);
+}
+.urbanpulse-home-cards .card-photo-weather:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+.urbanpulse-home-cards .card-photo-risk {
+  background-image: 
+    linear-gradient(180deg, rgba(26, 12, 22, 0.84) 0%, rgba(12, 7, 16, 0.95) 100%),
+    url('/images/cards/risk_bg.png');
+  border: 1px solid rgba(244, 63, 94, 0.32);
+}
+.urbanpulse-home-cards .card-photo-risk:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(244, 63, 94, 0.65);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 25px rgba(244, 63, 94, 0.2);
+}
+
+.urbanpulse-home-cards .card-photo-ops {
+  background-image: 
+    linear-gradient(180deg, rgba(10, 18, 34, 0.85) 0%, rgba(6, 10, 20, 0.95) 100%),
+    url('/images/cards/ops_bg.png');
+  border: 1px solid rgba(56, 189, 248, 0.28);
+}
+.urbanpulse-home-cards .card-photo-ops:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 
+    0 22px 48px -10px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.25),
+    0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+.urbanpulse-home-cards .card-photo-cta {
+  background-image: 
+    linear-gradient(135deg, rgba(2, 132, 199, 0.35) 0%, rgba(10, 18, 34, 0.88) 40%, rgba(4, 8, 16, 0.96) 100%),
+    url('/images/cards/cta_bg.png');
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+.urbanpulse-home-cards .card-photo-cta:hover {
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 
+    0 30px 65px -12px rgba(0, 0, 0, 0.92),
+    0 1px 0 inset rgba(255, 255, 255, 0.3),
+    0 0 45px rgba(2, 132, 199, 0.3);
+}
+
+/* Crystal-Clear Text & Metric Precision */
+.urbanpulse-home-cards .text-razor-sharp {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 0, 0, 0.9);
+}

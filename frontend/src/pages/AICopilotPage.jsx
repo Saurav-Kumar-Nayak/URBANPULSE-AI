@@ -57,7 +57,7 @@ export const AICopilotPage = () => {
         ...prev,
         {
           sender: 'copilot',
-          text: 'Unable to process query against live backend. Please ensure the backend server is online at `http://localhost:8000`.',
+          text: 'Unable to process query against live backend service. Please ensure the backend server is online and operational.',
           confidence: 'N/A'
         }
       ]);

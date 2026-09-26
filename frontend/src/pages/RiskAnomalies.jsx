@@ -78,6 +78,15 @@ export const RiskAnomalies = () => {
     fetchData();
   }, []);
 
+  const handleStatusChange = async (anomalyId, newStatus) => {
+    try {
+      await api.updateAnomalyStatus(anomalyId, newStatus);
+      fetchData();
+    } catch (e) {
+      console.error("Failed to update incident status:", e);
+    }
+  };
+
   const handleRunSimulation = async (scenarioType) => {
     setSimulatingScenario(scenarioType);
     setSimulationResult(null);

@@ -250,35 +250,59 @@ export const LeftIntelligencePanel = ({ overview = null, activeZone = null, onLo
         </div>
       </div>
 
-      {/* 6. RISK LEVEL */}
+      {/* 6. RISK LEVEL & MODEL PREDICTION HORIZON */}
       <div 
         className="card-panel"
         style={{
           padding: '14px 16px',
           background: 'rgba(13, 19, 28, 0.95)',
           border: '1px solid var(--border-color)',
-          borderRadius: '14px'
+          borderRadius: '14px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', fontWeight: 700, color: '#f8fafc' }}>
-            <ShieldCheck size={15} color="#34d399" />
-            <span>Risk Level</span>
+            <ShieldCheck size={15} color={locState.risk.includes('High') || locState.risk.includes('Critical') ? "#fb7185" : "#34d399"} />
+            <span>Risk & Model Prediction</span>
           </div>
-          <ChevronRight size={14} color="#64748b" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('risk')} />
+          <span style={{ fontSize: '0.58rem', fontWeight: 800, background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#38bdf8', padding: '1px 6px', borderRadius: '4px', letterSpacing: '0.05em' }}>
+            MODEL PREDICTION
+          </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: locState.risk.includes('High') || locState.risk.includes('Critical') ? 'rgba(244,63,94,0.15)' : 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: locState.risk.includes('High') || locState.risk.includes('Critical') ? '#fb7185' : '#34d399' }}>
             <ShieldCheck size={18} />
           </div>
-          <div>
-            <div style={{ fontSize: '1.05rem', fontWeight: 800, color: locState.risk.includes('High') ? '#fb7185' : '#34d399' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 800, color: locState.risk.includes('High') || locState.risk.includes('Critical') ? '#fb7185' : '#34d399' }}>
               {locState.risk}
             </div>
-            <div style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '2px' }}>
-              No Major Alerts <span style={{ color: '#34d399' }}>↓ 10%</span>
+            <div style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '2px', display: 'flex', gap: '8px' }}>
+              <span>Horizon: <b>+1 Hour</b></span>
+              <span>Confidence: <b style={{ color: '#38bdf8' }}>94.2%</b></span>
             </div>
+          </div>
+        </div>
+
+        {/* Contributing Factors & Considerations */}
+        <div style={{ padding: '8px 10px', background: 'rgba(15, 23, 42, 0.6)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Key Contributing Factors
+          </div>
+          <div style={{ fontSize: '0.68rem', color: '#cbd5e1', lineHeight: 1.4 }}>
+            • Commute volume spike vs baseline<br />
+            • PM2.5 particle dispersion rate<br />
+            • Signal delay at main interchange
+          </div>
+          <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '4px' }}>
+            Operational Consideration
+          </div>
+          <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontStyle: 'italic' }}>
+            Maintain monitoring; trigger dynamic signal override if congestion index exceeds 0.75.
           </div>
         </div>
       </div>

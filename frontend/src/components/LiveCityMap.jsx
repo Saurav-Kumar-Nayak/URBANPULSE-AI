@@ -26,15 +26,324 @@ const BHUBANESWAR_ZONES = [
   { id: 'LOC-08', name: 'KIIT University', lat: 20.3530, lng: 85.8150, x: 74, y: 53, speed: 32, aqi: 58, health: 88, risk: 'Optimal', temp: '31°C', population: '65K', areaSqKm: '16', sensorNodes: 11, dataSources: '30+', alertsCount: 0 }
 ];
 
+// EXISTING BHUBANESWAR ROAD GEOMETRY CORRIDORS (FOR DYNAMIC VEHICLE NAVIGATION)
+// REAL ROAD NETWORK GRAPH STRUCTURE (NODES & EDGES)
+const ROAD_GRAPH_NODES = {
+  N_NK:      { id: 'N_NK',      name: 'Nandankanan North', x: 62.0, y: 12.0, lat: 20.3700, lng: 85.8300 },
+  N_PATIA:   { id: 'N_PATIA',   name: 'Patia Square',      x: 48.0, y: 38.0, lat: 20.3588, lng: 85.8184 },
+  N_JAYADEV: { id: 'N_JAYADEV', name: 'Jayadev Vihar',    x: 16.0, y: 27.0, lat: 20.2980, lng: 85.8245 },
+  N_SAHEED:  { id: 'N_SAHEED',  name: 'Saheed Nagar',     x: 26.0, y: 12.0, lat: 20.2885, lng: 85.8420 },
+  N_VANI:    { id: 'N_VANI',    name: 'Vani Vihar',        x: 84.0, y: 28.0, lat: 20.2910, lng: 85.8580 },
+  N_KIIT:    { id: 'N_KIIT',    name: 'KIIT Square',       x: 74.0, y: 53.0, lat: 20.3530, lng: 85.8150 },
+  N_STATION: { id: 'N_STATION', name: 'Railway Station',   x: 38.0, y: 28.0, lat: 20.2650, lng: 85.8400 },
+  N_KHAN:    { id: 'N_KHAN',    name: 'Khandagiri Square', x: 18.0, y: 68.0, lat: 20.2600, lng: 85.7850 }
+};
+
+const ROAD_GRAPH_EDGES = [
+  // 1. Nandankanan North <-> Patia Square
+  {
+    id: 'E_NK_PATIA',
+    from: 'N_NK',
+    to: 'N_PATIA',
+    points: [
+      { x: 62.0, y: 12.0, lat: 20.3700, lng: 85.8300 },
+      { x: 55.0, y: 25.0, lat: 20.3644, lng: 85.8242 },
+      { x: 48.0, y: 38.0, lat: 20.3588, lng: 85.8184 }
+    ]
+  },
+  // 2. Patia Square <-> Jayadev Vihar
+  {
+    id: 'E_PATIA_JAYADEV',
+    from: 'N_PATIA',
+    to: 'N_JAYADEV',
+    points: [
+      { x: 48.0, y: 38.0, lat: 20.3588, lng: 85.8184 },
+      { x: 40.0, y: 35.0, lat: 20.3436, lng: 85.8199 },
+      { x: 32.0, y: 32.5, lat: 20.3284, lng: 85.8214 },
+      { x: 24.0, y: 30.0, lat: 20.3132, lng: 85.8229 },
+      { x: 16.0, y: 27.0, lat: 20.2980, lng: 85.8245 }
+    ]
+  },
+  // 3. Jayadev Vihar <-> Saheed Nagar (Janpath W)
+  {
+    id: 'E_JAYADEV_SAHEED',
+    from: 'N_JAYADEV',
+    to: 'N_SAHEED',
+    points: [
+      { x: 16.0, y: 27.0, lat: 20.2980, lng: 85.8245 },
+      { x: 21.0, y: 19.5, lat: 20.2932, lng: 85.8332 },
+      { x: 26.0, y: 12.0, lat: 20.2885, lng: 85.8420 }
+    ]
+  },
+  // 4. Saheed Nagar <-> Vani Vihar (Janpath E)
+  {
+    id: 'E_SAHEED_VANI',
+    from: 'N_SAHEED',
+    to: 'N_VANI',
+    points: [
+      { x: 26.0, y: 12.0, lat: 20.2885, lng: 85.8420 },
+      { x: 40.0, y: 16.0, lat: 20.2891, lng: 85.8460 },
+      { x: 55.0, y: 20.0, lat: 20.2897, lng: 85.8500 },
+      { x: 70.0, y: 24.0, lat: 20.2903, lng: 85.8540 },
+      { x: 84.0, y: 28.0, lat: 20.2910, lng: 85.8580 }
+    ]
+  },
+  // 5. Patia Square <-> KIIT Square
+  {
+    id: 'E_PATIA_KIIT',
+    from: 'N_PATIA',
+    to: 'N_KIIT',
+    points: [
+      { x: 48.0, y: 38.0, lat: 20.3588, lng: 85.8184 },
+      { x: 61.0, y: 45.5, lat: 20.3559, lng: 85.8167 },
+      { x: 74.0, y: 53.0, lat: 20.3530, lng: 85.8150 }
+    ]
+  },
+  // 6. KIIT Square <-> Vani Vihar Outer Bypass
+  {
+    id: 'E_KIIT_VANI',
+    from: 'N_KIIT',
+    to: 'N_VANI',
+    points: [
+      { x: 74.0, y: 53.0, lat: 20.3530, lng: 85.8150 },
+      { x: 79.0, y: 40.5, lat: 20.3220, lng: 85.8365 },
+      { x: 84.0, y: 28.0, lat: 20.2910, lng: 85.8580 }
+    ]
+  },
+  // 7. Jayadev Vihar <-> Railway Station Link
+  {
+    id: 'E_JAYADEV_STATION',
+    from: 'N_JAYADEV',
+    to: 'N_STATION',
+    points: [
+      { x: 16.0, y: 27.0, lat: 20.2980, lng: 85.8245 },
+      { x: 27.0, y: 27.5, lat: 20.2815, lng: 85.8322 },
+      { x: 38.0, y: 28.0, lat: 20.2650, lng: 85.8400 }
+    ]
+  },
+  // 8. Railway Station <-> Khandagiri South Ring
+  {
+    id: 'E_STATION_KHAN',
+    from: 'N_STATION',
+    to: 'N_KHAN',
+    points: [
+      { x: 38.0, y: 28.0, lat: 20.2650, lng: 85.8400 },
+      { x: 28.0, y: 48.0, lat: 20.2625, lng: 85.8125 },
+      { x: 18.0, y: 68.0, lat: 20.2600, lng: 85.7850 }
+    ]
+  },
+  // 9. Khandagiri <-> Jayadev Vihar West Highway
+  {
+    id: 'E_KHAN_JAYADEV',
+    from: 'N_KHAN',
+    to: 'N_JAYADEV',
+    points: [
+      { x: 18.0, y: 68.0, lat: 20.2600, lng: 85.7850 },
+      { x: 17.0, y: 47.5, lat: 20.2790, lng: 85.8047 },
+      { x: 16.0, y: 27.0, lat: 20.2980, lng: 85.8245 }
+    ]
+  },
+  // 10. Nandankanan North <-> KIIT Expressway
+  {
+    id: 'E_NK_KIIT',
+    from: 'N_NK',
+    to: 'N_KIIT',
+    points: [
+      { x: 62.0, y: 12.0, lat: 20.3700, lng: 85.8300 },
+      { x: 68.0, y: 32.5, lat: 20.3615, lng: 85.8225 },
+      { x: 74.0, y: 53.0, lat: 20.3530, lng: 85.8150 }
+    ]
+  },
+  // 11. KIIT Square <-> Railway Station Direct Link
+  {
+    id: 'E_KIIT_STATION',
+    from: 'N_KIIT',
+    to: 'N_STATION',
+    points: [
+      { x: 74.0, y: 53.0, lat: 20.3530, lng: 85.8150 },
+      { x: 56.0, y: 40.5, lat: 20.3090, lng: 85.8275 },
+      { x: 38.0, y: 28.0, lat: 20.2650, lng: 85.8400 }
+    ]
+  }
+];
+
+// Helper to precalculate lengths and segment vectors for each edge
+const PROCESSED_EDGES = ROAD_GRAPH_EDGES.map((edge) => {
+  const segments = [];
+  let totalLength = 0;
+
+  for (let i = 0; i < edge.points.length - 1; i++) {
+    const p1 = edge.points[i];
+    const p2 = edge.points[i + 1];
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    segments.push({ p1, p2, len, startDist: totalLength, endDist: totalLength + len });
+    totalLength += len;
+  }
+
+  return { ...edge, segments, totalLength };
+});
+
+const EDGES_MAP = {};
+PROCESSED_EDGES.forEach((e) => { EDGES_MAP[e.id] = e; });
+
+// POLYLINE INTERPOLATION WITH TANGENT HEADING AND LANE SEPARATION
+const getPolylineSample = (edgeId, progressRatio, direction, lane = 1) => {
+  const edge = EDGES_MAP[edgeId];
+  if (!edge || edge.segments.length === 0) {
+    return { x: 50, y: 50, lat: 20.3, lng: 85.8, heading: 0 };
+  }
+
+  const clampedRatio = Math.max(0, Math.min(1, progressRatio));
+  const targetDist = direction === 1 
+    ? clampedRatio * edge.totalLength 
+    : (1 - clampedRatio) * edge.totalLength;
+
+  let seg = edge.segments[0];
+  for (let i = 0; i < edge.segments.length; i++) {
+    if (targetDist >= edge.segments[i].startDist && targetDist <= edge.segments[i].endDist) {
+      seg = edge.segments[i];
+      break;
+    }
+  }
+
+  const segDist = targetDist - seg.startDist;
+  const t = seg.len > 0 ? segDist / seg.len : 0;
+
+  const baseX = seg.p1.x + (seg.p2.x - seg.p1.x) * t;
+  const baseY = seg.p1.y + (seg.p2.y - seg.p1.y) * t;
+  const baseLat = seg.p1.lat + (seg.p2.lat - seg.p1.lat) * t;
+  const baseLng = seg.p1.lng + (seg.p2.lng - seg.p1.lng) * t;
+
+  const dx = seg.p2.x - seg.p1.x;
+  const dy = seg.p2.y - seg.p1.y;
+  const angleRad = Math.atan2(dy, dx);
+  
+  const headingDeg = direction === 1 
+    ? Math.round(angleRad * (180 / Math.PI)) 
+    : Math.round((angleRad + Math.PI) * (180 / Math.PI));
+
+  const laneOffset3d = 0.45;
+  const laneOffsetGis = 0.00015;
+
+  const perpX = -Math.sin(angleRad) * laneOffset3d * lane * direction;
+  const perpY = Math.cos(angleRad) * laneOffset3d * lane * direction;
+  const perpLat = -Math.sin(angleRad) * laneOffsetGis * lane * direction;
+  const perpLng = Math.cos(angleRad) * laneOffsetGis * lane * direction;
+
+  return {
+    x: baseX + perpX,
+    y: baseY + perpY,
+    lat: baseLat + perpLat,
+    lng: baseLng + perpLng,
+    heading: headingDeg
+  };
+};
+
+// JUNCTION ROUTING: PICK NEXT CONNECTED ROAD AT INTERSECTION NODE
+const getConnectedNextEdge = (currentNodeId, prevEdgeId) => {
+  const candidates = PROCESSED_EDGES.filter(
+    (e) => e.from === currentNodeId || e.to === currentNodeId
+  );
+  if (candidates.length === 0) return { edgeId: prevEdgeId, direction: 1 };
+
+  const nonPrev = candidates.filter((e) => e.id !== prevEdgeId);
+  const chosen = nonPrev.length > 0 
+    ? nonPrev[Math.floor(Math.random() * nonPrev.length)] 
+    : candidates[0];
+
+  const direction = chosen.from === currentNodeId ? 1 : -1;
+  return { edgeId: chosen.id, direction };
+};
+
+// INITIAL VEHICLE FLEET SIMULATION DATA (GRAPH BOUND)
+const INITIAL_VEHICLES = [
+  { id: 'v1',  type: 'car',       color: '#38bdf8', edgeId: 'E_NK_PATIA',        progressRatio: 0.15, direction: 1,  lane: 1,  baseSpeed: 0.0018 },
+  { id: 'v2',  type: 'car',       color: '#34d399', edgeId: 'E_NK_PATIA',        progressRatio: 0.65, direction: 1,  lane: 1,  baseSpeed: 0.0022 },
+  { id: 'v3',  type: 'bus',       color: '#f59e0b', edgeId: 'E_NK_PATIA',        progressRatio: 0.40, direction: -1, lane: -1, baseSpeed: 0.0014 },
+  { id: 'v4',  type: 'car',       color: '#ffffff', edgeId: 'E_PATIA_JAYADEV',   progressRatio: 0.20, direction: 1,  lane: 1,  baseSpeed: 0.0020 },
+  { id: 'v5',  type: 'car',       color: '#f87171', edgeId: 'E_PATIA_JAYADEV',   progressRatio: 0.70, direction: 1,  lane: 1,  baseSpeed: 0.0023 },
+  { id: 'v6',  type: 'ev',        color: '#06b6d4', edgeId: 'E_PATIA_JAYADEV',   progressRatio: 0.50, direction: -1, lane: -1, baseSpeed: 0.0021 },
+  { id: 'v7',  type: 'car',       color: '#a855f7', edgeId: 'E_JAYADEV_SAHEED',  progressRatio: 0.35, direction: 1,  lane: 1,  baseSpeed: 0.0019 },
+  { id: 'v8',  type: 'bus',       color: '#f59e0b', edgeId: 'E_SAHEED_VANI',     progressRatio: 0.60, direction: 1,  lane: 1,  baseSpeed: 0.0015 },
+  { id: 'v9',  type: 'car',       color: '#38bdf8', edgeId: 'E_SAHEED_VANI',     progressRatio: 0.25, direction: -1, lane: -1, baseSpeed: 0.0022 },
+  { id: 'v10', type: 'emergency', color: '#ef4444', edgeId: 'E_PATIA_KIIT',      progressRatio: 0.45, direction: 1,  lane: 1,  baseSpeed: 0.0028 },
+  { id: 'v11', type: 'car',       color: '#34d399', edgeId: 'E_KIIT_VANI',       progressRatio: 0.30, direction: 1,  lane: 1,  baseSpeed: 0.0020 },
+  { id: 'v12', type: 'car',       color: '#ffffff', edgeId: 'E_JAYADEV_STATION', progressRatio: 0.55, direction: 1,  lane: 1,  baseSpeed: 0.0021 },
+  { id: 'v13', type: 'ev',        color: '#06b6d4', edgeId: 'E_STATION_KHAN',    progressRatio: 0.40, direction: 1,  lane: 1,  baseSpeed: 0.0022 },
+  { id: 'v14', type: 'car',       color: '#f87171', edgeId: 'E_KHAN_JAYADEV',    progressRatio: 0.65, direction: 1,  lane: 1,  baseSpeed: 0.0020 },
+  { id: 'v15', type: 'bus',       color: '#f59e0b', edgeId: 'E_NK_KIIT',         progressRatio: 0.30, direction: 1,  lane: 1,  baseSpeed: 0.0016 },
+  { id: 'v16', type: 'car',       color: '#38bdf8', edgeId: 'E_KIIT_STATION',    progressRatio: 0.70, direction: 1,  lane: 1,  baseSpeed: 0.0023 },
+  { id: 'v17', type: 'car',       color: '#a855f7', edgeId: 'E_PATIA_JAYADEV',   progressRatio: 0.90, direction: 1,  lane: 1,  baseSpeed: 0.0019 },
+  { id: 'v18', type: 'emergency', color: '#3b82f6', edgeId: 'E_JAYADEV_SAHEED',  progressRatio: 0.80, direction: -1, lane: -1, baseSpeed: 0.0029 }
+];
+
+// VEHICLE GRAPHIC SVG COMPONENT
+const VehicleGraphic = ({ type, color }) => {
+  if (type === 'bus') {
+    return (
+      <div style={{ filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.75))', display: 'flex', alignItems: 'center' }}>
+        <svg width="24" height="10" viewBox="0 0 24 10" fill="none">
+          <path d="M20 2.5 L24 0.5 L24 9.5 L20 7.5 Z" fill="rgba(254, 240, 138, 0.4)" />
+          <rect x="2" y="1.5" width="18" height="7" rx="1.5" fill={color} stroke="#070b12" strokeWidth="0.8" />
+          <rect x="5" y="3" width="12" height="4" rx="0.8" fill="#0f172a" opacity="0.85" />
+          <circle cx="19.5" cy="2.5" r="0.8" fill="#fef08a" />
+          <circle cx="19.5" cy="7.5" r="0.8" fill="#fef08a" />
+          <circle cx="2.5" cy="2.5" r="0.7" fill="#ef4444" />
+          <circle cx="2.5" cy="7.5" r="0.7" fill="#ef4444" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (type === 'emergency') {
+    return (
+      <div style={{ filter: 'drop-shadow(0 2px 6px rgba(239,68,68,0.8))', display: 'flex', alignItems: 'center' }}>
+        <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+          <circle cx="10" cy="5" r="6" fill="rgba(239, 68, 68, 0.3)" />
+          <path d="M16 2 L20 0 L20 10 L16 8 Z" fill="rgba(254, 240, 138, 0.45)" />
+          <rect x="2" y="1" width="14" height="8" rx="1.8" fill="#ffffff" stroke="#ef4444" strokeWidth="1" />
+          <rect x="8" y="3.5" width="2" height="3" fill="#ef4444" />
+          <rect x="10" y="3.5" width="2" height="3" fill="#3b82f6" />
+          <circle cx="15.5" cy="2.5" r="0.8" fill="#fef08a" />
+          <circle cx="15.5" cy="7.5" r="0.8" fill="#fef08a" />
+        </svg>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.65))', display: 'flex', alignItems: 'center' }}>
+      <svg width="18" height="9" viewBox="0 0 18 9" fill="none">
+        <path d="M14 2 L18 0.5 L18 8.5 L14 7 Z" fill="rgba(254, 240, 138, 0.35)" />
+        <rect x="2" y="1" width="12" height="7" rx="1.5" fill={color} stroke="#070b12" strokeWidth="0.7" />
+        <rect x="5" y="2.5" width="5.5" height="4" rx="0.8" fill="#0f172a" opacity="0.85" />
+        <circle cx="13.5" cy="2.2" r="0.7" fill="#fef08a" />
+        <circle cx="13.5" cy="6.8" r="0.7" fill="#fef08a" />
+        <circle cx="2.5" cy="2.2" r="0.6" fill="#ef4444" />
+        <circle cx="2.5" cy="6.8" r="0.6" fill="#ef4444" />
+      </svg>
+    </div>
+  );
+};
+
 export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", onSelectZone, mapHeight = '520px', userLocation = null }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
   const markersLayerRef = useRef(null);
+  const leafletVehiclesLayerRef = useRef(null);
+  const leafletVehicleMarkersRef = useRef({});
   const imageContainerRef = useRef(null);
   
   const [mapMode, setMapMode] = useState('3d'); // '3d' | 'live' | 'satellite'
   const [showInspector, setShowInspector] = useState(false);
+  const [trafficSeverityState, setTrafficSeverityState] = useState('Smooth'); // 'Smooth' | 'Moderate' | 'Heavy' | 'Severe'
+
+  // Ref storing live vehicles state for high performance 60 FPS requestAnimationFrame loop
+  const vehiclesRef = useRef(JSON.parse(JSON.stringify(INITIAL_VEHICLES)));
+  const animationFrameRef = useRef(null);
   
   // Pin position state (default to Patia x: 48%, y: 38%)
   const [activePin, setActivePin] = useState({
@@ -169,6 +478,122 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
     }
   }, [userLocation]);
 
+  // DYNAMIC GRAPH ROAD NETWORK VEHICLE ANIMATION ENGINE (requestAnimationFrame)
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const animateVehicles = (now) => {
+      const deltaTime = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      // Determine speed multiplier from traffic state
+      const severityMultiplier = 
+        trafficSeverityState === 'Severe' ? 0.20 :
+        trafficSeverityState === 'Heavy' ? 0.45 :
+        trafficSeverityState === 'Moderate' ? 0.72 : 1.0;
+
+      const vehicles = vehiclesRef.current;
+
+      // Group vehicles by edgeId for collision avoidance & safe spacing
+      const edgeOccupancy = {};
+      vehicles.forEach((v) => {
+        if (!edgeOccupancy[v.edgeId]) edgeOccupancy[v.edgeId] = [];
+        edgeOccupancy[v.edgeId].push(v);
+      });
+
+      vehicles.forEach((veh) => {
+        const edge = EDGES_MAP[veh.edgeId];
+        if (!edge) return;
+
+        // Check for lead vehicle on the same edge and direction to maintain safe spacing
+        let safeSpeedFactor = 1.0;
+        const sames = edgeOccupancy[veh.edgeId] || [];
+        sames.forEach((other) => {
+          if (other.id === veh.id || other.direction !== veh.direction || other.lane !== veh.lane) return;
+          
+          const gap = veh.direction === 1 
+            ? other.progressRatio - veh.progressRatio 
+            : veh.progressRatio - other.progressRatio;
+
+          if (gap > 0 && gap < 0.12) {
+            safeSpeedFactor = Math.max(0, (gap - 0.03) / 0.09);
+          }
+        });
+
+        // Intersection deceleration: slow down as vehicle approaches junction node
+        let junctionSpeedFactor = 1.0;
+        if (veh.progressRatio > 0.88 || veh.progressRatio < 0.12) {
+          junctionSpeedFactor = 0.65;
+        }
+
+        // Severe traffic intersection signal pause simulation
+        if (trafficSeverityState === 'Severe' && veh.stopTicks > 0) {
+          veh.stopTicks--;
+          safeSpeedFactor = 0;
+        } else if (trafficSeverityState === 'Severe' && Math.random() < 0.002) {
+          veh.stopTicks = Math.floor(60 + Math.random() * 90);
+          safeSpeedFactor = 0;
+        }
+
+        // Advance vehicle along road polyline
+        const stepSpeed = veh.baseSpeed * severityMultiplier * safeSpeedFactor * junctionSpeedFactor;
+        veh.progressRatio += stepSpeed;
+
+        // Check node arrival / intersection turning
+        if (veh.progressRatio >= 1.0 || veh.progressRatio <= 0.0) {
+          const reachedNodeId = veh.progressRatio >= 1.0 
+            ? (veh.direction === 1 ? edge.to : edge.from)
+            : (veh.direction === 1 ? edge.from : edge.to);
+
+          const nextRoute = getConnectedNextEdge(reachedNodeId, veh.edgeId);
+          veh.edgeId = nextRoute.edgeId;
+          veh.direction = nextRoute.direction;
+          veh.progressRatio = veh.direction === 1 ? 0.0 : 1.0;
+        }
+
+        // Compute sampled 3D percentage position & Leaflet GPS coordinates
+        const pos = getPolylineSample(veh.edgeId, veh.progressRatio, veh.direction, veh.lane);
+
+        veh.x = pos.x;
+        veh.y = pos.y;
+        veh.lat = pos.lat;
+        veh.lng = pos.lng;
+        veh.heading = pos.heading;
+
+        // Direct DOM update for 3D Mode element (60 FPS Butter Smooth)
+        const el3d = document.getElementById(`v3d-${veh.id}`);
+        if (el3d) {
+          el3d.style.left = `${pos.x}%`;
+          el3d.style.top = `${pos.y}%`;
+          el3d.style.transform = `translate(-50%, -50%) rotate(${pos.heading}deg)`;
+        }
+
+        // Direct update for Leaflet Mode marker
+        const leafletMarker = leafletVehicleMarkersRef.current[veh.id];
+        if (leafletMarker) {
+          leafletMarker.setLatLng([pos.lat, pos.lng]);
+          const iconEl = leafletMarker.getElement();
+          if (iconEl) {
+            const svgEl = iconEl.querySelector('.vehicle-svg-container');
+            if (svgEl) {
+              svgEl.style.transform = `rotate(${pos.heading}deg)`;
+            }
+          }
+        }
+      });
+
+      animationFrameRef.current = requestAnimationFrame(animateVehicles);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animateVehicles);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [trafficSeverityState]);
+
   // Leaflet map setup and lifecycle for 'live' or 'satellite' mode
   useEffect(() => {
     if (mapMode === 'live' || mapMode === 'satellite') {
@@ -199,6 +624,9 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
 
         const markersGroup = L.layerGroup().addTo(map);
         markersLayerRef.current = markersGroup;
+
+        const vehiclesGroup = L.layerGroup().addTo(map);
+        leafletVehiclesLayerRef.current = vehiclesGroup;
 
         mapInstanceRef.current = map;
       } else {
@@ -264,7 +692,42 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
         });
       }
 
-      // Ensure proper Leaflet container sizing after display toggle
+      // Render Leaflet vehicle markers
+      if (leafletVehiclesLayerRef.current) {
+        leafletVehiclesLayerRef.current.clearLayers();
+        leafletVehicleMarkersRef.current = {};
+
+        vehiclesRef.current.forEach((veh) => {
+          const vehHtml = `
+            <div class="vehicle-svg-container" style="
+              transform: rotate(${veh.heading || 0}deg);
+              transition: transform 0.05s linear;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            ">
+              <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+                <rect x="2" y="1" width="14" height="8" rx="1.5" fill="${veh.color}" stroke="#000000" stroke-width="0.8" />
+                <rect x="5.5" y="2.5" width="6" height="5" rx="0.8" fill="#0f172a" opacity="0.85" />
+                <circle cx="15.5" cy="2.5" r="0.8" fill="#fef08a" />
+                <circle cx="15.5" cy="7.5" r="0.8" fill="#fef08a" />
+              </svg>
+            </div>
+          `;
+
+          const vehIcon = L.divIcon({
+            className: 'leaflet-vehicle-marker',
+            html: vehHtml,
+            iconSize: [20, 10],
+            iconAnchor: [10, 5]
+          });
+
+          const marker = L.marker([veh.lat || 20.3588, veh.lng || 85.8184], { icon: vehIcon });
+          leafletVehiclesLayerRef.current.addLayer(marker);
+          leafletVehicleMarkersRef.current[veh.id] = marker;
+        });
+      }
+
       const timer = setTimeout(() => {
         if (mapInstanceRef.current) {
           mapInstanceRef.current.invalidateSize();
@@ -609,6 +1072,25 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
             );
           })}
 
+          {/* DYNAMIC MOVING VEHICLES OVER 3D DIGITAL TWIN MAP ROADS */}
+          {INITIAL_VEHICLES.map((v) => (
+            <div
+              key={v.id}
+              id={`v3d-${v.id}`}
+              style={{
+                position: 'absolute',
+                top: `${v.y || 38}%`,
+                left: `${v.x || 48}%`,
+                transform: `translate(-50%, -50%) rotate(${v.heading || 0}deg)`,
+                pointerEvents: 'none',
+                zIndex: 8,
+                willChange: 'transform, left, top'
+              }}
+            >
+              <VehicleGraphic type={v.type} color={v.color} />
+            </div>
+          ))}
+
           {/* SUBTLE GIS RADAR ZONE & PROFESSIONAL LOCATION PIN */}
           <div 
             style={{ 
@@ -744,11 +1226,25 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <button 
             onClick={() => {
+              setTrafficSeverityState('Smooth');
               const lowZone = BHUBANESWAR_ZONES.find(z => z.risk === 'Low Risk');
               if (lowZone) setActivePin({ ...lowZone, isUserLocation: false });
             }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', color: '#34d399', fontSize: '0.74rem', fontWeight: 700, padding: '3px 8px', borderRadius: '6px' }}
-            title="Highlight Smooth Zones"
+            style={{ 
+              background: trafficSeverityState === 'Smooth' ? 'rgba(16, 185, 129, 0.2)' : 'none', 
+              border: trafficSeverityState === 'Smooth' ? '1px solid rgba(16, 185, 129, 0.5)' : 'none', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              color: '#34d399', 
+              fontSize: '0.74rem', 
+              fontWeight: 700, 
+              padding: '3px 8px', 
+              borderRadius: '6px',
+              transition: 'all 0.15s ease'
+            }}
+            title="Highlight Smooth Traffic Speed"
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
             <span>Smooth</span>
@@ -756,11 +1252,25 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
 
           <button 
             onClick={() => {
+              setTrafficSeverityState('Moderate');
               const medZone = BHUBANESWAR_ZONES.find(z => z.risk === 'Medium Risk' || z.risk === 'Moderate');
               if (medZone) setActivePin({ ...medZone, isUserLocation: false });
             }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', color: '#fbbf24', fontSize: '0.74rem', fontWeight: 700, padding: '3px 8px', borderRadius: '6px' }}
-            title="Highlight Moderate Zones"
+            style={{ 
+              background: trafficSeverityState === 'Moderate' ? 'rgba(245, 158, 11, 0.2)' : 'none', 
+              border: trafficSeverityState === 'Moderate' ? '1px solid rgba(245, 158, 11, 0.5)' : 'none', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              color: '#fbbf24', 
+              fontSize: '0.74rem', 
+              fontWeight: 700, 
+              padding: '3px 8px', 
+              borderRadius: '6px',
+              transition: 'all 0.15s ease'
+            }}
+            title="Highlight Moderate Traffic Speed"
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', boxShadow: '0 0 6px #f59e0b' }} />
             <span>Moderate</span>
@@ -768,11 +1278,25 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
 
           <button 
             onClick={() => {
+              setTrafficSeverityState('Heavy');
               const heavyZone = BHUBANESWAR_ZONES.find(z => z.name.includes('Station') || z.speed < 20);
               if (heavyZone) setActivePin({ ...heavyZone, isUserLocation: false });
             }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', color: '#fb923c', fontSize: '0.74rem', fontWeight: 700, padding: '3px 8px', borderRadius: '6px' }}
-            title="Highlight Heavy Traffic Zones"
+            style={{ 
+              background: trafficSeverityState === 'Heavy' ? 'rgba(251, 146, 60, 0.2)' : 'none', 
+              border: trafficSeverityState === 'Heavy' ? '1px solid rgba(251, 146, 60, 0.5)' : 'none', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              color: '#fb923c', 
+              fontSize: '0.74rem', 
+              fontWeight: 700, 
+              padding: '3px 8px', 
+              borderRadius: '6px',
+              transition: 'all 0.15s ease'
+            }}
+            title="Highlight Heavy Traffic Speed"
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f97316', boxShadow: '0 0 6px #f97316' }} />
             <span>Heavy</span>
@@ -780,11 +1304,25 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
 
           <button 
             onClick={() => {
+              setTrafficSeverityState('Severe');
               const highZone = BHUBANESWAR_ZONES.find(z => z.risk === 'High Risk');
               if (highZone) setActivePin({ ...highZone, isUserLocation: false });
             }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', color: '#fb7185', fontSize: '0.74rem', fontWeight: 700, padding: '3px 8px', borderRadius: '6px' }}
-            title="Highlight Severe Risk Zones"
+            style={{ 
+              background: trafficSeverityState === 'Severe' ? 'rgba(244, 63, 94, 0.2)' : 'none', 
+              border: trafficSeverityState === 'Severe' ? '1px solid rgba(244, 63, 94, 0.5)' : 'none', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              color: '#fb7185', 
+              fontSize: '0.74rem', 
+              fontWeight: 700, 
+              padding: '3px 8px', 
+              borderRadius: '6px',
+              transition: 'all 0.15s ease'
+            }}
+            title="Highlight Severe Traffic Speed"
           >
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f43f5e', boxShadow: '0 0 6px #f43f5e' }} />
             <span>Severe</span>

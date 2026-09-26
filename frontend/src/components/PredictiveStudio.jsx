@@ -341,69 +341,157 @@ export default function PredictiveStudio() {
           box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
           background: rgba(15, 23, 42, 1);
         }
-        .pred-tab-btn {
-          padding: 10px 18px;
+        .pred-glass-card {
+          background: linear-gradient(135deg, rgba(13, 22, 38, 0.85) 0%, rgba(9, 16, 28, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px;
+          backdrop-filter: blur(12px);
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .pred-glass-card:hover {
+          border-color: rgba(56, 189, 248, 0.25);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+        .pred-input-dark {
+          width: 100%;
+          background: rgba(15, 23, 42, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 8px;
-          font-size: 0.82rem;
-          font-weight: 700;
+          color: #f8fafc;
+          padding: 8px 12px;
+          font-size: 0.84rem;
+          font-weight: 600;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+        .pred-input-dark:focus {
+          border-color: #38bdf8;
+          box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+          background: rgba(15, 23, 42, 1);
+        }
+        .pred-tab-btn {
+          padding: 10px 20px;
+          border-radius: 10px;
+          font-size: 0.84rem;
+          font-weight: 800;
           cursor: pointer;
-          border: 1px solid transparent;
           display: flex;
           align-items: center;
-          gap: 8px;
-          transition: all 0.2s ease;
+          gap: 9px;
           white-space: nowrap;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          user-select: none;
+          position: relative;
         }
         .pred-tab-btn.active {
-          background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(14, 165, 233, 0.15) 100%);
-          border: 1px solid rgba(56, 189, 248, 0.45);
-          color: #38bdf8;
-          box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+          background: linear-gradient(180deg, #06b6d4 0%, #0284c7 100%);
+          border: 1px solid #38bdf8;
+          color: #ffffff;
+          box-shadow: 
+            0 4px 0 #0369a1,
+            0 6px 20px rgba(6, 182, 212, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.45);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .pred-tab-btn.active:hover {
+          transform: translateY(-2px);
+          box-shadow: 
+            0 6px 0 #0369a1,
+            0 10px 25px rgba(6, 182, 212, 0.65),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+        .pred-tab-btn.active:active {
+          transform: translateY(2px) !important;
+          box-shadow: 
+            0 1px 0 #0369a1,
+            0 2px 6px rgba(0, 0, 0, 0.4),
+            inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
         }
         .pred-tab-btn.inactive {
-          background: transparent;
+          background: linear-gradient(180deg, rgba(26, 36, 50, 0.8) 0%, rgba(13, 19, 28, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           color: #94a3b8;
+          box-shadow: 
+            0 3px 0 rgba(0, 0, 0, 0.6),
+            0 4px 12px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
         .pred-tab-btn.inactive:hover {
-          color: #f1f5f9;
-          background: rgba(255, 255, 255, 0.04);
+          color: #f8fafc;
+          background: linear-gradient(180deg, rgba(40, 56, 78, 0.85) 0%, rgba(20, 30, 45, 0.95) 100%);
+          border-color: rgba(6, 182, 212, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 
+            0 5px 0 rgba(2, 132, 199, 0.7),
+            0 8px 20px rgba(6, 182, 212, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+        .pred-tab-btn.inactive:active {
+          transform: translateY(2px) !important;
+          box-shadow: 
+            0 1px 0 rgba(2, 132, 199, 0.8),
+            0 2px 6px rgba(0, 0, 0, 0.4),
+            inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
         }
         .preset-chip {
-          background: rgba(15, 23, 42, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 6px;
+          background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 8px;
           color: #cbd5e1;
-          padding: 5px 10px;
-          font-size: 0.74rem;
-          font-weight: 600;
+          padding: 6px 12px;
+          font-size: 0.76rem;
+          font-weight: 700;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 
+            0 3px 0 rgba(0, 0, 0, 0.5),
+            0 4px 10px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
         .preset-chip:hover {
           border-color: #38bdf8;
           color: #38bdf8;
-          background: rgba(56, 189, 248, 0.1);
+          transform: translateY(-2px);
+          box-shadow: 
+            0 5px 0 #0284c7,
+            0 8px 16px rgba(6, 182, 212, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+        .preset-chip:active {
+          transform: translateY(2px) !important;
+          box-shadow: 
+            0 1px 0 #0284c7,
+            inset 0 2px 4px rgba(0, 0, 0, 0.5) !important;
         }
         .filter-btn {
-          padding: 4px 10px;
-          border-radius: 6px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          border: 1px solid transparent;
+          padding: 6px 12px;
+          border-radius: 8px;
+          font-size: 0.75rem;
+          font-weight: 800;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 
+            0 3px 0 rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
         .filter-btn.active {
-          background: rgba(56, 189, 248, 0.2);
-          border-color: rgba(56, 189, 248, 0.4);
-          color: #38bdf8;
+          background: linear-gradient(180deg, #06b6d4 0%, #0284c7 100%);
+          border: 1px solid #38bdf8;
+          color: #ffffff;
+          box-shadow: 
+            0 3px 0 #0369a1,
+            0 4px 14px rgba(6, 182, 212, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
         .filter-btn.inactive {
-          background: transparent;
+          background: linear-gradient(180deg, rgba(26, 36, 50, 0.8) 0%, rgba(13, 19, 28, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           color: #64748b;
         }
         .filter-btn.inactive:hover {
           color: #cbd5e1;
+          border-color: rgba(6, 182, 212, 0.3);
+          transform: translateY(-1px);
         }
       `}</style>
 
@@ -416,21 +504,26 @@ export default function PredictiveStudio() {
             <h1 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', margin: 0 }}>
               Predictive Intelligence
             </h1>
-            {/* AI Model Active Status Badge */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '6px', 
-              padding: '4px 10px', 
-              borderRadius: '20px', 
-              background: 'rgba(16, 185, 129, 0.12)', 
-              border: '1px solid rgba(16, 185, 129, 0.35)', 
-              fontSize: '0.7rem', 
-              fontWeight: 800, 
-              color: '#34d399' 
-            }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
-              <span>AI MODEL ACTIVE</span>
+            {/* AI Model Active Status Badge & Lineage */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '6px', 
+                padding: '4px 10px', 
+                borderRadius: '20px', 
+                background: 'rgba(16, 185, 129, 0.12)', 
+                border: '1px solid rgba(16, 185, 129, 0.35)', 
+                fontSize: '0.7rem', 
+                fontWeight: 800, 
+                color: '#34d399' 
+              }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
+                <span>AI MODEL ACTIVE</span>
+              </div>
+              <span style={{ fontSize: '0.62rem', fontWeight: 800, background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#38bdf8', padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.05em' }}>
+                MODEL PREDICTION
+              </span>
             </div>
           </div>
           <p style={{ fontSize: '0.86rem', color: '#94a3b8', marginTop: '6px', margin: 0 }}>
@@ -831,23 +924,13 @@ export default function PredictiveStudio() {
           <button
             onClick={handleRunInference}
             disabled={predicting}
+            className="btn-primary"
             style={{
               width: '100%',
-              background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)',
-              border: 'none',
-              borderRadius: '8px',
+              justifyContent: 'center',
               padding: '12px 18px',
-              color: '#ffffff',
               fontSize: '0.9rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justify: 'center',
-              gap: '8px',
-              marginTop: '16px',
-              boxShadow: '0 4px 16px rgba(2, 132, 199, 0.35)',
-              transition: 'all 0.2s ease'
+              marginTop: '16px'
             }}
           >
             {predicting ? (

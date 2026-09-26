@@ -56,14 +56,14 @@ export const SettingsPage = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '6px', backgroundColor: 'rgba(32, 43, 56, 0.4)' }}>
               <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>Base API URL</span>
               <span style={{ fontSize: '0.82rem', fontFamily: 'monospace', color: '#38bdf8' }}>
-                http://127.0.0.1:8000/api
+                {import.meta.env.VITE_API_BASE_URL || (typeof window !== 'undefined' ? `${window.location.origin}/api` : '/api')}
               </span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '6px', backgroundColor: 'rgba(32, 43, 56, 0.4)' }}>
               <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>OpenAPI Swagger Docs</span>
               <a
-                href="http://localhost:8000/docs"
+                href="/docs"
                 target="_blank"
                 rel="noreferrer"
                 style={{ fontSize: '0.82rem', color: '#06b6d4', display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}

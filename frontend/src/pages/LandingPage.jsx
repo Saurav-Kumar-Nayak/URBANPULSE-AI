@@ -365,54 +365,54 @@ export const LandingPage = () => {
               </div>
             </div>
 
-            {/* Dedicated Top Telemetry Bar (4 Non-Overlapping Live Cards) */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+            {/* Dedicated Top Telemetry Bar (4 Scoped Photographic Live Cards) */}
+            <div className="urbanpulse-home-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
               
               {/* 1. Weather Card */}
-              <div style={{ background: 'rgba(10, 18, 36, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <CloudSun size={16} />
+              <div className="card-photo-base card-photo-weather" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.22)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                  <CloudSun size={18} />
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '0.60rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Weather</div>
-                  <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tempValue}</div>
-                  <div style={{ fontSize: '0.60rem', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{weatherStatus}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#cbd5e1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Weather</div>
+                  <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{tempValue}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#38bdf8', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">● {weatherStatus}</div>
                 </div>
               </div>
 
               {/* 2. Traffic Card */}
-              <div style={{ background: 'rgba(10, 18, 36, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Car size={16} />
+              <div className="card-photo-base card-photo-traffic" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(52, 211, 153, 0.22)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(52, 211, 153, 0.4)' }}>
+                  <Car size={18} />
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '0.60rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Traffic</div>
-                  <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#34d399', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{trafficStatus}</div>
-                  <div style={{ fontSize: '0.60rem', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{avgSpeed}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#cbd5e1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Traffic</div>
+                  <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#34d399', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{trafficStatus}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#e2e8f0', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{avgSpeed}</div>
                 </div>
               </div>
 
               {/* 3. Air Quality Card */}
-              <div style={{ background: 'rgba(10, 18, 36, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '10px', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Wind size={16} />
+              <div className="card-photo-base card-photo-aqi" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(251, 191, 36, 0.22)', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(251, 191, 36, 0.4)' }}>
+                  <Wind size={18} />
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '0.60rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Air Quality</div>
-                  <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#fbbf24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{aqiValue}</div>
-                  <div style={{ fontSize: '0.60rem', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{aqiStatus}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#cbd5e1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Air Quality</div>
+                  <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#fbbf24', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{aqiValue}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#e2e8f0', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{aqiStatus}</div>
                 </div>
               </div>
 
               {/* 4. Urban Risk Card */}
-              <div style={{ background: 'rgba(10, 18, 36, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(244, 63, 94, 0.35)', borderRadius: '10px', padding: '9px 12px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 14px rgba(0,0,0,0.4)' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(244, 63, 94, 0.15)', color: '#fb7185', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <AlertTriangle size={16} />
+              <div className="card-photo-base card-photo-risk" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(244, 63, 94, 0.22)', color: '#fb7185', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(244, 63, 94, 0.4)' }}>
+                  <AlertTriangle size={18} />
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: '0.60rem', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Risk</div>
-                  <div style={{ fontSize: '0.86rem', fontWeight: 800, color: '#fb7185', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{riskLevel}</div>
-                  <div style={{ fontSize: '0.60rem', color: '#cbd5e1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{riskStatus}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#cbd5e1', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Risk</div>
+                  <div style={{ fontSize: '0.94rem', fontWeight: 800, color: '#fb7185', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{riskLevel}</div>
+                  <div style={{ fontSize: '0.62rem', color: '#e2e8f0', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} className="text-razor-sharp">{riskStatus}</div>
                 </div>
               </div>
 
@@ -476,69 +476,137 @@ export const LandingPage = () => {
         </div>
 
         {/* 4 KPI CARDS GRID */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+        <div className="urbanpulse-home-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
           
           {/* Card 1: Traffic */}
           <div 
             onClick={() => setActiveTab('traffic')}
-            style={{ background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.75), rgba(8, 14, 27, 0.85))', border: '1px solid rgba(56, 189, 248, 0.18)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }}
+            className="card-photo-base card-photo-traffic"
+            style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Car size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(52, 211, 153, 0.22)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.5)', border: '1px solid rgba(52, 211, 153, 0.4)' }}>
+                <Car size={22} />
+              </div>
+              <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#34d399', background: 'rgba(52, 211, 153, 0.18)', border: '1px solid rgba(52, 211, 153, 0.4)', padding: '3px 9px', borderRadius: '20px', letterSpacing: '0.04em' }}>
+                MOBILITY
+              </span>
             </div>
-            <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Traffic</div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>{avgSpeed}</div>
-            <div style={{ fontSize: '0.76rem', color: '#34d399', fontWeight: 700 }}>● {trafficStatus}</div>
-            <div style={{ fontSize: '0.68rem', color: '#64748b', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              ● Live Telemetry
+
+            <div>
+              <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Traffic Mobility</div>
+              <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', margin: '4px 0' }} className="text-razor-sharp">{avgSpeed}</div>
+              <div style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: 700 }} className="text-razor-sharp">● {trafficStatus}</div>
+            </div>
+
+            {/* Sparkline Visual */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.70rem', color: '#94a3b8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }} className="text-razor-sharp">
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34d399' }} />
+                <span>LIVE TELEMETRY</span>
+              </div>
+              <svg width="60" height="18" viewBox="0 0 60 18" fill="none">
+                <path d="M0 12 Q 15 4, 30 14 T 60 6" stroke="#34d399" strokeWidth="2" fill="none" />
+              </svg>
             </div>
           </div>
 
           {/* Card 2: Air Quality */}
           <div 
             onClick={() => setActiveTab('pollution')}
-            style={{ background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.75), rgba(8, 14, 27, 0.85))', border: '1px solid rgba(56, 189, 248, 0.18)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }}
+            className="card-photo-base card-photo-aqi"
+            style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Wind size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(251, 191, 36, 0.22)', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.5)', border: '1px solid rgba(251, 191, 36, 0.4)' }}>
+                <Wind size={22} />
+              </div>
+              <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#fbbf24', background: 'rgba(251, 191, 36, 0.18)', border: '1px solid rgba(251, 191, 36, 0.4)', padding: '3px 9px', borderRadius: '20px', letterSpacing: '0.04em' }}>
+                ENVIRONMENT
+              </span>
             </div>
-            <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Air Quality</div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>{aqiValue}</div>
-            <div style={{ fontSize: '0.76rem', color: '#fbbf24', fontWeight: 700 }}>● {aqiStatus}</div>
-            <div style={{ fontSize: '0.68rem', color: '#64748b', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              ● Live Telemetry
+
+            <div>
+              <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Air Quality Index</div>
+              <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', margin: '4px 0' }} className="text-razor-sharp">{aqiValue}</div>
+              <div style={{ fontSize: '0.78rem', color: '#fbbf24', fontWeight: 700 }} className="text-razor-sharp">● {aqiStatus}</div>
+            </div>
+
+            {/* Sparkline Visual */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.70rem', color: '#94a3b8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }} className="text-razor-sharp">
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fbbf24' }} />
+                <span>LIVE SENSOR DATA</span>
+              </div>
+              <svg width="60" height="18" viewBox="0 0 60 18" fill="none">
+                <path d="M0 8 Q 15 14, 30 6 T 60 10" stroke="#fbbf24" strokeWidth="2" fill="none" />
+              </svg>
             </div>
           </div>
 
           {/* Card 3: Weather */}
           <div 
             onClick={() => setActiveTab('weather')}
-            style={{ background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.75), rgba(8, 14, 27, 0.85))', border: '1px solid rgba(56, 189, 248, 0.18)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }}
+            className="card-photo-base card-photo-weather"
+            style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CloudSun size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.22)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.5)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                <CloudSun size={22} />
+              </div>
+              <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#38bdf8', background: 'rgba(56, 189, 248, 0.18)', border: '1px solid rgba(56, 189, 248, 0.4)', padding: '3px 9px', borderRadius: '20px', letterSpacing: '0.04em' }}>
+                ATMOSPHERE
+              </span>
             </div>
-            <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Weather</div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>{tempValue}</div>
-            <div style={{ fontSize: '0.76rem', color: '#38bdf8', fontWeight: 700 }}>● {weatherStatus}</div>
-            <div style={{ fontSize: '0.68rem', color: '#64748b', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              ● Live Telemetry
+
+            <div>
+              <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Weather Telemetry</div>
+              <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em', margin: '4px 0' }} className="text-razor-sharp">{tempValue}</div>
+              <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700 }} className="text-razor-sharp">● {weatherStatus}</div>
+            </div>
+
+            {/* Sparkline Visual */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.70rem', color: '#94a3b8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }} className="text-razor-sharp">
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#38bdf8' }} />
+                <span>METEOROLOGICAL SENSORS</span>
+              </div>
+              <svg width="60" height="18" viewBox="0 0 60 18" fill="none">
+                <path d="M0 6 Q 15 12, 30 4 T 60 8" stroke="#38bdf8" strokeWidth="2" fill="none" />
+              </svg>
             </div>
           </div>
 
           {/* Card 4: Urban Risk */}
           <div 
             onClick={() => setActiveTab('risk')}
-            style={{ background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.75), rgba(8, 14, 27, 0.85))', border: '1px solid rgba(244, 63, 94, 0.25)', borderRadius: '14px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }}
+            className="card-photo-base card-photo-risk"
+            style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(244, 63, 94, 0.12)', color: '#fb7185', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <ShieldAlert size={22} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(244, 63, 94, 0.22)', color: '#fb7185', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.5)', border: '1px solid rgba(244, 63, 94, 0.4)' }}>
+                <ShieldAlert size={22} />
+              </div>
+              <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#fb7185', background: 'rgba(244, 63, 94, 0.18)', border: '1px solid rgba(244, 63, 94, 0.4)', padding: '3px 9px', borderRadius: '20px', letterSpacing: '0.04em' }}>
+                AI MODEL
+              </span>
             </div>
-            <div style={{ fontSize: '0.74rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Urban Risk</div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#fb7185' }}>{riskLevel}</div>
-            <div style={{ fontSize: '0.76rem', color: '#fb7185', fontWeight: 700 }}>● {riskStatus}</div>
-            <div style={{ fontSize: '0.68rem', color: '#64748b', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              ● Model Assessment
+
+            <div>
+              <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.06em' }} className="text-razor-sharp">Urban Risk Assessment</div>
+              <div style={{ fontSize: '1.9rem', fontWeight: 800, color: '#fb7185', letterSpacing: '-0.02em', margin: '4px 0' }} className="text-razor-sharp">{riskLevel}</div>
+              <div style={{ fontSize: '0.78rem', color: '#fb7185', fontWeight: 700 }} className="text-razor-sharp">● {riskStatus}</div>
+            </div>
+
+            {/* Sparkline Visual */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', paddingTop: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.70rem', color: '#94a3b8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }} className="text-razor-sharp">
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fb7185' }} />
+                <span>MODEL PREDICTION</span>
+              </div>
+              <svg width="60" height="18" viewBox="0 0 60 18" fill="none">
+                <path d="M0 14 Q 15 2, 30 10 T 60 4" stroke="#fb7185" strokeWidth="2" fill="none" />
+              </svg>
             </div>
           </div>
 
@@ -547,169 +615,213 @@ export const LandingPage = () => {
 
       {/* 8. PLATFORM CAPABILITIES */}
       <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 48px 32px' }}>
-        <div style={{ background: 'rgba(10, 18, 36, 0.85)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '16px', padding: '36px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          
-          <div>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>Platform Capabilities</h2>
-            <p style={{ fontSize: '0.86rem', color: '#94a3b8', marginTop: '4px' }}>Comprehensive urban intelligence for modern cities.</p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+        <div className="urbanpulse-home-cards">
+          <div className="card-photo-base card-photo-weather" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
             
-            <div onClick={() => setActiveTab('traffic')} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Car size={20} />
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.18)', padding: '4px 12px', borderRadius: '20px', marginBottom: '8px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                <Layers size={13} />
+                <span>CORE ARCHITECTURE</span>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>01 Traffic Intelligence</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>Understand congestion and mobility patterns.</p>
-              <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 700, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>→</div>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }} className="text-razor-sharp">Platform Capabilities</h2>
+              <p style={{ fontSize: '0.90rem', color: '#cbd5e1', marginTop: '4px' }} className="text-razor-sharp">Comprehensive 3D-assisted urban intelligence for modern municipal centers.</p>
             </div>
 
-            <div onClick={() => setActiveTab('pollution')} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Wind size={20} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '22px' }}>
+              
+              {/* Capability 1 */}
+              <div onClick={() => setActiveTab('traffic')} className="card-photo-base card-photo-traffic" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.22)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                    <Car size={22} />
+                  </div>
+                  <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.05em' }} className="text-razor-sharp">MODULE 01</span>
+                </div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">Traffic Intelligence</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5 }} className="text-razor-sharp">Real-time congestion telemetry, speed vectors & arterial corridor optimization.</p>
+                <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 800, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }} className="text-razor-sharp">
+                  <span>Explore Module</span>
+                  <span>→</span>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>02 Environmental Intelligence</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>Monitor AQI and environmental conditions.</p>
-              <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 700, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>→</div>
-            </div>
 
-            <div onClick={() => setActiveTab('predictions')} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Cpu size={20} />
+              {/* Capability 2 */}
+              <div onClick={() => setActiveTab('pollution')} className="card-photo-base card-photo-aqi" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(251, 191, 36, 0.22)', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(251, 191, 36, 0.4)' }}>
+                    <Wind size={22} />
+                  </div>
+                  <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#fbbf24', letterSpacing: '0.05em' }} className="text-razor-sharp">MODULE 02</span>
+                </div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">Environmental Intelligence</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5 }} className="text-razor-sharp">Multi-zone AQI monitoring, particulate tracking & emission heatmap telemetry.</p>
+                <div style={{ color: '#fbbf24', fontSize: '0.88rem', fontWeight: 800, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }} className="text-razor-sharp">
+                  <span>Explore Module</span>
+                  <span>→</span>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>03 Predictive Intelligence</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>Identify emerging patterns using machine learning.</p>
-              <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 700, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>→</div>
-            </div>
 
-            <div onClick={() => setActiveTab('predictions')} style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', cursor: 'pointer' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Activity size={20} />
+              {/* Capability 3 */}
+              <div onClick={() => setActiveTab('predictions')} className="card-photo-base card-photo-weather" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.22)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                    <Cpu size={22} />
+                  </div>
+                  <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.05em' }} className="text-razor-sharp">MODULE 03</span>
+                </div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">Predictive Intelligence</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5 }} className="text-razor-sharp">AI-driven trend forecasting, incident prediction & anomaly classification.</p>
+                <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 800, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }} className="text-razor-sharp">
+                  <span>Explore Studio</span>
+                  <span>→</span>
+                </div>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>04 Operational Decision Support</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>Turn intelligence into informed actions.</p>
-              <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 700, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>→</div>
+
+              {/* Capability 4 */}
+              <div onClick={() => setActiveTab('predictions')} className="card-photo-base card-photo-ops" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.22)', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                    <Activity size={22} />
+                  </div>
+                  <span style={{ fontSize: '0.70rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.05em' }} className="text-razor-sharp">MODULE 04</span>
+                </div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">Operational Decision Support</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.5 }} className="text-razor-sharp">Actionable dispatch protocols, green-wave signal control & incident triage.</p>
+                <div style={{ color: '#38bdf8', fontSize: '0.88rem', fontWeight: 800, marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '6px' }} className="text-razor-sharp">
+                  <span>View Command</span>
+                  <span>→</span>
+                </div>
+              </div>
+
             </div>
 
           </div>
-
         </div>
       </section>
 
-      {/* 9. HOW IT WORKS */}
+      {/* 9. HOW IT WORKS OPERATIONAL WORKFLOW */}
       <section id="how-it-works" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 48px 32px' }}>
-        <div style={{ background: 'rgba(10, 18, 36, 0.85)', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '16px', padding: '36px', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          
-          <div>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff' }}>How It Works</h2>
-            <p style={{ fontSize: '0.86rem', color: '#94a3b8', marginTop: '4px' }}>From data to decisions in three simple steps.</p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: '16px', alignItems: 'center' }}>
+        <div className="urbanpulse-home-cards">
+          <div className="card-photo-base card-photo-weather" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
             
-            {/* Step 01 */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.88rem' }}>
-                01
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.18)', padding: '4px 12px', borderRadius: '20px', marginBottom: '8px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                <Database size={13} />
+                <span>OPERATIONAL PIPELINE</span>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>COLLECT</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>
-                Urban telemetry and environmental signals are continuously gathered.
-              </p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }} className="text-razor-sharp">How UrbanPulse AI Works</h2>
+              <p style={{ fontSize: '0.90rem', color: '#cbd5e1', marginTop: '4px' }} className="text-razor-sharp">From raw telemetry signals to coordinated municipal decision making.</p>
             </div>
 
-            <ArrowRight size={20} color="#38bdf8" />
-
-            {/* Step 02 */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.88rem' }}>
-                02
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: '20px', alignItems: 'center' }}>
+              
+              {/* Step 01 */}
+              <div className="card-photo-base card-photo-traffic" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.92rem', boxShadow: '0 6px 16px rgba(2, 132, 199, 0.5)' }}>
+                    01
+                  </div>
+                  <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#38bdf8', background: 'rgba(56, 189, 248, 0.18)', padding: '3px 8px', borderRadius: '12px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                    TELEMETRY
+                  </span>
+                </div>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">COLLECT</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.6 }} className="text-razor-sharp">
+                  IoT sensors, traffic cameras, weather beacons and municipal GPS streams are continuously aggregated into the data engine.
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>ANALYZE</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>
-                AI/ML models process patterns and anomalies in real time.
-              </p>
-            </div>
 
-            <ArrowRight size={20} color="#38bdf8" />
-
-            {/* Step 03 */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.15)', borderRadius: '12px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.88rem' }}>
-                03
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <ArrowRight size={24} color="#38bdf8" />
+                <span style={{ fontSize: '0.60rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.06em' }}>DATA</span>
               </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff' }}>ACT</h3>
-              <p style={{ fontSize: '0.80rem', color: '#94a3b8', lineHeight: 1.5 }}>
-                Operators use intelligence to make informed, timely decisions.
-              </p>
+
+              {/* Step 02 */}
+              <div className="card-photo-base card-photo-weather" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.92rem', boxShadow: '0 6px 16px rgba(2, 132, 199, 0.5)' }}>
+                    02
+                  </div>
+                  <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#c084fc', background: 'rgba(139, 92, 246, 0.18)', padding: '3px 8px', borderRadius: '12px', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                    AI / ML ENGINE
+                  </span>
+                </div>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">ANALYZE</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.6 }} className="text-razor-sharp">
+                  Machine learning models process patterns, evaluate risk scores and detect traffic anomalies in real time.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <ArrowRight size={24} color="#38bdf8" />
+                <span style={{ fontSize: '0.60rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.06em' }}>INSIGHT</span>
+              </div>
+
+              {/* Step 03 */}
+              <div className="card-photo-base card-photo-ops" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.92rem', boxShadow: '0 6px 16px rgba(2, 132, 199, 0.5)' }}>
+                    03
+                  </div>
+                  <span style={{ fontSize: '0.64rem', fontWeight: 800, color: '#34d399', background: 'rgba(16, 185, 129, 0.18)', padding: '3px 8px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                    DECISION
+                  </span>
+                </div>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff' }} className="text-razor-sharp">ACT</h3>
+                <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.6 }} className="text-razor-sharp">
+                  Command center operators receive AI decision recommendations to dispatch resources and optimize city flow.
+                </p>
+              </div>
+
             </div>
 
           </div>
-
         </div>
       </section>
 
-      {/* 11. FINAL CTA BANNER */}
+      {/* 11. FINAL REAL-WORLD PHOTOGRAPHIC CTA COMMAND PANEL */}
       <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 64px 32px' }}>
-        <div style={{ 
-          background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(7, 11, 22, 0.95))', 
-          border: '1px solid rgba(56, 189, 248, 0.3)', 
-          borderRadius: '16px', 
-          padding: '40px 48px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '24px',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
-        }}>
-          <div>
-            <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
-              See Your City With More Intelligence.
-            </h2>
-            <p style={{ fontSize: '0.96rem', color: '#94a3b8', marginTop: '6px' }}>
-              Explore live urban data, predictions and insights for a smarter tomorrow.
-            </p>
-          </div>
+        <div className="urbanpulse-home-cards">
+          <div className="card-photo-base card-photo-cta" style={{ padding: '44px 52px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '28px' }}>
+            <div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.2)', padding: '4px 14px', borderRadius: '20px', marginBottom: '12px', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
+                <Compass size={14} color="#38bdf8" />
+                <span>COMMAND CENTER INTELLIGENCE</span>
+              </div>
+              <h2 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em' }} className="text-razor-sharp">
+                See Your City With More Intelligence.
+              </h2>
+              <p style={{ fontSize: '1.02rem', color: '#cbd5e1', marginTop: '8px', maxWidth: '580px', lineHeight: 1.6 }} className="text-razor-sharp">
+                Explore live municipal data streams, predictive AI models, and real-time risk assessments for a smarter tomorrow.
+              </p>
+            </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button 
-              onClick={() => setActiveTab('live-city')}
-              style={{ 
-                padding: '14px 28px', 
-                borderRadius: '10px', 
-                background: 'linear-gradient(135deg, #0284c7, #0369a1)', 
-                color: '#ffffff', 
-                fontWeight: 700, 
-                fontSize: '0.92rem', 
-                border: '1px solid rgba(56, 189, 248, 0.4)', 
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 8px 24px rgba(2, 132, 199, 0.4)'
-              }}
-            >
-              <span>Explore Live City</span>
-              <ArrowRight size={16} />
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+              <button 
+                onClick={() => setActiveTab('live-city')}
+                className="btn-primary btn-3d"
+                style={{ 
+                  padding: '16px 32px', 
+                  fontSize: '0.96rem',
+                  boxShadow: '0 8px 25px rgba(2, 132, 199, 0.5)'
+                }}
+              >
+                <span>Explore Live City</span>
+                <ArrowRight size={18} />
+              </button>
 
-            <button 
-              onClick={() => setIsLoginModalOpen(true)}
-              style={{ 
-                padding: '14px 26px', 
-                borderRadius: '10px', 
-                background: 'rgba(255, 255, 255, 0.05)', 
-                color: '#e2e8f0', 
-                fontWeight: 600, 
-                fontSize: '0.92rem', 
-                border: '1px solid rgba(255, 255, 255, 0.15)', 
-                cursor: 'pointer'
-              }}
-            >
-              Operator Login
-            </button>
+              <button 
+                onClick={() => setIsLoginModalOpen(true)}
+                className="btn-subtle"
+                style={{ 
+                  padding: '16px 28px', 
+                  fontSize: '0.96rem'
+                }}
+              >
+                <Lock size={16} color="#38bdf8" />
+                <span>Operator Login</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

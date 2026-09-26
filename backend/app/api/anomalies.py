@@ -65,7 +65,8 @@ def get_anomalies(
             anomaly_type=rec.anomaly_type,
             severity="Critical" if rec.risk_score >= 75 else ("High" if rec.risk_score >= 55 else "Medium"),
             risk_score=rec.risk_score,
-            explanation=rec.anomaly_explanation or "Statistical isolation anomaly detected."
+            explanation=rec.anomaly_explanation or "Statistical isolation anomaly detected.",
+            status=getattr(rec, "status", None) or "DETECTED"
         )
         for rec in recent_items
     ]
@@ -101,24 +102,38 @@ def update_anomaly_status(
 ):
     """
     Updates the operational lifecycle status of an anomaly incident record.
-    Supported statuses: DETECTED, ACKNOWLEDGED, UNDER_INVESTIGATION, RESOLVED
+    Supported statuses: DETECTED, ACKNOWLEDGED, INVESTIGATING, UNDER_INVESTIGATION, ESCALATED, RESOLVED
     """
-    new_status = status_update.get("status", "").upper()
-    valid_statuses = ["DETECTED", "ACKNOWLEDGED", "UNDER_INVESTIGATION", "RESOLVED"]
+    raw_status = status_update.get("status", "").upper()
+    status_map = {
+        "INVESTIGATING": "UNDER_INVESTIGATION",
+        "UNDER_INVESTIGATION": "UNDER_INVESTIGATION",
+        "ACKNOWLEDGED": "ACKNOWLEDGED",
+        "DETECTED": "DETECTED",
+        "ESCALATED": "ESCALATED",
+        "RESOLVED": "RESOLVED"
+    }
     
-    if new_status not in valid_statuses:
-        raise HTTPException(status_code=422, detail=f"Invalid status '{new_status}'. Allowed: {valid_statuses}")
+    if raw_status not in status_map:
+        raise HTTPException(status_code=422, detail=f"Invalid status '{raw_status}'. Allowed: {list(status_map.keys())}")
+
+    new_status = status_map[raw_status]
         
     rec = db.query(UrbanRecord).filter(UrbanRecord.id == anomaly_id).first()
     if not rec:
         raise HTTPException(status_code=404, detail=f"Anomaly record ID {anomaly_id} not found")
+
+    previous_status = getattr(rec, "status", "DETECTED") or "DETECTED"
+    rec.status = new_status
+    db.commit()
+    db.refresh(rec)
         
     return {
         "status": "success",
         "record_id": anomaly_id,
         "record_code": rec.record_code,
         "location_name": rec.location_name,
-        "previous_status": "DETECTED",
+        "previous_status": previous_status,
         "updated_status": new_status,
         "lifecycle_stage": new_status
     }

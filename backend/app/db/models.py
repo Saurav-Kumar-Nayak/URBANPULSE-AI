@@ -33,6 +33,7 @@ class UrbanRecord(Base):
     is_anomaly = Column(Boolean, default=False, index=True)
     anomaly_type = Column(String, default="None")
     anomaly_explanation = Column(Text, default="")
+    status = Column(String, default="DETECTED", index=True)
 
     anomalies = relationship("AnomalyLog", back_populates="record", cascade="all, delete-orphan")
 
