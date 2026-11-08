@@ -139,5 +139,26 @@ class FullBackendTest(unittest.TestCase):
         self.assertIn("total_trips", data)
         self.assertIn("avg_congestion_index", data)
 
+    def test_12_analytics_data_quality(self):
+        res = self.client.get("/api/analytics/data-quality")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("health_score", data)
+        self.assertEqual(data["health_score"], 100.0)
+
+    def test_13_analytics_summary_report(self):
+        res = self.client.get("/api/analytics/summary-report")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("title", data)
+        self.assertIn("citywide_kpis", data)
+
+    def test_14_early_warning_alerts(self):
+        res = self.client.get("/api/alerts")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("total_active_alerts", data)
+        self.assertIn("alerts", data)
+
 if __name__ == "__main__":
     unittest.main()

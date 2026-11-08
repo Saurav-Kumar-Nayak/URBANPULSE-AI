@@ -137,3 +137,47 @@ def update_anomaly_status(
         "updated_status": new_status,
         "lifecycle_stage": new_status
     }
+
+@router.get("/alerts")
+@router.get("/v1/alerts")
+def get_early_warning_alerts(
+    limit: int = Query(10, ge=1, le=50),
+    db: Session = Depends(get_db)
+):
+    """
+    Smart City Early Warning System: Returns prioritized active alerts categorized by severity.
+    Covers Traffic Gridlocks, Air Quality Hazards, and Weather Risks.
+    """
+    anomalous = db.query(UrbanRecord).filter(
+        UrbanRecord.is_anomaly == True
+    ).order_by(UrbanRecord.timestamp.desc()).limit(limit).all()
+
+    alerts = []
+    for rec in anomalous:
+        severity = "CRITICAL" if rec.risk_score >= 75 else ("HIGH" if rec.risk_score >= 55 else "WARNING")
+        category = "TRAFFIC" if rec.congestion_index > 0.6 else ("ENVIRONMENTAL" if rec.aqi > 100 else "MUNICIPAL")
+        
+        alerts.append({
+            "id": rec.id,
+            "record_code": rec.record_code,
+            "location_name": rec.location_name,
+            "latitude": rec.latitude,
+            "longitude": rec.longitude,
+            "timestamp": rec.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            "category": category,
+            "severity": severity,
+            "risk_score": rec.risk_score,
+            "alert_title": f"{severity}: {rec.anomaly_type} at {rec.location_name}",
+            "summary": rec.anomaly_explanation or f"Telemetry deviation: Congestion {int(rec.congestion_index*100)}%, AQI {rec.aqi}.",
+            "action_required": "Deploy rapid response field team and update digital signage.",
+            "status": getattr(rec, "status", "DETECTED") or "DETECTED"
+        })
+
+    return {
+        "status": "active",
+        "total_active_alerts": len(alerts),
+        "critical_count": sum(1 for a in alerts if a["severity"] == "CRITICAL"),
+        "high_count": sum(1 for a in alerts if a["severity"] == "HIGH"),
+        "warning_count": sum(1 for a in alerts if a["severity"] == "WARNING"),
+        "alerts": alerts
+    }

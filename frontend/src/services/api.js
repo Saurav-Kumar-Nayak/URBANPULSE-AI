@@ -62,9 +62,13 @@ export const api = {
     return res.data;
   },
 
-  // Anomalies
+  // Anomalies & Early Warning Alerts
   getAnomalies: async (params = {}) => {
     const res = await apiClient.get('/anomalies', { params });
+    return res.data;
+  },
+  getAlerts: async (params = {}) => {
+    const res = await apiClient.get('/alerts', { params });
     return res.data;
   },
   detectAnomaly: async (payload) => {
@@ -113,9 +117,21 @@ export const api = {
     return `${base}/records/export${queryString ? `?${queryString}` : ''}`;
   },
 
-  // Analytics
+  // Analytics & Intelligence
   getAnalytics: async () => {
     const res = await apiClient.get('/analytics/kpis');
+    return res.data;
+  },
+  getDataQuality: async () => {
+    const res = await apiClient.get('/analytics/data-quality');
+    return res.data;
+  },
+  getCorrelations: async () => {
+    const res = await apiClient.get('/analytics/correlations');
+    return res.data;
+  },
+  getSummaryReport: async () => {
+    const res = await apiClient.get('/analytics/summary-report');
     return res.data;
   },
   getTrafficFlow: async () => {
