@@ -1,0 +1,48 @@
+
+==================================================
+ TARGET URL: https://urbanpulse-ai-g3mf.onrender.com
+==================================================
+[HTTP 200 OK] / -> <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name
+[HTTP 200 OK] /api/health -> {"status":"online","system":"UrbanPulse AI - Real-World Urban Data Analytics Platform","version":"1.0.0","ml_engine_trained":true,"database":"SQLite (
+[HTTP 200 OK] /api/readiness -> {"ready":true,"database_connected":true,"ml_engine_trained":true,"status":"OPERATIONAL"}
+[HTTP 200 OK] /api/overview -> {"total_records":5200,"avg_aqi":102,"aqi_status":"Unhealthy for Sensitive Groups","avg_congestion_index":0.55,"avg_congestion_pct":"55%","urban_risk_s
+[HTTP 200 OK] /api/anomalies -> {"total_anomalies":241,"anomaly_rate_percent":4.63,"severity_breakdown":{"Critical":67,"High":56,"Medium":118},"anomaly_types":{"Air Quality Hazard":5
+
+==================================================
+ TARGET URL: https://urban-pulse-ai.onrender.com
+==================================================
+[HTTP 200 OK] / -> <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Urban
+[HTTP 404 Not Found] /api/health -> <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 
+[HTTP 404 Not Found] /api/readiness -> <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 
+[HTTP 404 Not Found] /api/overview -> <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 
+[HTTP 404 Not Found] /api/anomalies -> <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page 

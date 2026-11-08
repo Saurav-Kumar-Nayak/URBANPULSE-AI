@@ -13,6 +13,7 @@ router = APIRouter(tags=["Traffic Intelligence"])
 @router.get("/v1/traffic", response_model=TrafficResponseSchema)
 def get_traffic_intelligence(
     timeframe: Optional[str] = Query("24h"),
+    location: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
     # Filter base query by timeframe relative to maximum timestamp in DB
@@ -30,6 +31,11 @@ def get_traffic_intelligence(
         start_ts = max_ts - timedelta(hours=24)
 
     base_query = db.query(UrbanRecord).filter(UrbanRecord.timestamp >= start_ts)
+    if location and location != "ALL":
+        base_query = base_query.filter(
+            (UrbanRecord.location_name.ilike(f"%{location}%")) |
+            (UrbanRecord.location_id == location)
+        )
     # 1. Hourly Traffic Breakdown
     hourly_trends = []
     for h in range(24):

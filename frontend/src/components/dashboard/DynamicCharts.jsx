@@ -39,31 +39,38 @@ export const DynamicCharts = ({
   const basePm25 = (baseAqi * 0.34).toFixed(1);
   const aqiStatus = baseAqi < 75 ? 'Good' : (baseAqi < 100 ? 'Moderate' : 'Unhealthy');
 
-  // Dynamic 24-hour Air Quality Trend based on activeZone
-  const aqiTrends = [
-    { timestamp: '12 AM', pm25: Math.max(10, Math.round(baseAqi * 0.90)), aqi: Math.round(baseAqi * 0.90) },
-    { timestamp: '3 AM', pm25: Math.max(10, Math.round(baseAqi * 0.82)), aqi: Math.round(baseAqi * 0.82) },
-    { timestamp: '6 AM', pm25: Math.round(baseAqi * 1.05), aqi: Math.round(baseAqi * 1.05) },
-    { timestamp: '9 AM', pm25: Math.round(baseAqi * 1.18), aqi: Math.round(baseAqi * 1.18) },
-    { timestamp: '12 PM', pm25: Math.round(baseAqi * 0.98), aqi: Math.round(baseAqi * 0.98) },
-    { timestamp: '3 PM', pm25: Math.round(baseAqi * 0.94), aqi: Math.round(baseAqi * 0.94) },
-    { timestamp: '6 PM', pm25: Math.round(baseAqi * 1.12), aqi: Math.round(baseAqi * 1.12) },
-    { timestamp: '9 PM', pm25: Math.round(baseAqi * 1.02), aqi: Math.round(baseAqi * 1.02) },
-    { timestamp: '12 AM', pm25: Math.round(baseAqi * 0.92), aqi: Math.round(baseAqi * 0.92) }
-  ];
+  // Dynamic 24-hour Air Quality Trend based on backend data or activeZone
+  const aqiTrends = (pollutionData?.aqi_trends && pollutionData.aqi_trends.length > 0)
+    ? pollutionData.aqi_trends
+    : [
+        { timestamp: '12 AM', pm25: Math.max(10, Math.round(baseAqi * 0.90)), aqi: Math.round(baseAqi * 0.90) },
+        { timestamp: '3 AM', pm25: Math.max(10, Math.round(baseAqi * 0.82)), aqi: Math.round(baseAqi * 0.82) },
+        { timestamp: '6 AM', pm25: Math.round(baseAqi * 1.05), aqi: Math.round(baseAqi * 1.05) },
+        { timestamp: '9 AM', pm25: Math.round(baseAqi * 1.18), aqi: Math.round(baseAqi * 1.18) },
+        { timestamp: '12 PM', pm25: Math.round(baseAqi * 0.98), aqi: Math.round(baseAqi * 0.98) },
+        { timestamp: '3 PM', pm25: Math.round(baseAqi * 0.94), aqi: Math.round(baseAqi * 0.94) },
+        { timestamp: '6 PM', pm25: Math.round(baseAqi * 1.12), aqi: Math.round(baseAqi * 1.12) },
+        { timestamp: '9 PM', pm25: Math.round(baseAqi * 1.02), aqi: Math.round(baseAqi * 1.02) },
+        { timestamp: '12 AM', pm25: Math.round(baseAqi * 0.92), aqi: Math.round(baseAqi * 0.92) }
+      ];
 
-  // Dynamic Traffic Flow Trend based on activeZone speed
-  const trafficTrends = [
-    { hour: '12 AM', avg_speed_kmh: Math.round(baseSpeed * 1.40) },
-    { hour: '3 AM', avg_speed_kmh: Math.round(baseSpeed * 1.50) },
-    { hour: '6 AM', avg_speed_kmh: Math.round(baseSpeed * 1.20) },
-    { hour: '9 AM', avg_speed_kmh: Math.max(10, Math.round(baseSpeed * 0.75)) },
-    { hour: '12 PM', avg_speed_kmh: Math.round(baseSpeed * 0.95) },
-    { hour: '3 PM', avg_speed_kmh: Math.round(baseSpeed * 1.05) },
-    { hour: '6 PM', avg_speed_kmh: Math.max(8, Math.round(baseSpeed * 0.70)) },
-    { hour: '9 PM', avg_speed_kmh: Math.round(baseSpeed * 1.15) },
-    { hour: '12 AM', avg_speed_kmh: Math.round(baseSpeed * 1.35) }
-  ];
+  // Dynamic Traffic Flow Trend based on backend data or activeZone speed
+  const trafficTrends = (trafficData?.hourly_trends && trafficData.hourly_trends.length > 0)
+    ? trafficData.hourly_trends.map(t => ({
+        hour: t.hour,
+        avg_speed_kmh: Math.round(t.avg_speed_kmh)
+      }))
+    : [
+        { hour: '12 AM', avg_speed_kmh: Math.round(baseSpeed * 1.40) },
+        { hour: '3 AM', avg_speed_kmh: Math.round(baseSpeed * 1.50) },
+        { hour: '6 AM', avg_speed_kmh: Math.round(baseSpeed * 1.20) },
+        { hour: '9 AM', avg_speed_kmh: Math.max(10, Math.round(baseSpeed * 0.75)) },
+        { hour: '12 PM', avg_speed_kmh: Math.round(baseSpeed * 0.95) },
+        { hour: '3 PM', avg_speed_kmh: Math.round(baseSpeed * 1.05) },
+        { hour: '6 PM', avg_speed_kmh: Math.max(8, Math.round(baseSpeed * 0.70)) },
+        { hour: '9 PM', avg_speed_kmh: Math.round(baseSpeed * 1.15) },
+        { hour: '12 AM', avg_speed_kmh: Math.round(baseSpeed * 1.35) }
+      ];
 
   // Weather Data
   const currentTemp = activeZone?.temp || '32°C';

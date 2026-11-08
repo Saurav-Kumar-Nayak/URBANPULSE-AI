@@ -117,5 +117,27 @@ export const api = {
   getAnalytics: async () => {
     const res = await apiClient.get('/analytics/kpis');
     return res.data;
+  },
+  getTrafficFlow: async () => {
+    const res = await apiClient.get('/analytics/traffic-flow');
+    return res.data;
+  },
+  getModes: async () => {
+    const res = await apiClient.get('/analytics/modes');
+    return res.data;
+  },
+  getZones: async () => {
+    const res = await apiClient.get('/analytics/zones');
+    return res.data;
+  },
+
+  // Trips & Telemetry Records
+  getTrips: async (params = {}) => {
+    const res = await apiClient.get('/trips/', { params });
+    return res.data;
+  },
+  getTripDetail: async (recordId) => {
+    const res = await apiClient.get(`/trips/${recordId}`);
+    return res.data;
   }
 };

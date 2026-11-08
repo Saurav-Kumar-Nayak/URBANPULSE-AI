@@ -17,7 +17,7 @@ export const AppLayout = ({ children }) => {
 
       {/* Main Content Area */}
       <div className="main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <main style={isAuthPage ? { flex: 1, width: '100%', padding: 0 } : { flex: 1, padding: isHome ? '0' : '24px', maxWidth: '1800px', width: '100%', margin: '0 auto' }}>
+        <main className={`app-main-content ${isHome ? 'is-home-page' : ''} ${isAuthPage ? 'is-auth-page' : ''}`}>
           {children}
         </main>
       </div>

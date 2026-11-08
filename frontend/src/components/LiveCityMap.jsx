@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { 
@@ -329,6 +329,29 @@ const VehicleGraphic = ({ type, color }) => {
 };
 
 export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", onSelectZone, mapHeight = '520px', userLocation = null }) {
+  const displayZones = useMemo(() => {
+    if (!locations || locations.length === 0) return BHUBANESWAR_ZONES;
+    return BHUBANESWAR_ZONES.map(z => {
+      const match = locations.find(l => 
+        l.location_id === z.id || 
+        (l.location_name && z.name && (
+          l.location_name.toLowerCase().includes(z.name.toLowerCase()) ||
+          z.name.toLowerCase().includes(l.location_name.toLowerCase())
+        ))
+      );
+      if (match) {
+        return {
+          ...z,
+          aqi: match.aqi ?? z.aqi,
+          speed: match.avg_speed_kmh ?? Math.round(55 * (1 - (match.congestion_index ?? 0.4))),
+          risk: match.status ?? (match.risk_score > 65 ? 'High Risk' : (match.risk_score > 40 ? 'Medium Risk' : 'Low Risk')),
+          alertsCount: match.is_anomaly ? Math.max(1, z.alertsCount) : z.alertsCount
+        };
+      }
+      return z;
+    });
+  }, [locations]);
+
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
@@ -440,7 +463,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
   // Sync when selectedZone prop changes from external component click
   useEffect(() => {
     if (selectedZone) {
-      const found = BHUBANESWAR_ZONES.find(z => z.id === selectedZone || z.name === selectedZone || z.name === selectedZone?.name);
+      const found = displayZones.find(z => z.id === selectedZone || z.name === selectedZone || z.name === selectedZone?.name);
       if (found) {
         setActivePin({ ...found, isUserLocation: false });
       } else if (typeof selectedZone === 'object' && selectedZone.name) {
@@ -644,7 +667,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
       if (markersLayerRef.current) {
         markersLayerRef.current.clearLayers();
 
-        BHUBANESWAR_ZONES.forEach((zone) => {
+        displayZones.forEach((zone) => {
           const isActive = activePin.id === zone.id || activePin.name === zone.name;
           const riskColor = zone.risk === 'High Risk' ? '#f43f5e' : (zone.risk === 'Medium Risk' ? '#f59e0b' : '#34d399');
           const bg = isActive ? '#2563eb' : '#0f172a';
@@ -767,7 +790,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
     const clickY = ((e.clientY - rect.top) / rect.height) * 100;
 
     // Check if clicked close to a known zone
-    const closest = BHUBANESWAR_ZONES.find(z => 
+    const closest = displayZones.find(z => 
       Math.abs(z.x - clickX) < 12 && Math.abs(z.y - clickY) < 12
     );
 
@@ -1024,7 +1047,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
           />
 
           {/* CRISP FLOATING 3D AREA NAME BADGES & INTERACTIVE HOTSPOTS OVER ALL LOCATIONS */}
-          {BHUBANESWAR_ZONES.map((zone, idx) => {
+          {displayZones.map((zone, idx) => {
             const isActive = activePin.name === zone.name || activePin.id === zone.id;
             return (
               <div
@@ -1227,7 +1250,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
           <button 
             onClick={() => {
               setTrafficSeverityState('Smooth');
-              const lowZone = BHUBANESWAR_ZONES.find(z => z.risk === 'Low Risk');
+              const lowZone = displayZones.find(z => z.risk === 'Low Risk');
               if (lowZone) setActivePin({ ...lowZone, isUserLocation: false });
             }}
             style={{ 
@@ -1253,7 +1276,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
           <button 
             onClick={() => {
               setTrafficSeverityState('Moderate');
-              const medZone = BHUBANESWAR_ZONES.find(z => z.risk === 'Medium Risk' || z.risk === 'Moderate');
+              const medZone = displayZones.find(z => z.risk === 'Medium Risk' || z.risk === 'Moderate');
               if (medZone) setActivePin({ ...medZone, isUserLocation: false });
             }}
             style={{ 
@@ -1279,7 +1302,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
           <button 
             onClick={() => {
               setTrafficSeverityState('Heavy');
-              const heavyZone = BHUBANESWAR_ZONES.find(z => z.name.includes('Station') || z.speed < 20);
+              const heavyZone = displayZones.find(z => z.name.includes('Station') || z.speed < 20);
               if (heavyZone) setActivePin({ ...heavyZone, isUserLocation: false });
             }}
             style={{ 
@@ -1305,7 +1328,7 @@ export default function LiveCityMap({ locations = [], selectedZone = "LOC-01", o
           <button 
             onClick={() => {
               setTrafficSeverityState('Severe');
-              const highZone = BHUBANESWAR_ZONES.find(z => z.risk === 'High Risk');
+              const highZone = displayZones.find(z => z.risk === 'High Risk');
               if (highZone) setActivePin({ ...highZone, isUserLocation: false });
             }}
             style={{ 

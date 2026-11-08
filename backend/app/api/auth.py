@@ -10,10 +10,11 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.db.models import User
+from app.core.config import settings
 
 router = APIRouter(tags=["Authentication"])
 
-SECRET_KEY = "urbanpulse_citizen_auth_secret_key_2026"
+SECRET_KEY = settings.JWT_SECRET
 
 # Pydantic Schemas for Citizen Auth
 class SignupRequest(BaseModel):

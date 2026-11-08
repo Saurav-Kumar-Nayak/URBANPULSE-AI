@@ -129,7 +129,7 @@ export const CommandCenter = () => {
           <PredictionTimeline activeZone={selectedZone} />
 
           {/* 4. DECISION & SIMULATION GRID (ALERTS, TRAFFIC FEED, WHAT-IF SIMULATOR) */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="command-center-decision-grid">
             <ActiveAlertCenter 
               anomalies={anomaliesData?.recent_anomalies || []}
               activeZone={selectedZone}

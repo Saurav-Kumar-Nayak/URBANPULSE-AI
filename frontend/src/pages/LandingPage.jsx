@@ -28,6 +28,7 @@ import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 import LiveCityMap from '../components/LiveCityMap';
 import { api } from '../services/api';
 import BrandLogo3D from '../components/ui/BrandLogo3D';
+import './LandingPage.css';
 
 export const LandingPage = () => {
   const { 
@@ -257,8 +258,8 @@ export const LandingPage = () => {
 
 
       {/* 5. HERO SECTION — WIDE COMPOSITION MATCHING REFERENCE IMAGE */}
-      <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '40px 32px 32px 32px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1fr', gap: '32px', alignItems: 'center' }}>
+      <section className="landing-hero-container">
+        <div className="landing-hero-grid">
           
           {/* LEFT COLUMN: HERO COPY & CTAs */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -272,7 +273,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Main Title */}
-            <h1 style={{ fontSize: '3.1rem', fontWeight: 800, lineHeight: 1.12, letterSpacing: '-0.03em', color: '#ffffff' }}>
+            <h1 className="landing-hero-title">
               Understand Your City.<br />
               <span style={{ color: '#38bdf8' }}>Predict What Happens Next.</span>
             </h1>
@@ -283,7 +284,7 @@ export const LandingPage = () => {
             </p>
 
             {/* CTAs */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px', flexWrap: 'wrap' }}>
               <button 
                 onClick={() => setActiveTab('live-city')}
                 style={{ 
@@ -366,7 +367,7 @@ export const LandingPage = () => {
             </div>
 
             {/* Dedicated Top Telemetry Bar (4 Scoped Photographic Live Cards) */}
-            <div className="urbanpulse-home-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+            <div className="urbanpulse-home-cards landing-telemetry-grid">
               
               {/* 1. Weather Card */}
               <div className="card-photo-base card-photo-weather" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -465,7 +466,7 @@ export const LandingPage = () => {
       </section>
 
       {/* 7. REAL-TIME KPI STRIP: "ONE PLATFORM. A CLEARER VIEW OF THE CITY." */}
-      <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '48px 32px' }}>
+      <section className="landing-section">
         <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 36px auto' }}>
           <h2 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
             One Platform. A Clearer View of the City.
@@ -476,7 +477,7 @@ export const LandingPage = () => {
         </div>
 
         {/* 4 KPI CARDS GRID */}
-        <div className="urbanpulse-home-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+        <div className="urbanpulse-home-cards landing-kpi-grid">
           
           {/* Card 1: Traffic */}
           <div 
@@ -614,9 +615,9 @@ export const LandingPage = () => {
       </section>
 
       {/* 8. PLATFORM CAPABILITIES */}
-      <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 48px 32px' }}>
+      <section className="landing-section-compact">
         <div className="urbanpulse-home-cards">
-          <div className="card-photo-base card-photo-weather" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div className="card-photo-base card-photo-weather" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
             
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.18)', padding: '4px 12px', borderRadius: '20px', marginBottom: '8px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
@@ -627,7 +628,7 @@ export const LandingPage = () => {
               <p style={{ fontSize: '0.90rem', color: '#cbd5e1', marginTop: '4px' }} className="text-razor-sharp">Comprehensive 3D-assisted urban intelligence for modern municipal centers.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '22px' }}>
+            <div className="landing-capabilities-grid">
               
               {/* Capability 1 */}
               <div onClick={() => setActiveTab('traffic')} className="card-photo-base card-photo-traffic" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -700,9 +701,9 @@ export const LandingPage = () => {
       </section>
 
       {/* 9. HOW IT WORKS OPERATIONAL WORKFLOW */}
-      <section id="how-it-works" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 48px 32px' }}>
+      <section id="how-it-works" className="landing-section-compact">
         <div className="urbanpulse-home-cards">
-          <div className="card-photo-base card-photo-weather" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div className="card-photo-base card-photo-weather" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
             
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.18)', padding: '4px 12px', borderRadius: '20px', marginBottom: '8px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
@@ -713,7 +714,7 @@ export const LandingPage = () => {
               <p style={{ fontSize: '0.90rem', color: '#cbd5e1', marginTop: '4px' }} className="text-razor-sharp">From raw telemetry signals to coordinated municipal decision making.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: '20px', alignItems: 'center' }}>
+            <div className="landing-workflow-grid">
               
               {/* Step 01 */}
               <div className="card-photo-base card-photo-traffic" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -731,7 +732,7 @@ export const LandingPage = () => {
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+              <div className="landing-workflow-arrow">
                 <ArrowRight size={24} color="#38bdf8" />
                 <span style={{ fontSize: '0.60rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.06em' }}>DATA</span>
               </div>
@@ -752,7 +753,7 @@ export const LandingPage = () => {
                 </p>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+              <div className="landing-workflow-arrow">
                 <ArrowRight size={24} color="#38bdf8" />
                 <span style={{ fontSize: '0.60rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.06em' }}>INSIGHT</span>
               </div>
@@ -780,15 +781,15 @@ export const LandingPage = () => {
       </section>
 
       {/* 11. FINAL REAL-WORLD PHOTOGRAPHIC CTA COMMAND PANEL */}
-      <section style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 32px 64px 32px' }}>
+      <section className="landing-section-cta">
         <div className="urbanpulse-home-cards">
-          <div className="card-photo-base card-photo-cta" style={{ padding: '44px 52px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '28px' }}>
+          <div className="card-photo-base card-photo-cta landing-cta-panel">
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.72rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(56, 189, 248, 0.2)', padding: '4px 14px', borderRadius: '20px', marginBottom: '12px', border: '1px solid rgba(56, 189, 248, 0.4)' }}>
                 <Compass size={14} color="#38bdf8" />
                 <span>COMMAND CENTER INTELLIGENCE</span>
               </div>
-              <h2 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.03em' }} className="text-razor-sharp">
+              <h2 className="text-razor-sharp landing-cta-title">
                 See Your City With More Intelligence.
               </h2>
               <p style={{ fontSize: '1.02rem', color: '#cbd5e1', marginTop: '8px', maxWidth: '580px', lineHeight: 1.6 }} className="text-razor-sharp">

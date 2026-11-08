@@ -13,6 +13,7 @@ router = APIRouter(tags=["Pollution Intelligence"])
 @router.get("/v1/pollution", response_model=PollutionResponseSchema)
 def get_pollution_intelligence(
     timeframe: Optional[str] = Query("24h"),
+    location: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
     max_ts = db.query(func.max(UrbanRecord.timestamp)).scalar() or datetime.utcnow()
@@ -29,6 +30,11 @@ def get_pollution_intelligence(
         start_ts = max_ts - timedelta(hours=24)
 
     base_query = db.query(UrbanRecord).filter(UrbanRecord.timestamp >= start_ts)
+    if location and location != "ALL":
+        base_query = base_query.filter(
+            (UrbanRecord.location_name.ilike(f"%{location}%")) |
+            (UrbanRecord.location_id == location)
+        )
 
     avg_aqi = base_query.with_entities(func.avg(UrbanRecord.aqi)).scalar() or 0
     max_aqi = base_query.with_entities(func.max(UrbanRecord.aqi)).scalar() or 0

@@ -83,33 +83,41 @@ export const WeatherIntelligence = () => {
     }
   }, []);
 
-  // Initial Telemetry Loading
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          try {
-            const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
-            const geoData = await geoRes.json();
-            const city = geoData.city || geoData.locality || 'Bhubaneswar';
-            const region = geoData.principalSubdivision || 'Odisha';
-            const country = geoData.countryName || 'India';
-            
-            const loc = { city, region, country, lat, lng };
-            setUserLocation(loc);
-            loadWeatherData(loc);
-          } catch {
-            loadWeatherData(userLocation);
-          }
-        },
-        () => loadWeatherData(userLocation),
-        { timeout: 6000 }
-      );
-    } else {
-      loadWeatherData(userLocation);
+  // Handlers
+  const handleDetectLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
     }
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        try {
+          const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+          const geoData = await geoRes.json();
+          const city = geoData.city || geoData.locality || 'Bhubaneswar';
+          const region = geoData.principalSubdivision || 'Odisha';
+          const country = geoData.countryName || 'India';
+          const loc = { city, region, country, lat, lng };
+          setUserLocation(loc);
+          loadWeatherData(loc);
+        } catch {
+          const loc = { city: 'Detected Location', region: '', country: 'India', lat, lng };
+          setUserLocation(loc);
+          loadWeatherData(loc);
+        }
+      },
+      (err) => {
+        console.warn("Location permission denied or unavailable:", err.message);
+      },
+      { timeout: 8000 }
+    );
+  };
+
+  // Initial Telemetry Loading (Default Bhubaneswar - No silent geolocation)
+  useEffect(() => {
+    loadWeatherData(userLocation);
     loadRadarData();
   }, []);
 
@@ -1015,6 +1023,31 @@ export const WeatherIntelligence = () => {
                 <X size={18} />
               </button>
             </div>
+
+            <button
+              onClick={() => {
+                handleDetectLocation();
+                setIsLocationModalOpen(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: 'rgba(56, 189, 248, 0.12)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                color: '#38bdf8',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                width: '100%'
+              }}
+            >
+              <Compass size={15} />
+              <span>Use Current Device Location</span>
+            </button>
 
             <div style={{ position: 'relative' }}>
               <Search size={15} color="#94a3b8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />

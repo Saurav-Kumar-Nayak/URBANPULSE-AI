@@ -9,13 +9,13 @@ const getInitialTab = () => {
   const knownTabs = [
     'home', 'command-center', 'dashboard', 'live-city', 'predictions', 'traffic', 
     'environment', 'pollution', 'weather', 'risk', 'what-if', 
-    'analytics', 'ml-models', 'ai-copilot', 'api-docs', 'settings',
+    'analytics', 'explorer', 'data-explorer', 'insights', 'ml-models', 'ai-copilot', 'api-docs', 'settings',
     'login', 'signup', 'forgot-password', 'user-dashboard', 'profile', 'citizen-dashboard'
   ];
   return knownTabs.includes(path) ? path : 'home';
 };
 
-const PROTECTED_TABS = ['command-center', 'dashboard', 'what-if', 'simulator', 'analytics', 'ml-models', 'ai-copilot', 'settings', 'user-dashboard', 'profile'];
+const PROTECTED_TABS = ['command-center', 'dashboard', 'what-if', 'simulator', 'analytics', 'explorer', 'data-explorer', 'insights', 'ml-models', 'ai-copilot', 'settings', 'user-dashboard', 'profile'];
 
 export const UrbanPulseProvider = ({ children }) => {
   const [activeTab, setActiveTabState] = useState(getInitialTab);

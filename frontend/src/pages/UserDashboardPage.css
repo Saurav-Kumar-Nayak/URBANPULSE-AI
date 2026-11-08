@@ -203,3 +203,30 @@
   0% { box-shadow: 0 0 16px rgba(56, 189, 248, 0.5); }
   100% { box-shadow: 0 0 28px rgba(56, 189, 248, 0.9), 0 0 8px #ffffff; }
 }
+
+/* Mobile Responsiveness Rules */
+@media (max-width: 768px) {
+  .hero-3d-banner {
+    padding: 24px 16px;
+  }
+
+  .profile-3d-card {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .telemetry-3d-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .digital-twin-3d-card {
+    padding: 20px 16px;
+    margin-top: 24px;
+  }
+
+  .card-3d-stage {
+    padding: 18px 16px;
+  }
+}
+

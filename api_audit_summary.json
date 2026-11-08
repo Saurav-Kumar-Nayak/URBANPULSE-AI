@@ -1,0 +1,562 @@
+[
+  {
+    "path": "/api/v1/health",
+    "method": "GET",
+    "summary": "Health Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/health",
+    "method": "GET",
+    "summary": "Health Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/health",
+    "method": "GET",
+    "summary": "Health Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/readiness",
+    "method": "GET",
+    "summary": "Readiness Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/readiness",
+    "method": "GET",
+    "summary": "Readiness Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/readiness",
+    "method": "GET",
+    "summary": "Readiness Check",
+    "tags": [
+      "Health"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/overview",
+    "method": "GET",
+    "summary": "Get Executive Overview",
+    "tags": [
+      "Executive Overview"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/overview",
+    "method": "GET",
+    "summary": "Get Executive Overview",
+    "tags": [
+      "Executive Overview"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/traffic",
+    "method": "GET",
+    "summary": "Get Traffic Intelligence",
+    "tags": [
+      "Traffic Intelligence"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/traffic",
+    "method": "GET",
+    "summary": "Get Traffic Intelligence",
+    "tags": [
+      "Traffic Intelligence"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/pollution",
+    "method": "GET",
+    "summary": "Get Pollution Intelligence",
+    "tags": [
+      "Pollution Intelligence"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/pollution",
+    "method": "GET",
+    "summary": "Get Pollution Intelligence",
+    "tags": [
+      "Pollution Intelligence"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/anomalies",
+    "method": "GET",
+    "summary": "Get Anomalies",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/anomalies",
+    "method": "GET",
+    "summary": "Get Anomalies",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/anomalies/detect",
+    "method": "POST",
+    "summary": "Detect Live Anomaly",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/anomalies/detect",
+    "method": "POST",
+    "summary": "Detect Live Anomaly",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/anomalies/{anomaly_id}/status",
+    "method": "PATCH",
+    "summary": "Update Anomaly Status",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/anomalies/{anomaly_id}/status",
+    "method": "PATCH",
+    "summary": "Update Anomaly Status",
+    "tags": [
+      "AI Anomaly Detection"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/predictions",
+    "method": "GET",
+    "summary": "Get Prediction Models Metadata",
+    "tags": [
+      "Predictive Analytics Studio"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/predictions",
+    "method": "GET",
+    "summary": "Get Prediction Models Metadata",
+    "tags": [
+      "Predictive Analytics Studio"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/predictions/predict",
+    "method": "POST",
+    "summary": "Run Real Prediction",
+    "tags": [
+      "Predictive Analytics Studio"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/predictions/predict",
+    "method": "POST",
+    "summary": "Run Real Prediction",
+    "tags": [
+      "Predictive Analytics Studio"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/insights",
+    "method": "GET",
+    "summary": "Get Ai Insights",
+    "tags": [
+      "AI Insight Engine"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/insights",
+    "method": "GET",
+    "summary": "Get Ai Insights",
+    "tags": [
+      "AI Insight Engine"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/locations",
+    "method": "GET",
+    "summary": "Get Location Zones",
+    "tags": [
+      "Locations & Spatial Telemetry"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/locations",
+    "method": "GET",
+    "summary": "Get Location Zones",
+    "tags": [
+      "Locations & Spatial Telemetry"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/records",
+    "method": "GET",
+    "summary": "Search And Filter Records",
+    "tags": [
+      "Data Explorer"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/records",
+    "method": "GET",
+    "summary": "Search And Filter Records",
+    "tags": [
+      "Data Explorer"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/records/export",
+    "method": "GET",
+    "summary": "Export Records Csv",
+    "tags": [
+      "Data Explorer"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/records/export",
+    "method": "GET",
+    "summary": "Export Records Csv",
+    "tags": [
+      "Data Explorer"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/signup",
+    "method": "POST",
+    "summary": "Signup",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/signup",
+    "method": "POST",
+    "summary": "Signup",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/login",
+    "method": "POST",
+    "summary": "Login",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "POST",
+    "summary": "Login",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/google",
+    "method": "POST",
+    "summary": "Google Auth",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/google",
+    "method": "POST",
+    "summary": "Google Auth",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/forgot-password",
+    "method": "POST",
+    "summary": "Forgot Password",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/forgot-password",
+    "method": "POST",
+    "summary": "Forgot Password",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/verify-email",
+    "method": "POST",
+    "summary": "Verify Email",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/verify-email",
+    "method": "POST",
+    "summary": "Verify Email",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/me",
+    "method": "GET",
+    "summary": "Get Me",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/me",
+    "method": "GET",
+    "summary": "Get Me",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/auth/logout",
+    "method": "POST",
+    "summary": "Logout",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/auth/logout",
+    "method": "POST",
+    "summary": "Logout",
+    "tags": [
+      "Authentication"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/analytics/kpis",
+    "method": "GET",
+    "summary": "Get Kpi Summary",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/analytics/traffic-flow",
+    "method": "GET",
+    "summary": "Get Traffic Flow",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/analytics/modes",
+    "method": "GET",
+    "summary": "Get Mode Distribution",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/analytics/zones",
+    "method": "GET",
+    "summary": "Get Zone Metrics",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/analytics/kpis",
+    "method": "GET",
+    "summary": "Get Kpi Summary",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/analytics/traffic-flow",
+    "method": "GET",
+    "summary": "Get Traffic Flow",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/analytics/modes",
+    "method": "GET",
+    "summary": "Get Mode Distribution",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/analytics/zones",
+    "method": "GET",
+    "summary": "Get Zone Metrics",
+    "tags": [
+      "Analytics"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/trips/",
+    "method": "GET",
+    "summary": "Get Trips",
+    "tags": [
+      "Telemetry Records"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/trips/{record_id}",
+    "method": "GET",
+    "summary": "Get Trip Detail",
+    "tags": [
+      "Telemetry Records"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/trips/",
+    "method": "GET",
+    "summary": "Get Trips",
+    "tags": [
+      "Telemetry Records"
+    ],
+    "status_code": 200,
+    "success": true
+  },
+  {
+    "path": "/api/v1/trips/{record_id}",
+    "method": "GET",
+    "summary": "Get Trip Detail",
+    "tags": [
+      "Telemetry Records"
+    ],
+    "status_code": 200,
+    "success": true
+  }
+]

@@ -1369,3 +1369,128 @@ button:active, .btn-3d:active {
 .urbanpulse-home-cards .text-razor-sharp {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 0, 0, 0.9);
 }
+
+/* ==============================================================================
+   URBANPULSE AI — MOBILE-FIRST GLOBAL RESPONSIVE & OVERFLOW UTILITIES
+   ============================================================================== */
+
+/* Main layout container responsive paddings */
+.app-main-content {
+  flex: 1;
+  padding: 24px;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.app-main-content.is-home-page,
+.app-main-content.is-auth-page {
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Global media containers & SVGs */
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Recharts container fix */
+.recharts-responsive-container, .recharts-wrapper {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 4px;
+}
+
+/* Modal dialog responsive adjustments */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-container-responsive {
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .app-main-content {
+    padding: 16px;
+  }
+
+  .command-center-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .command-center-map-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main-content {
+    padding: 12px;
+  }
+
+  .copilot-floating-btn {
+    bottom: 16px !important;
+    right: 16px !important;
+    padding: 10px 16px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .command-center-decision-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .urban-card-grid-container.grid-5,
+  .urban-card-grid-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .grid-2, .grid-3, .grid-4, .grid-5, .grid-6 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-main-content {
+    padding: 8px;
+  }
+
+  .card-panel, .glass-panel, .card-3d-enterprise {
+    padding: 14px !important;
+  }
+
+  .urban-card-grid-container.grid-5,
+  .urban-card-grid-container {
+    grid-template-columns: 1fr !important;
+  }
+}
+

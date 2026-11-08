@@ -11,6 +11,8 @@ import WeatherIntelligence from './pages/WeatherIntelligence';
 import RiskAnomalies from './pages/RiskAnomalies';
 import WhatIfSimulator from './pages/WhatIfSimulator';
 import AnalyticsWorkspace from './pages/AnalyticsWorkspace';
+import DataExplorerPage from './pages/DataExplorerPage';
+import InsightPage from './pages/InsightPage';
 import MLModelCenter from './pages/MLModelCenter';
 import AICopilotPage from './pages/AICopilotPage';
 import ApiDocsPage from './pages/ApiDocsPage';
@@ -57,14 +59,18 @@ function AppContent() {
       case 'what-if':
       case 'simulator':
         return <WhatIfSimulator key={refreshTrigger} />;
-      case 'analytics':
       case 'explorer':
+      case 'data-explorer':
+        return <DataExplorerPage key={refreshTrigger} />;
+      case 'analytics':
         return <AnalyticsWorkspace key={refreshTrigger} />;
       case 'ml-models':
         return <MLModelCenter key={refreshTrigger} />;
       case 'ai-copilot':
-      case 'insights':
         return <AICopilotPage key={refreshTrigger} />;
+      case 'insights':
+      case 'insight-engine':
+        return <InsightPage key={refreshTrigger} />;
       case 'api-docs':
       case 'apidocs':
         return <ApiDocsPage key={refreshTrigger} />;

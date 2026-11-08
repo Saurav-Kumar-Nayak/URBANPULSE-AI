@@ -141,17 +141,56 @@ class UrbanPulseMLEngine:
         self.is_trained = True
         print(f"[ML Engine] Scikit-learn ML models trained. AQI R²={r2_aqi}, Traffic R²={r2_tr}, Risk Acc={acc_r}.")
 
+    def ensure_trained(self):
+        """Ensures ML models are trained, auto-loading from SQLite dataset if not yet initialized."""
+        if self.is_trained:
+            return
+        try:
+            from app.core.database import SessionLocal
+            from app.db.models import UrbanRecord
+            from app.db.seeder import seed_database
+            db = SessionLocal()
+            try:
+                seed_database(db)
+                records = db.query(UrbanRecord).all()
+                if records:
+                    records_data = [
+                        {
+                            "traffic_density": r.traffic_density,
+                            "congestion_index": r.congestion_index,
+                            "avg_speed_kmh": r.avg_speed_kmh,
+                            "aqi": r.aqi,
+                            "pm25": r.pm25,
+                            "pm10": r.pm10,
+                            "co2_ppm": r.co2_ppm,
+                            "temperature_c": r.temperature_c,
+                            "humidity_pct": r.humidity_pct,
+                            "weather": r.weather,
+                            "risk_score": r.risk_score,
+                            "timestamp": r.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+                        }
+                        for r in records
+                    ]
+                    self.train_models(records_data)
+            finally:
+                db.close()
+        except Exception as e:
+            print(f"[ML Engine] Auto-train fallback failed: {e}")
+
     def predict_aqi(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        features = np.array([[
-            input_data.get('traffic_density', 120),
-            input_data.get('temperature_c', 24.0),
-            input_data.get('humidity_pct', 60.0),
-            input_data.get('pm25', 25.0),
-            input_data.get('pm10', 45.0),
-            input_data.get('co2_ppm', 430.0),
-            input_data.get('hour', 14),
-            input_data.get('day_of_week', 2)
-        ]])
+        if not self.is_trained:
+            self.ensure_trained()
+        aqi_features = ['traffic_density', 'temperature_c', 'humidity_pct', 'pm25', 'pm10', 'co2_ppm', 'hour', 'day_of_week']
+        features = pd.DataFrame([{
+            'traffic_density': input_data.get('traffic_density', 120),
+            'temperature_c': input_data.get('temperature_c', 24.0),
+            'humidity_pct': input_data.get('humidity_pct', 60.0),
+            'pm25': input_data.get('pm25', 25.0),
+            'pm10': input_data.get('pm10', 45.0),
+            'co2_ppm': input_data.get('co2_ppm', 430.0),
+            'hour': input_data.get('hour', 14),
+            'day_of_week': input_data.get('day_of_week', 2)
+        }], columns=aqi_features)
         predicted_aqi = float(self.aqi_model.predict(features)[0])
         status = "Good" if predicted_aqi < 50 else ("Moderate" if predicted_aqi < 100 else ("Unhealthy for Sensitive Groups" if predicted_aqi < 150 else "Unhealthy"))
         
@@ -174,15 +213,18 @@ class UrbanPulseMLEngine:
         }
 
     def predict_congestion(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        features = np.array([[
-            input_data.get('traffic_density', 140),
-            input_data.get('avg_speed_kmh', 32.0),
-            input_data.get('hour', 17),
-            input_data.get('day_of_week', 3),
-            input_data.get('is_weekend', 0),
-            input_data.get('temperature_c', 25.0),
-            input_data.get('humidity_pct', 55.0)
-        ]])
+        if not self.is_trained:
+            self.ensure_trained()
+        traffic_features = ['traffic_density', 'avg_speed_kmh', 'hour', 'day_of_week', 'is_weekend', 'temperature_c', 'humidity_pct']
+        features = pd.DataFrame([{
+            'traffic_density': input_data.get('traffic_density', 140),
+            'avg_speed_kmh': input_data.get('avg_speed_kmh', 32.0),
+            'hour': input_data.get('hour', 17),
+            'day_of_week': input_data.get('day_of_week', 3),
+            'is_weekend': input_data.get('is_weekend', 0),
+            'temperature_c': input_data.get('temperature_c', 25.0),
+            'humidity_pct': input_data.get('humidity_pct', 55.0)
+        }], columns=traffic_features)
         predicted_congestion = float(self.traffic_model.predict(features)[0])
         predicted_congestion = max(0.05, min(0.99, round(predicted_congestion, 2)))
         status = "Fluid" if predicted_congestion < 0.35 else ("Moderate Congestion" if predicted_congestion < 0.65 else ("Heavy Gridlock" if predicted_congestion < 0.85 else "Severe Bottleneck"))
@@ -207,14 +249,17 @@ class UrbanPulseMLEngine:
         }
 
     def predict_risk(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        features = np.array([[
-            input_data.get('aqi', 85),
-            input_data.get('pm25', 30.0),
-            input_data.get('congestion_index', 0.55),
-            input_data.get('traffic_density', 150),
-            input_data.get('co2_ppm', 450.0),
-            input_data.get('avg_speed_kmh', 28.0)
-        ]])
+        if not self.is_trained:
+            self.ensure_trained()
+        risk_features = ['aqi', 'pm25', 'congestion_index', 'traffic_density', 'co2_ppm', 'avg_speed_kmh']
+        features = pd.DataFrame([{
+            'aqi': input_data.get('aqi', 85),
+            'pm25': input_data.get('pm25', 30.0),
+            'congestion_index': input_data.get('congestion_index', 0.55),
+            'traffic_density': input_data.get('traffic_density', 150),
+            'co2_ppm': input_data.get('co2_ppm', 450.0),
+            'avg_speed_kmh': input_data.get('avg_speed_kmh', 28.0)
+        }], columns=risk_features)
         predicted_class = str(self.risk_model.predict(features)[0])
         probs = self.risk_model.predict_proba(features)[0]
         classes = list(self.risk_model.classes_)
@@ -239,15 +284,18 @@ class UrbanPulseMLEngine:
         }
 
     def detect_anomaly(self, record: Dict[str, Any]) -> Dict[str, Any]:
-        features = np.array([[
-            record.get('traffic_density', 100),
-            record.get('congestion_index', 0.4),
-            record.get('aqi', 60),
-            record.get('pm25', 20.0),
-            record.get('risk_score', 40.0)
-        ]])
-        if_score = self.anomaly_detector.decision_function(features)[0]
-        is_anomaly = self.anomaly_detector.predict(features)[0] == -1
+        if not self.is_trained:
+            self.ensure_trained()
+        anom_features = ['traffic_density', 'congestion_index', 'aqi', 'pm25', 'risk_score']
+        features = pd.DataFrame([{
+            'traffic_density': record.get('traffic_density', 100),
+            'congestion_index': record.get('congestion_index', 0.4),
+            'aqi': record.get('aqi', 60),
+            'pm25': record.get('pm25', 20.0),
+            'risk_score': record.get('risk_score', 40.0)
+        }], columns=anom_features)
+        if_score = float(self.anomaly_detector.decision_function(features)[0])
+        is_anomaly = bool(self.anomaly_detector.predict(features)[0] == -1)
 
         explanation = "Normal operating parameters within baseline variance."
         anomaly_type = "None"
@@ -265,10 +313,10 @@ class UrbanPulseMLEngine:
                 explanation = f"Statistical isolation anomaly detected with decision score {round(float(if_score), 3)}."
 
         return {
-            "is_anomaly": is_anomaly,
-            "anomaly_type": anomaly_type,
+            "is_anomaly": bool(is_anomaly),
+            "anomaly_type": str(anomaly_type),
             "decision_score": round(float(if_score), 4),
-            "explanation": explanation
+            "explanation": str(explanation)
         }
 
 

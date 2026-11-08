@@ -16,7 +16,10 @@ import {
   User, 
   LogOut,
   Lock,
-  ShieldCheck
+  ShieldCheck,
+  Database,
+  BarChart3,
+  Lightbulb
 } from 'lucide-react';
 import { useUrbanPulseContext } from '../context/UrbanPulseContext';
 
@@ -41,21 +44,25 @@ export const Navbar = () => {
   const publicNavItems = [
     { id: 'home', label: 'Home', icon: HomeIcon },
     { id: 'live-city', label: 'Live Map', icon: Map },
-    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
-    { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
     { id: 'traffic', label: 'Traffic', icon: Car },
     { id: 'pollution', label: 'Air Quality', icon: Wind },
     { id: 'weather', label: 'Weather', icon: CloudSun },
+    { id: 'explorer', label: 'Data Explorer', icon: Database },
+    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
+    { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
   ];
 
   const operatorNavItems = [
     { id: 'command-center', label: 'Command Center', icon: Activity },
     { id: 'live-city', label: 'Live Map', icon: Map },
-    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
-    { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
     { id: 'traffic', label: 'Traffic', icon: Car },
     { id: 'pollution', label: 'Air Quality', icon: Wind },
     { id: 'weather', label: 'Weather', icon: CloudSun },
+    { id: 'explorer', label: 'Data Explorer', icon: Database },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'predictions', label: 'Predictions', icon: TrendingUp },
+    { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
+    { id: 'insights', label: 'AI Insights', icon: Lightbulb },
     { id: 'what-if', label: 'What-If Simulator', icon: Sliders },
   ];
 
@@ -344,15 +351,8 @@ export const Navbar = () => {
         {/* Mobile Hamburger Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#F5F8FF',
-            cursor: 'pointer',
-            padding: '4px',
-            display: 'none'
-          }}
           className="mobile-hamburger-btn"
+          aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -361,18 +361,21 @@ export const Navbar = () => {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div
+          className="mobile-nav-drawer-popup"
           style={{
             position: 'fixed',
             top: '60px',
             left: 0,
             right: 0,
+            maxHeight: 'calc(100vh - 60px)',
+            overflowY: 'auto',
             background: '#0B1730',
             borderBottom: '1px solid rgba(120, 170, 255, 0.2)',
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',
             gap: '10px',
-            zIndex: 110,
+            zIndex: 2000,
             boxShadow: '0 10px 30px rgba(0,0,0,0.8)'
           }}
         >

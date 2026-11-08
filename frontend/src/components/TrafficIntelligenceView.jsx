@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { api } from '../services/api';
 import { 
   ResponsiveContainer, 
   LineChart, 
@@ -242,7 +243,59 @@ const getPolylineSample = (points, progress, direction = 1, lane = 1) => {
 };
 
 
-export default function TrafficIntelligenceView() {
+export default function TrafficIntelligenceView({ trafficData: initialTraffic = null }) {
+  const [liveTraffic, setLiveTraffic] = useState(initialTraffic);
+
+  useEffect(() => {
+    if (initialTraffic) {
+      setLiveTraffic(initialTraffic);
+    } else {
+      api.getTraffic()
+        .then(res => {
+          if (res) setLiveTraffic(res);
+        })
+        .catch(err => console.warn("Live traffic fetch failed:", err));
+    }
+  }, [initialTraffic]);
+
+  const flowChartData = useMemo(() => {
+    if (liveTraffic?.hourly_trends && liveTraffic.hourly_trends.length > 0) {
+      return liveTraffic.hourly_trends.map(t => ({
+        time: t.hour,
+        density: t.traffic_density,
+        speed: t.avg_speed_kmh,
+        congestion: t.congestion_index
+      }));
+    }
+    return LIVE_TRAFFIC_FLOW_DATA;
+  }, [liveTraffic]);
+
+  const weekdayWeekendChartData = useMemo(() => {
+    if (liveTraffic?.weekday_vs_weekend && liveTraffic.weekday_vs_weekend.length >= 2) {
+      const wk = liveTraffic.weekday_vs_weekend[0];
+      const we = liveTraffic.weekday_vs_weekend[1];
+      return [
+        { metric: 'Traffic Density (veh/min)', Weekday: wk.avg_traffic_density, Weekend: we.avg_traffic_density },
+        { metric: 'Average Speed (km/h)', Weekday: wk.avg_speed_kmh, Weekend: we.avg_speed_kmh },
+        { metric: 'Congestion Index', Weekday: wk.avg_congestion, Weekend: we.avg_congestion }
+      ];
+    }
+    return WEEKDAY_WEEKEND_DATA;
+  }, [liveTraffic]);
+
+  const forecastChartData = useMemo(() => {
+    if (liveTraffic?.congestion_forecast && liveTraffic.congestion_forecast.length > 0) {
+      return liveTraffic.congestion_forecast.map((f, i) => ({
+        time: f.hour_ahead,
+        actual: i === 0 ? f.predicted_congestion : null,
+        predicted: f.predicted_congestion,
+        confidenceUpper: f.confidence_upper,
+        confidenceLower: f.confidence_lower
+      }));
+    }
+    return FORECAST_DATA;
+  }, [liveTraffic]);
+
   const [userLocation, setUserLocation] = useState(CITY_PRESETS[0]);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
@@ -559,6 +612,54 @@ export default function TrafficIntelligenceView() {
   const handleZoomIn = () => { if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.zoomIn(); };
   const handleZoomOut = () => { if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.zoomOut(); };
   const handleRecenter = () => { if (trafficMapInstanceRef.current) trafficMapInstanceRef.current.setView([userLocation.lat, userLocation.lng], 14); };
+
+  const handleSelectCity = (preset) => {
+    setUserLocation(preset);
+    setIsLocationModalOpen(false);
+    if (trafficMapInstanceRef.current && preset.lat && preset.lng) {
+      trafficMapInstanceRef.current.setView([preset.lat, preset.lng], 13);
+    }
+  };
+
+  const handleDetectLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        try {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const detectedLoc = {
+            city: 'Current Location',
+            region: 'GPS Detected',
+            country: '',
+            lat,
+            lng,
+            vehicles: '15,400',
+            congestion: 0.58,
+            avgSpeed: 28.5,
+            flow: '75%',
+            incidents: 2
+          };
+          setUserLocation(detectedLoc);
+          setIsLocationModalOpen(false);
+          if (trafficMapInstanceRef.current) {
+            trafficMapInstanceRef.current.setView([lat, lng], 14);
+          }
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (err) => {
+        console.warn("Geolocation permission error:", err);
+        setIsLocating(false);
+      },
+      { timeout: 8000 }
+    );
+  };
 
   const filteredPresets = CITY_PRESETS.filter(p => 
     p.city.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -1001,7 +1102,7 @@ export default function TrafficIntelligenceView() {
 
             <div style={{ height: '140px', width: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={LIVE_TRAFFIC_FLOW_DATA} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+                <LineChart data={flowChartData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 170, 255, 0.1)" vertical={false} />
                   <XAxis dataKey="time" stroke="#91A4C5" tick={{ fontSize: 9, fill: '#91A4C5' }} axisLine={false} tickLine={false} />
                   <YAxis yAxisId="left" stroke="#91A4C5" tick={{ fontSize: 9, fill: '#91A4C5' }} axisLine={false} tickLine={false} domain={[0, 200]} />
@@ -1108,7 +1209,7 @@ export default function TrafficIntelligenceView() {
 
           <div style={{ height: '160px', width: '100%' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={WEEKDAY_WEEKEND_DATA} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+              <BarChart data={weekdayWeekendChartData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(120, 170, 255, 0.1)" vertical={false} />
                 <XAxis dataKey="metric" stroke="#91A4C5" tick={{ fontSize: 9, fill: '#91A4C5' }} axisLine={false} tickLine={false} />
                 <YAxis stroke="#91A4C5" tick={{ fontSize: 9, fill: '#91A4C5' }} axisLine={false} tickLine={false} />
@@ -1146,7 +1247,7 @@ export default function TrafficIntelligenceView() {
 
           <div style={{ height: '200px', width: '100%' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={FORECAST_DATA} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
+              <AreaChart data={forecastChartData} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorConfidence" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#20D9FF" stopOpacity={0.25}/>

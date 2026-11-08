@@ -9,7 +9,7 @@ from app.core.database import engine, Base, SessionLocal
 from app.db.models import UrbanRecord
 from app.db.seeder import seed_database
 from app.ml.engine import ml_engine
-from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics, auth
+from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics, auth, trips
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -86,6 +86,9 @@ from sqlalchemy import text
 @app.get("/api/readiness", tags=["Health"])
 @app.get("/api/v1/readiness", tags=["Health"])
 def readiness_check():
+    if not ml_engine.is_trained:
+        ml_engine.ensure_trained()
+
     db = SessionLocal()
     db_ok = False
     try:
@@ -107,7 +110,7 @@ def readiness_check():
         "status": "OPERATIONAL"
     }
 
-# Register API Routers directly at both root `/api` and `/api/v1`
+# Register API Routers directly at root `/api` (which strictly exposes both `/api/...` and `/api/v1/...`)
 app.include_router(overview.router, prefix="/api")
 app.include_router(traffic.router, prefix="/api")
 app.include_router(pollution.router, prefix="/api")
@@ -116,20 +119,13 @@ app.include_router(predictions.router, prefix="/api")
 app.include_router(insights.router, prefix="/api")
 app.include_router(locations.router, prefix="/api")
 app.include_router(explorer.router, prefix="/api")
-app.include_router(analytics.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 
-# Duplicate mounts under `/api/v1` to ensure strict dual route support
-app.include_router(overview.router, prefix="/api/v1")
-app.include_router(traffic.router, prefix="/api/v1")
-app.include_router(pollution.router, prefix="/api/v1")
-app.include_router(anomalies.router, prefix="/api/v1")
-app.include_router(predictions.router, prefix="/api/v1")
-app.include_router(insights.router, prefix="/api/v1")
-app.include_router(locations.router, prefix="/api/v1")
-app.include_router(explorer.router, prefix="/api/v1")
+# Analytics and Trips routers declare internal prefixes (/analytics and /trips), mount under both /api and /api/v1
+app.include_router(analytics.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api/v1")
-app.include_router(auth.router, prefix="/api/v1")
+app.include_router(trips.router, prefix="/api")
+app.include_router(trips.router, prefix="/api/v1")
 
 # ==============================================================================
 # ONE-SERVER FRONTEND STATIC FILE SERVING & SPA FALLBACK
