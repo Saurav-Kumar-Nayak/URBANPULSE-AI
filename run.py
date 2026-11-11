@@ -39,6 +39,10 @@ def ensure_frontend_built():
             print("Please build manually by running: cd frontend && npm run build")
 
 import socket
+import threading
+import time
+import urllib.request
+import webbrowser
 
 def get_local_ip():
     try:
@@ -50,16 +54,43 @@ def get_local_ip():
     except Exception:
         return "127.0.0.1"
 
+def open_browser_when_ready(port: int):
+    """Automatically opens the default browser once the server is healthy."""
+    if os.environ.get("OPEN_BROWSER", "1").lower() in ("0", "false", "no"):
+        return
+    if os.environ.get("RENDER") or os.environ.get("CI"):
+        return
+
+    url = f"http://localhost:{port}"
+    health_url = f"http://127.0.0.1:{port}/api/health"
+
+    # Poll until server returns HTTP 200 (max 20 seconds)
+    for _ in range(40):
+        try:
+            with urllib.request.urlopen(health_url, timeout=1) as resp:
+                if resp.status == 200:
+                    break
+        except Exception:
+            time.sleep(0.5)
+
+    print(f"\n[Browser] Server is ready! Opening UrbanPulse AI at {url} ...\n")
+    webbrowser.open(url)
+
 if __name__ == "__main__":
     ensure_frontend_built()
     local_ip = get_local_ip()
+    port = int(os.environ.get("PORT", 8000))
     print("==================================================================")
     print(" URBANPULSE AI — UNIFIED SINGLE-SERVER PLATFORM (FRONTEND + BACKEND) ")
     print("==================================================================")
-    print(" Local Browser URL:                      http://127.0.0.1:8000")
-    port = int(os.environ.get("PORT", 8000))
-    print(f" Server Port:                           {port}")
+    print(f" Local Browser URL:                      http://127.0.0.1:{port}")
+    print(f" Network URL:                            http://{local_ip}:{port}")
+    print(f" Server Port:                            {port}")
     print("==================================================================")
+
+    # Launch browser opener in background thread
+    threading.Thread(target=open_browser_when_ready, args=(port,), daemon=True).start()
+
     uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False, app_dir=backend_dir)
 
 
