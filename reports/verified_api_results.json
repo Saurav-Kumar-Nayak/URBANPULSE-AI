@@ -1,0 +1,386 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/alerts",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/correlations",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/data-quality",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/kpis",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/modes",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/summary-report",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/traffic-flow",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/analytics/zones",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/anomalies",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/anomalies/detect",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/anomalies/{anomaly_id}/status",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/forgot-password",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/google",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/login",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/me",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/signup",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/verify-email",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/health",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/insights",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/locations",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/overview",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/pollution",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/predictions",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/predictions/predict",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/readiness",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/records",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/records/export",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/traffic",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/trips/",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/trips/{record_id}",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/alerts",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/correlations",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/data-quality",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/kpis",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/modes",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/summary-report",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/traffic-flow",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/zones",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/anomalies",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/anomalies/detect",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/anomalies/{anomaly_id}/status",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/forgot-password",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/google",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/logout",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/signup",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/verify-email",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/health",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/insights",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/locations",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/overview",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/pollution",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/predictions",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/predictions/predict",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/readiness",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/records",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/records/export",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/traffic",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/trips/",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/trips/{record_id}",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/health",
+    "status": 200,
+    "success": true
+  },
+  {
+    "method": "GET",
+    "path": "/readiness",
+    "status": 200,
+    "success": true
+  }
+]
