@@ -90,9 +90,17 @@ export const api = {
     return res.data;
   },
 
-  // Insights
+  // Insights & AI Copilot
   getInsights: async () => {
     const res = await apiClient.get('/insights');
+    return res.data;
+  },
+  queryCopilot: async (query, locationId = null) => {
+    const res = await apiClient.post('/copilot/query', { query, location_id: locationId });
+    return res.data;
+  },
+  getCopilotContext: async () => {
+    const res = await apiClient.get('/copilot/context');
     return res.data;
   },
 

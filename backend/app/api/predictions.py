@@ -54,9 +54,12 @@ def get_prediction_models_metadata(db: Session = Depends(get_db)):
         if ml_engine.is_trained:
             pred_aqi_res = ml_engine.predict_aqi(input_data)
             pred_tr_res = ml_engine.predict_congestion(input_data)
+            pred_risk_res = ml_engine.predict_risk(input_data)
             pred_aqi = int(pred_aqi_res.get("predicted_aqi", act_aqi))
             pred_tr = round(float(pred_tr_res.get("predicted_congestion_index", act_tr)), 2)
-            pred_rk = act_rk
+            probs = pred_risk_res.get("class_probabilities", {})
+            weight_map = {"Low": 20.0, "Medium": 45.0, "High": 70.0, "Critical": 90.0}
+            pred_rk = round(sum(weight_map.get(k, 40.0) * v for k, v in probs.items()), 1) if probs else act_rk
         else:
             pred_aqi = act_aqi
             pred_tr = act_tr

@@ -50,6 +50,8 @@ export const Navbar = () => {
     { id: 'explorer', label: 'Data Explorer', icon: Database },
     { id: 'predictions', label: 'Predictions', icon: TrendingUp },
     { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
+    { id: 'ml-models', label: 'ML Models', icon: Database },
+    { id: 'ai-copilot', label: 'AI Copilot', icon: Sparkles },
   ];
 
   const operatorNavItems = [
@@ -62,6 +64,8 @@ export const Navbar = () => {
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'predictions', label: 'Predictions', icon: TrendingUp },
     { id: 'risk', label: 'Risk Intelligence', icon: ShieldAlert },
+    { id: 'ml-models', label: 'ML Models', icon: Database },
+    { id: 'ai-copilot', label: 'AI Copilot', icon: Sparkles },
     { id: 'insights', label: 'AI Insights', icon: Lightbulb },
     { id: 'what-if', label: 'What-If Simulator', icon: Sliders },
   ];

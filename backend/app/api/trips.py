@@ -7,6 +7,7 @@ from app.db.seeder import seed_database
 
 router = APIRouter(prefix="/trips", tags=["Telemetry Records"])
 
+@router.get("")
 @router.get("/")
 def get_trips(
     is_anomaly: Optional[bool] = None,

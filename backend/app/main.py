@@ -9,7 +9,7 @@ from app.core.database import engine, Base, SessionLocal
 from app.db.models import UrbanRecord
 from app.db.seeder import seed_database
 from app.ml.engine import ml_engine
-from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics, auth, trips
+from app.api import overview, traffic, pollution, anomalies, predictions, insights, locations, explorer, analytics, auth, trips, copilot
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -126,6 +126,8 @@ app.include_router(analytics.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api/v1")
 app.include_router(trips.router, prefix="/api")
 app.include_router(trips.router, prefix="/api/v1")
+app.include_router(copilot.router, prefix="/api")
+app.include_router(copilot.router, prefix="/api/v1")
 
 # ==============================================================================
 # ONE-SERVER FRONTEND STATIC FILE SERVING & SPA FALLBACK

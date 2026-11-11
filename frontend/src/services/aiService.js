@@ -6,6 +6,16 @@ export const aiService = {
   },
   queryCopilot: async (userQuery) => {
     try {
+      // 1. Try real dedicated backend AI Copilot endpoint
+      const backendRes = await api.queryCopilot(userQuery);
+      if (backendRes && backendRes.answer) {
+        return backendRes;
+      }
+    } catch {
+      // Fall through to client synthesis fallback if offline or unreachable
+    }
+
+    try {
       const [overview, insights, locations, predictions] = await Promise.all([
         api.getOverview().catch(() => null),
         api.getInsights().catch(() => []),

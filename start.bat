@@ -41,3 +41,4 @@ if %ERRORLEVEL% neq 0 (
     echo [!] Server stopped with exit code %ERRORLEVEL%.
     pause
 )
+

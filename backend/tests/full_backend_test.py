@@ -160,5 +160,45 @@ class FullBackendTest(unittest.TestCase):
         self.assertIn("total_active_alerts", data)
         self.assertIn("alerts", data)
 
+    def test_15_ai_copilot_context(self):
+        res = self.client.get("/api/copilot/context")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "OPERATIONAL")
+        self.assertTrue(data["ml_engine_ready"])
+
+    def test_16_ai_copilot_query_traffic(self):
+        res = self.client.post("/api/copilot/query", json={"query": "Which zone has highest traffic congestion?"})
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("answer", data)
+        self.assertIn("metrics", data)
+        self.assertTrue(len(data["metrics"]) > 0)
+
+    def test_17_ai_copilot_query_pollution(self):
+        res = self.client.post("/api/copilot/query", json={"query": "What is the air quality and PM2.5 status?"})
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("answer", data)
+        self.assertIn("metrics", data)
+
+    def test_18_ai_copilot_query_anomalies(self):
+        res = self.client.post("/api/copilot/query", json={"query": "Are there any risk anomalies detected?"})
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("answer", data)
+
+    def test_19_csv_export(self):
+        res = self.client.get("/api/records/export")
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("text/csv", res.headers.get("content-type", ""))
+
+    def test_20_trips_endpoints(self):
+        res = self.client.get("/api/trips?limit=5")
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertIn("items", data)
+        self.assertTrue(len(data["items"]) <= 5)
+
 if __name__ == "__main__":
     unittest.main()
